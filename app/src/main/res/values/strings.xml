@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">测试</string>
+    <string name="text_home">首页</string>
+    <string name="text_chat">聊天</string>
+    <string name="text_note">热帖</string>
+    <string name="text_mall">我的</string>
+    <string name="text_me">我的</string>
+    <string name="text_loading">加载中…</string>
+    <string name="toast_response_data_error">网络请求返回错误</string>
+</resources>
