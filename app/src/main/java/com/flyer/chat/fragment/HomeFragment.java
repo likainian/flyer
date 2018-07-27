@@ -3,6 +3,7 @@ package com.flyer.chat.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
+import com.flyer.chat.adapter.UserInfoAdapter;
 import com.flyer.chat.base.BaseFragment;
+import com.flyer.chat.bean.User;
+import com.flyer.chat.network.CallBack;
+import com.flyer.chat.network.RetrofitService;
+import com.flyer.chat.util.HttpParseUtil;
 import com.flyer.chat.util.SharedPreferencesHelper;
+
+import java.util.List;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -28,6 +36,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mToolbar;
     private RecyclerView mRecyclerView;
     private FrameLayout mHomeMap;
+    private UserInfoAdapter adapter;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -44,12 +53,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initAdapter();
+        initData();
         getChildFragmentManager().beginTransaction().add(R.id.home_map,MapFragment.newInstance()).commit();
         switchMode();
     }
 
-    private void initAdapter() {
+    private void initData() {
+        RetrofitService.getInstance().requestGet("allUser", new CallBack<String>() {
+            @Override
+            public void onResponse(String response) {
+                List<User> data = HttpParseUtil.parseArray(response, "data", User.class);
+                adapter.setNewData(data);
+            }
+        });
+    }
 
+    private void initAdapter() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new UserInfoAdapter(getActivity());
+        mRecyclerView.setAdapter(adapter);
     }
     private void switchMode(){
         if(MAP_MODE.equals(SharedPreferencesHelper.getInstance().getHomeMode())){

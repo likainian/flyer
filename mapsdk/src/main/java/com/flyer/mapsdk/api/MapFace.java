@@ -13,4 +13,5 @@ public interface MapFace {
     void onStart(Bundle savedInstanceState);
     void onStop();
     void onDestroy();
+    void setLocationChangeListener(LocationChangeListener locationChangeListener);
 }

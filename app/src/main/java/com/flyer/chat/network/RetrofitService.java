@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
+import com.flyer.chat.BuildConfig;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.LoginActivity;
 import com.flyer.chat.app.ChatApplication;
@@ -20,7 +21,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.HttpException;
 
 /**
  * Created by mike.li on 2018/4/17.
@@ -45,9 +45,9 @@ public class RetrofitService {
         handString(retrofitApi.requestPost(ConstantUtil.getBaseUrl() + path,requestBody),callBack);
     }
 
-    //没有body的post
-    public void requestPost(String path, CallBack<String> callBack){
-        handString(retrofitApi.requestPost(ConstantUtil.getBaseUrl()+path),callBack);
+    //普通Post
+    public void requestPost(String path, @NonNull Object object, CallBack<String> callBack){
+        handString(retrofitApi.requestPost(ConstantUtil.getBaseUrl() + path,object),callBack);
     }
 
     //用特定Url的普通post
@@ -122,6 +122,7 @@ public class RetrofitService {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        if(BuildConfig.DEBUG)throwable.printStackTrace();
                         callBack.onError(ErrorUtil.getExceptionError(throwable));
                     }
                 });

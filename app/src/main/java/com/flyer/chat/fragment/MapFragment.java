@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.flyer.chat.R;
+import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseFragment;
+import com.flyer.chat.bean.User;
+import com.flyer.chat.util.SharedPreferencesHelper;
 import com.flyer.mapsdk.MapSdk;
 import com.flyer.mapsdk.api.LocationChangeListener;
 
@@ -38,6 +41,7 @@ public class MapFragment extends BaseFragment implements LocationChangeListener 
         FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
         mapSdk = new MapSdk();
         frameLayout.addView(mapSdk.getMapView(getActivity()));
+        mapSdk.setLocationChangeListener(this);
         mapSdk.onStart(savedInstanceState);
     }
 
@@ -56,5 +60,10 @@ public class MapFragment extends BaseFragment implements LocationChangeListener 
     @Override
     public void onLocationChange(double Latitude, double Longitude) {
         Log.i("ttt", "onLocationChange: "+Latitude+":"+Longitude);
+        User user = SharedPreferencesHelper.getInstance().getUser();
+        user.setLatitude(Latitude);
+        user.setLongitude(Longitude);
+        SharedPreferencesHelper.getInstance().setUser(user);
+        ChatApplication.updateUser();
     }
 }

@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
-
+repositories {
+    //个推
+    maven { url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/" }
+    maven { url "$rootDir/../node_modules/react-native/android" }
+}
 android {
     compileSdkVersion COMPILE_SDK_VERSION
 
@@ -8,8 +12,12 @@ android {
         targetSdkVersion TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                GETUI_APP_ID           : "dmProgGJyqAhQquVfEHTY9",
+                GETUI_APP_KEY          : "DXRYscQAqD6lWGMpX7cG24",
+                GETUI_APP_SECRET       : "oNOAzDneYl8vPpflkBPE89"
+        ]
 
     }
 
@@ -24,6 +32,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //高德地图
-    implementation 'com.amap.api:3dmap:6.3.0'
+    //个推
+    implementation 'com.getui:sdk:2.12.3.0'
 }

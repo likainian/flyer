@@ -1,6 +1,7 @@
 package com.flyer.chat.network;
 
-import com.flyer.chat.network.converter.ConverterFactory;
+import com.flyer.chat.network.converter.BitmapConverter;
+import com.flyer.chat.network.converter.FileConverter;
 import com.flyer.chat.network.interceptor.HeaderInterceptor;
 import com.flyer.chat.network.interceptor.LogInterceptor;
 import com.flyer.chat.util.ConstantUtil;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.fastjson.FastJsonConverterFactory;
 
 /**
  * Created by mike.li on 2018/4/17.
@@ -30,7 +32,9 @@ class RetrofitClient {
                             .addInterceptor(new LogInterceptor())
                             .build())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(ConverterFactory.create())
+                    .addConverterFactory(BitmapConverter.create())
+                    .addConverterFactory(FileConverter.create())
+                    .addConverterFactory(FastJsonConverterFactory.create())
                     .build();
         }
         return retrofit;

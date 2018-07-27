@@ -1,11 +1,12 @@
 package com.flyer.mapsdk;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.mapsdk.api.LocationChangeListener;
@@ -17,12 +18,12 @@ import com.flyer.mapsdk.api.MapFace;
 
 public class MapSdk implements MapFace{
     private LocationChangeListener locationChangeListener;
-    private TextureMapView mMapView;
+    private MapView mMapView;
     private AMap aMap;
 
     @Override
     public View getMapView(Context context) {
-        mMapView = new TextureMapView(context);
+        mMapView = new MapView(context);
         initSetting();
         return mMapView;
     }
@@ -43,6 +44,12 @@ public class MapSdk implements MapFace{
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setMyLocationEnabled(true);
+        aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                if(locationChangeListener!=null)locationChangeListener.onLocationChange(location.getLatitude(),location.getLongitude());
+            }
+        });
     }
 
     @Override
@@ -58,5 +65,10 @@ public class MapSdk implements MapFace{
     @Override
     public void onDestroy() {
         mMapView.onDestroy();
+    }
+
+    @Override
+    public void setLocationChangeListener(LocationChangeListener locationChangeListener) {
+        this.locationChangeListener = locationChangeListener;
     }
 }

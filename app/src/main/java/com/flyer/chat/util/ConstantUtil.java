@@ -9,9 +9,10 @@ import java.io.File;
  */
 
 public class ConstantUtil {
-
+    public static final String ACCOUNT_ADD_USER = "addUser";
+    public static final String ACCOUNT_DELETE_USER = "deleteUser";
     public static String getBaseUrl() {
-        return "";
+        return "http://192.168.2.64:8081/";
     }
     public static String getCameraPhonePath(String fileName){
         return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
@@ -21,4 +22,9 @@ public class ConstantUtil {
         return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
                 File.separator+"irenshi"+File.separator+"cache"+File.separator+fileName+".jpg");
     }
+
+    public static String getImageUrl(String imageId){
+        return getBaseUrl()+"image/"+imageId+".jpg";
+    }
+
 }

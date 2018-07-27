@@ -2,7 +2,7 @@ package com.flyer.chat.util;
 
 import com.flyer.chat.R;
 
-import retrofit2.HttpException;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -10,8 +10,8 @@ import retrofit2.HttpException;
 
 public class ErrorUtil {
     public static String getExceptionError(Throwable throwable) {
-        if(throwable instanceof HttpException){
-            return CommonUtil.getString(R.string.toast_response_data_error);
+        if(throwable instanceof SocketTimeoutException){
+            return "请求超时";
         }
         return CommonUtil.getString(R.string.toast_response_data_error);
     }

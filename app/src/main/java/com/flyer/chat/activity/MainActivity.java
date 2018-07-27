@@ -11,20 +11,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyer.chat.R;
+import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.fragment.ChatFragment;
 import com.flyer.chat.fragment.HomeFragment;
 import com.flyer.chat.fragment.MeFragment;
 import com.flyer.chat.fragment.NoteFragment;
+import com.flyer.chat.util.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private TabLayout mHomeTab;
     private List<Fragment> fragmentList;
+    private boolean isExit;
 
     @Override
     protected void onStart() {
@@ -33,6 +42,7 @@ public class MainActivity extends BaseActivity {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},0);
         }
+        ChatApplication.updateUser();
     }
 
     @Override
@@ -43,6 +53,11 @@ public class MainActivity extends BaseActivity {
         initPager();
         initTab();
         initSwitch();
+        initUser();
+    }
+
+    private void initUser() {
+
     }
 
     private void initSwitch() {
@@ -91,5 +106,21 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.frame_layout,fragment).hide(fragment).commit();
         }
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!this.isExit) {
+            this.isExit = true;
+            Toast.makeText(this.getApplication(), CommonUtil.getString(R.string.toast_exit_app_press_again), Toast.LENGTH_LONG).show();
+            Observable.just(isExit).subscribeOn(Schedulers.computation()).delay(2, TimeUnit.SECONDS).subscribe(new Consumer<Boolean>() {
+                @Override
+                public void accept(Boolean aBoolean) throws Exception {
+                    isExit = false;
+                }
+            });
+        } else {
+            super.onBackPressed();
+        }
     }
 }

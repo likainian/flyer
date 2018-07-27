@@ -2,9 +2,10 @@ package com.flyer.chat.network;
 
 import android.graphics.Bitmap;
 
+import com.flyer.chat.bean.User;
+
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -25,7 +26,10 @@ interface RetrofitApi {
 
     //普通Post
     @POST
-    Observable<String> requestPost(@Url String url, @Body RequestBody body);
+    Observable<String> requestPost(@Url String url, @Body Object object);
+
+    @POST
+    Observable<String> addUser(@Url String url, @Body User user);
 
     //没有body的post
     @POST
