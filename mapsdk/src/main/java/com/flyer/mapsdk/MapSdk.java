@@ -8,9 +8,17 @@ import android.view.View;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.mapsdk.api.LocationChangeListener;
 import com.flyer.mapsdk.api.MapFace;
+import com.flyer.mapsdk.api.MarkerClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mike.li on 2018/7/12.
@@ -18,8 +26,10 @@ import com.flyer.mapsdk.api.MapFace;
 
 public class MapSdk implements MapFace{
     private LocationChangeListener locationChangeListener;
+    private MarkerClickListener markerClickListener;
     private MapView mMapView;
     private AMap aMap;
+    private List<Marker> markers = new ArrayList<>();
 
     @Override
     public View getMapView(Context context) {
@@ -50,6 +60,13 @@ public class MapSdk implements MapFace{
                 if(locationChangeListener!=null)locationChangeListener.onLocationChange(location.getLatitude(),location.getLongitude());
             }
         });
+        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(markerClickListener!=null)markerClickListener.onMarkerClickListener(marker.getObject());
+                return false;
+            }
+        });
     }
 
     @Override
@@ -65,6 +82,26 @@ public class MapSdk implements MapFace{
     @Override
     public void onDestroy() {
         mMapView.onDestroy();
+    }
+
+    @Override
+    public void addMarker(double latitude, double longitude, View view,Object object) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(latitude,longitude));
+        markerOptions.icon(BitmapDescriptorFactory.fromView(view));
+        Marker marker = aMap.addMarker(markerOptions);
+        marker.setObject(object);
+        markers.add(marker);
+    }
+
+    @Override
+    public void removeMarkers() {
+        for (Marker marker:markers){
+            if(marker!=null){
+                marker.remove();
+                marker.destroy();
+            }
+        }
     }
 
     @Override

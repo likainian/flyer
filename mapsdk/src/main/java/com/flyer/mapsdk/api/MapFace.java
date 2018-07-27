@@ -13,5 +13,7 @@ public interface MapFace {
     void onStart(Bundle savedInstanceState);
     void onStop();
     void onDestroy();
+    void addMarker(double latitude, double longitude, View view,Object object);
+    void removeMarkers();
     void setLocationChangeListener(LocationChangeListener locationChangeListener);
 }

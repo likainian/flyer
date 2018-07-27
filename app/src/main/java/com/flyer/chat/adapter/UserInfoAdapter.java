@@ -29,5 +29,7 @@ public class UserInfoAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
         helper.setText(R.id.user_name,item.getName());
         helper.setText(R.id.user_sex,item.getSex());
         helper.setText(R.id.user_age,String.valueOf(item.getAge()));
+        helper.setText(R.id.sign,item.getSign());
+        helper.setText(R.id.location,item.getLocation());
     }
 }

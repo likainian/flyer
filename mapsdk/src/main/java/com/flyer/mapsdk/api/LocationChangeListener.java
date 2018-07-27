@@ -5,5 +5,5 @@ package com.flyer.mapsdk.api;
  */
 
 public interface LocationChangeListener {
-    void onLocationChange(double Latitude,double Longitude);
+    void onLocationChange(double latitude,double longitude);
 }

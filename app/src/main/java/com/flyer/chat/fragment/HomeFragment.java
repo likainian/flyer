@@ -37,6 +37,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private FrameLayout mHomeMap;
     private UserInfoAdapter adapter;
+    private List<User> data;
+    private MapFragment mapFragment;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -54,7 +56,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         initView(view);
         initAdapter();
         initData();
-        getChildFragmentManager().beginTransaction().add(R.id.home_map,MapFragment.newInstance()).commit();
         switchMode();
     }
 
@@ -62,8 +63,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         RetrofitService.getInstance().requestGet("allUser", new CallBack<String>() {
             @Override
             public void onResponse(String response) {
-                List<User> data = HttpParseUtil.parseArray(response, "data", User.class);
-                adapter.setNewData(data);
+                data = HttpParseUtil.parseArray(response, "data", User.class);
+                switchMode();
             }
         });
     }
@@ -72,16 +73,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new UserInfoAdapter(getActivity());
         mRecyclerView.setAdapter(adapter);
+
+        mapFragment = MapFragment.newInstance();
+        getChildFragmentManager().beginTransaction().add(R.id.home_map,mapFragment).commit();
     }
     private void switchMode(){
         if(MAP_MODE.equals(SharedPreferencesHelper.getInstance().getHomeMode())){
             mToolbarLeft.setText("列表");
             mHomeMap.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
+            mapFragment.setNewData(data);
         }else {
             mToolbarLeft.setText("地图");
             mHomeMap.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
+            adapter.setNewData(data);
         }
     }
 
