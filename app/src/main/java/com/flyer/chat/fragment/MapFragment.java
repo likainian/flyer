@@ -1,6 +1,6 @@
 package com.flyer.chat.fragment;
 
-import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,21 +8,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.chat.R;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseFragment;
 import com.flyer.chat.bean.User;
-import com.flyer.chat.util.ConstantUtil;
-import com.flyer.chat.util.GlideOptions;
+import com.flyer.chat.map.PoiOverlay;
 import com.flyer.chat.util.SharedPreferencesHelper;
-import com.flyer.mapsdk.MapSdk;
-import com.flyer.mapsdk.api.LocationChangeListener;
 
 import java.util.List;
 
@@ -30,9 +28,11 @@ import java.util.List;
  * Created by mike.li on 2018/7/12.
  */
 
-public class MapFragment extends BaseFragment implements LocationChangeListener {
+public class MapFragment extends BaseFragment implements AMap.OnMyLocationChangeListener, AMap.OnMarkerClickListener {
 
-    private MapSdk mapSdk;
+    private MapView mMapView;
+    private AMap aMap;
+    private PoiOverlay poiOverlay;
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -47,49 +47,60 @@ public class MapFragment extends BaseFragment implements LocationChangeListener 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
-        mapSdk = new MapSdk();
-        frameLayout.addView(mapSdk.getMapView(getActivity()));
-        mapSdk.setLocationChangeListener(this);
-        mapSdk.onStart(savedInstanceState);
+        mMapView = view.findViewById(R.id.map_view);
+        mMapView.onCreate(savedInstanceState);
+        aMap = mMapView.getMap();
+        poiOverlay = new PoiOverlay(getActivity(),aMap);
+        initMap();
+    }
+    private void initMap(){
+        UiSettings uiSettings = aMap.getUiSettings();
+        //缩放按钮
+        uiSettings.setZoomControlsEnabled(false);
+        //定位按钮是否显示
+        uiSettings.setMyLocationButtonEnabled(true);
+        //比例尺
+        uiSettings.setScaleControlsEnabled(true);
+        //定位
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        //定位一次，且将视角移动到地图中心点。
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher));
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW);
+        aMap.setMyLocationStyle(myLocationStyle);
+        aMap.setMyLocationEnabled(true);
+        aMap.setOnMyLocationChangeListener(this);
+        aMap.setOnMarkerClickListener(this);
     }
 
     public void setNewData(List<User> users){
         if(users==null)return;
-        Log.d("ttt", "setNewData: "+users.size());
-        mapSdk.removeMarkers();
-        for (final User user:users){
-            Glide.with(this).applyDefaultRequestOptions(GlideOptions.UserOptions())
-                    .asBitmap().load(ConstantUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    View view = LayoutInflater.from(getActivity()).inflate(R.layout.map_user_info, null);
-                    ImageView userImg = view.findViewById(R.id.user_img);
-                    userImg.setImageBitmap(resource);
-                    mapSdk.addMarker(user.getLatitude(),user.getLongitude(),view,user);
-                }
-            });
-        }
+        poiOverlay.removeUsers();
+        poiOverlay.addUsers(users);
     }
     @Override
     public void onStop() {
         super.onStop();
-        mapSdk.onStop();
+        mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapSdk.onDestroy();
+        mMapView.onDestroy();
     }
 
     @Override
-    public void onLocationChange(double Latitude, double Longitude) {
-        Log.i("ttt", "onLocationChange: "+Latitude+":"+Longitude);
+    public void onMyLocationChange(Location location) {
+        Log.i("ttt", "onLocationChange: "+location.getLatitude()+":"+location.getLongitude());
         User user = SharedPreferencesHelper.getInstance().getUser();
-        user.setLatitude(Latitude);
-        user.setLongitude(Longitude);
+        user.setLatitude(location.getLatitude());
+        user.setLongitude(location.getLongitude());
         SharedPreferencesHelper.getInstance().setUser(user);
         ChatApplication.updateUser();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 }

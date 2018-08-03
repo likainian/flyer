@@ -1,1 +1,1 @@
-include ':app', ':mapsdk', ':pushsdk'
+include ':app'//, ':pushsdk'

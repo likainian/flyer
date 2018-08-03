@@ -8,4 +8,6 @@
     <string name="text_loading">加载中…</string>
     <string name="toast_response_data_error">网络请求返回错误</string>
     <string name="toast_exit_app_press_again">再按一次退出程序</string>
+
+    <string name="text_personnel_information">我的信息</string>
 </resources>

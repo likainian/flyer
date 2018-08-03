@@ -64,6 +64,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onResponse(String response) {
                 data = HttpParseUtil.parseArray(response, "data", User.class);
+//                for (User user:data){
+//                    if(TextUtils.equals(user.getUdid(),SharedPreferencesHelper.getInstance().getUdid())){
+//                        data.remove(user);
+//                    }
+//                }
                 switchMode();
             }
         });

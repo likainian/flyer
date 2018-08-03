@@ -8,12 +8,16 @@ android {
         targetSdkVersion TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi"//, "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+            abiFilters "armeabi", "armeabi-v7a"//, "arm64-v8a", "x86","arm64-v8a","x86_64"
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY  : "eaa55c30696293983d30fa74", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     buildTypes {
         release {
@@ -31,8 +35,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //安卓
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     //工具
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -48,6 +50,10 @@ dependencies {
     //刷新
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     //适配状态栏
-    implementation project(':mapsdk')
-//    implementation project(':pushsdk')
+    implementation 'com.amap.api:3dmap:6.3.0'
+    //极光
+    implementation 'cn.jiguang.sdk:jmessage:2.6.1'
+    implementation 'cn.jiguang.sdk:janalytics:1.1.1'
+    implementation 'cn.jiguang.sdk:jpush:3.1.5'
+    implementation 'cn.jiguang.sdk:jcore:1.2.3'
 }

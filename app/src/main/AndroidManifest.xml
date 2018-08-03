@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.flyer.chat">
     <!--允许程序打开网络套接字-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,7 +16,15 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!--用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-
+    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!--用于申请获取蓝牙信息进行室内定位-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <application
         android:name=".app.ChatApplication"
         android:allowBackup="true"
@@ -23,6 +32,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="c06da13d27dcfabd0afd32a34451c0d8"/>
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +42,27 @@
         </activity>
 
         <activity android:name=".activity.LoginActivity"/>
+        <!--推送-->
+        <receiver
+            android:name=".receiver.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <!--注册所得到的注册 ID-->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!--收到了自定义消息-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!--收到了通知-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!--用户点击了通知-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!--用户点击了通知栏中自定义的按钮-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <!--服务的连接状态发生变化-->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="com.flyer.chat" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
