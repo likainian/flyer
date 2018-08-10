@@ -41,11 +41,13 @@ public class ChatApplication extends Application {
         //极光im
         JMessageClient.setDebugMode(BuildConfig.DEBUG);
         JMessageClient.init(this);
-        JMessageClient.register(SharedPreferencesHelper.getInstance().getUdid(), "", new BasicCallback() {
+        JMessageClient.register(SharedPreferencesHelper.getInstance().getUdid(), "123456", new BasicCallback() {
             @Override
             public void gotResult(int i, String s) {
+                LogUtil.i("ttt","register:"+i+"=="+s);
             }
         });
+
         updateUser();
     }
     public static void updateUser(){

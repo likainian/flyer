@@ -1,7 +1,5 @@
 package com.flyer.chat.network;
 
-import com.flyer.chat.network.converter.BitmapConverter;
-import com.flyer.chat.network.converter.FileConverter;
 import com.flyer.chat.network.interceptor.HeaderInterceptor;
 import com.flyer.chat.network.interceptor.LogInterceptor;
 import com.flyer.chat.util.ConstantUtil;
@@ -32,8 +30,6 @@ class RetrofitClient {
                             .addInterceptor(new LogInterceptor())
                             .build())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(BitmapConverter.create())
-                    .addConverterFactory(FileConverter.create())
                     .addConverterFactory(FastJsonConverterFactory.create())
                     .build();
         }

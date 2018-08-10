@@ -27,12 +27,7 @@ import cn.jpush.im.android.api.model.Conversation;
 
 public class ChatFragment extends BaseFragment {
     public static ChatFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        ChatFragment fragment = new ChatFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new ChatFragment();
     }
     public ImageView mToolbarLeft;
     public TextView mToolbarMiddle;

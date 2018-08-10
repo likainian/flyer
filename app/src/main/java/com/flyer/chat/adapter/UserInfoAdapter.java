@@ -8,11 +8,10 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.ConversationActivity;
 import com.flyer.chat.bean.User;
 import com.flyer.chat.util.ConstantUtil;
 import com.flyer.chat.util.GlideOptions;
-
-import cn.jpush.im.android.api.model.Conversation;
 
 /**
  * Created by mike.li on 2018/7/27.
@@ -38,7 +37,7 @@ public class UserInfoAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
             @Override
             public void onClick(View v) {
                 //第二个参数是appkey,如果填空则默认为本应用的appkey
-                Conversation singleConversation = Conversation.createSingleConversation(item.getUdid(), null);
+                ConversationActivity.startActivity(context,item.getUdid());
             }
         });
     }

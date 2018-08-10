@@ -9,6 +9,6 @@ import com.flyer.chat.R;
 
 public class GlideOptions {
     public static RequestOptions UserOptions(){
-        return new RequestOptions().centerCrop().placeholder(R.drawable.ic_launcher).error(R.drawable.ic_launcher);
+        return new RequestOptions().centerCrop().placeholder(R.drawable.default_head).error(R.drawable.default_head);
     }
 }

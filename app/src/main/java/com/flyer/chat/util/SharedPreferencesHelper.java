@@ -115,6 +115,12 @@ public class SharedPreferencesHelper {
             remove(key);
         }
     }
+    public String getUserName(){
+        return getString("user_name","");
+    }
+    public String getPassWord(){
+        return getString("pass_word","");
+    }
     public User getUser(){
         User user = getObject(USER, User.class);
         if(user==null){
