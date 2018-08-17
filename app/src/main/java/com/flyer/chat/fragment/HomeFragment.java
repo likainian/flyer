@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
-import com.flyer.chat.adapter.UserInfoAdapter;
+import com.flyer.chat.adapter.NearAdapter;
 import com.flyer.chat.base.BaseFragment;
 import com.flyer.chat.bean.User;
 import com.flyer.chat.network.CallBack;
@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mToolbar;
     private RecyclerView mRecyclerView;
     private FrameLayout mHomeMap;
-    private UserInfoAdapter adapter;
+    private NearAdapter adapter;
     private List<User> data;
     private MapFragment mapFragment;
 
@@ -64,11 +64,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onResponse(String response) {
                 data = HttpParseUtil.parseArray(response, "data", User.class);
-//                for (User user:data){
-//                    if(TextUtils.equals(user.getUdid(),SharedPreferencesHelper.getInstance().getUdid())){
-//                        data.remove(user);
-//                    }
-//                }
                 switchMode();
             }
         });
@@ -76,7 +71,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new UserInfoAdapter(getActivity());
+        adapter = new NearAdapter(getActivity());
         mRecyclerView.setAdapter(adapter);
 
         mapFragment = MapFragment.newInstance();

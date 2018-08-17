@@ -3,6 +3,7 @@ package com.flyer.chat.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -11,13 +12,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
+import com.flyer.chat.adapter.ConversationAdapter;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.util.CheckUtil;
+import com.flyer.chat.util.ToastHelper;
+
+import java.util.List;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
-import cn.jpush.im.android.api.options.MessageSendingOptions;
+import cn.jpush.im.api.BasicCallback;
 
 /**
  * Created by mike.li on 2018/8/6.
@@ -32,10 +37,12 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
     private RecyclerView mRecyclerView;
     private EditText mMessageText;
     private TextView mMessageSend;
+    private String name;
 
-    public static void startActivity(Context context, String udid) {
+    public static void startActivity(Context context, String name) {
+        JMessageClient.enterSingleConversation(name);
         Intent intent = new Intent(context, ConversationActivity.class);
-        intent.putExtra("udid", udid);
+        intent.putExtra("name", name);
         context.startActivity(intent);
     }
 
@@ -43,14 +50,21 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-        initView();
-        String udid = getIntent().getStringExtra("udid");
-        conversation = Conversation.createSingleConversation(udid, "eaa55c30696293983d30fa74");
+        name = getIntent().getStringExtra("name");
+        conversation = Conversation.createSingleConversation(name);
         if(conversation==null){
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            ToastHelper.showToast(name+"创建对话失败");
+        }else {
+            ToastHelper.showToast(name+"创建对话成功");
         }
+        initView();
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Message> allMessage = conversation.getAllMessage();
+        mRecyclerView.setAdapter(new ConversationAdapter(allMessage));
     }
 
     private void initView() {
@@ -63,6 +77,7 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
         mMessageSend = findViewById(R.id.message_send);
         mToolbarLeft.setOnClickListener(this);
         mMessageSend.setOnClickListener(this);
+        mToolbarMiddle.setText(name);
     }
 
     @Override
@@ -74,11 +89,21 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
             case R.id.message_send:
                 if(CheckUtil.isNotEmpty(mMessageText.getText().toString().trim())){
                     Message msg = conversation.createSendTextMessage(mMessageText.getText().toString().trim());
-                    MessageSendingOptions options = new MessageSendingOptions();
-                    options.setNeedReadReceipt(true);
-                    JMessageClient.sendMessage(msg, options);
+                    msg.setOnSendCompleteCallback(new BasicCallback() {
+                        @Override
+                        public void gotResult(int i, String s) {
+
+                        }
+                    });
+                    JMessageClient.sendMessage(msg);
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        JMessageClient.exitConversation();
+        super.onStop();
     }
 }

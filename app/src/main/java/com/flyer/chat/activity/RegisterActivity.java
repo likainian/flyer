@@ -5,17 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
+import com.flyer.chat.util.KeyBoardUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.ToastHelper;
 
@@ -30,13 +30,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private ImageView mToolbarLeft;
     private TextView mToolbarMiddle;
     private TextView mToolbarRight;
-    private RelativeLayout mToolbar;
+    private ScrollView mRegisterScroll;
     private ImageView mUserPhoto;
     private EditText mUserName;
     private EditText mPassword;
     private ImageView mSeePassword;
     private CheckBox mSavePassword;
-    private Button mBtnRegister;
+    private TextView mBtnRegister;
     private TextView mLoginHelp;
 
     public static void startActivity(Context context) {
@@ -54,7 +54,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mToolbarLeft = findViewById(R.id.toolbar_left);
         mToolbarMiddle = findViewById(R.id.toolbar_middle);
         mToolbarRight = findViewById(R.id.toolbar_right);
-        mToolbar = findViewById(R.id.toolbar);
+        mRegisterScroll = findViewById(R.id.register_scroll);
         mUserPhoto = findViewById(R.id.user_photo);
         mUserName = findViewById(R.id.edit_user_name);
         mPassword = findViewById(R.id.password);
@@ -63,6 +63,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mBtnRegister = findViewById(R.id.btn_register);
         mLoginHelp = findViewById(R.id.login_help);
 
+        mToolbarLeft.setOnClickListener(this);
         mBtnRegister.setOnClickListener(this);
         mUserName.addTextChangedListener(new EditTextWatcher() {
             @Override
@@ -76,19 +77,33 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 mBtnRegister.setEnabled(registerEnable());
             }
         });
+        KeyBoardUtil.register(this, new KeyBoardUtil.KeyBoardStatusListener() {
+            @Override
+            public void onKeyBoardStateChanged(boolean isShowKeyBoard, int keyBoardTop) {
+                int[] location = new int[2];
+                mBtnRegister.getLocationOnScreen(location);
+                final int scrollY = location[1] + mBtnRegister.getHeight()-keyBoardTop;
+                if (scrollY > 0) {
+                    mRegisterScroll.smoothScrollBy(0, scrollY);
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.toolbar_left:
+                onBackPressed();
+                break;
             case R.id.btn_register:
                 JMessageClient.register(mUserName.getText().toString().trim(), mPassword.getText().toString().trim(), new BasicCallback() {
                     @Override
                     public void gotResult(int i, String s) {
                         if(i==0){
-                            EditUserInfoActivity.startActivity(RegisterActivity.this);
+                            UserInfoActivity.startActivity(RegisterActivity.this,true);
                         }else if(898001==i){
-                            ToastHelper.showToast("用户已存在，请直接登陆!");
+                            ToastHelper.showToast("用户名已存在");
                         }else {
                             ToastHelper.showToast(s);
                         }

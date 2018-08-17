@@ -26,8 +26,16 @@
     </style>
     <!--加载进度对话框的Theme-->
     <style name="LoadingDialog" parent="Theme.AppCompat.Dialog">
+        //此属性控制悬浮窗背景是否变暗
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="SelectDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="anim_y_bottom">
+        <item name="android:windowEnterAnimation">@anim/anim_y_up_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_y_down_out</item>
     </style>
 </resources>

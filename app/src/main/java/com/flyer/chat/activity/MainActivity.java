@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyer.chat.R;
-import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.fragment.ChatFragment;
 import com.flyer.chat.fragment.HomeFragment;
@@ -49,7 +48,6 @@ public class MainActivity extends BaseActivity {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},0);
         }
-        ChatApplication.updateUser();
         JAnalyticsInterface.onEvent(this,new CountEvent("打开主界面").addKeyValue("key","value"));
     }
 
@@ -128,7 +126,7 @@ public class MainActivity extends BaseActivity {
                 }
             });
         } else {
-            super.onBackPressed();
+            System.exit(0);
         }
     }
 }

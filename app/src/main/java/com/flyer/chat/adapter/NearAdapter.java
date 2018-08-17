@@ -17,9 +17,9 @@ import com.flyer.chat.util.GlideOptions;
  * Created by mike.li on 2018/7/27.
  */
 
-public class UserInfoAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
+public class NearAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
     private Context context;
-    public UserInfoAdapter(Context context) {
+    public NearAdapter(Context context) {
         super(R.layout.item_user_info);
         this.context = context;
     }
@@ -37,7 +37,7 @@ public class UserInfoAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
             @Override
             public void onClick(View v) {
                 //第二个参数是appkey,如果填空则默认为本应用的appkey
-                ConversationActivity.startActivity(context,item.getUdid());
+                ConversationActivity.startActivity(context,item.getName());
             }
         });
     }

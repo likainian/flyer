@@ -13,6 +13,7 @@ import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.bean.User;
 import com.flyer.chat.fragment.HomeFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -104,7 +105,7 @@ public class SharedPreferencesHelper {
         if (CheckUtil.isNotEmpty(jsonString)) {
             return JSON.parseArray(jsonString, clazz);
         }else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -115,18 +116,36 @@ public class SharedPreferencesHelper {
             remove(key);
         }
     }
+    public void setUserName(String name){
+        putString("user_name",name);
+        setUserNameList(name);
+    }
     public String getUserName(){
         return getString("user_name","");
     }
+    public void setUserNameList(String name){
+        if(CheckUtil.isEmpty(name))return;
+        List<String> userNameList = getUserNameList();
+        if(!userNameList.contains(name)){
+            userNameList.add(name);
+        }
+        putObjectList("user_name_list",userNameList);
+    }
+    public List<String> getUserNameList(){
+        return getObjectList("user_name_list",String.class);
+    }
     public String getPassWord(){
-        return getString("pass_word","");
+        return getString("pass_word_"+getUserName(),"");
+    }
+    public void setPassWord(String passWord){
+        putString("pass_word_"+getUserName(),passWord);
     }
     public User getUser(){
         User user = getObject(USER, User.class);
         if(user==null){
             user = new User();
             user.setUdid(getUdid());
-            user.setName("未知");
+            user.setName(getUserName());
             user.setSex("未知");
             user.setAge(22);
             putObject(USER,user);

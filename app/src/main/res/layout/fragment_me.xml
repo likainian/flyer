@@ -1,196 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#f4f4f4"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#f4f4f4"
         android:layout_width="match_parent"
-        android:background="#00BF93"
-        android:layout_height="200dp">
-        <ImageView
-            android:id="@+id/head_back"
-            android:scaleType="centerCrop"
+        android:layout_height="wrap_content">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <de.hdodenhof.circleimageview.CircleImageView
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/white"
-                android:id="@+id/head"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-            <TextView
-                android:id="@+id/name"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+            android:background="#00BF93"
+            android:layout_height="200dp">
+            <ImageView
+                android:id="@+id/head_back"
+                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/white"
+                    android:id="@+id/head"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/me_info"
+            android:background="@drawable/list_bg_line_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_info" />
+            <TextView
+                android:text="@string/text_personnel_information"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#3a3a3a"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="6dp"
+                android:layout_height="11dp"
+                android:background="@drawable/next_icon" />
         </LinearLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/me_info"
-        android:background="@color/white"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent">
+        <LinearLayout
+            android:id="@+id/share_chat"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_info" />
+            <TextView
+                android:text="推荐给朋友"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#3a3a3a"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="6dp"
+                android:layout_height="11dp"
+                android:background="@drawable/next_icon" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/feed_back"
+            android:background="@drawable/list_bg_line_padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_info" />
+            <TextView
+                android:text="帮助与反馈"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#3a3a3a"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="6dp"
+                android:layout_height="11dp"
+                android:background="@drawable/next_icon" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/up_data"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_info" />
+            <TextView
+                android:text="版本更新"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#3a3a3a"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="6dp"
+                android:layout_height="11dp"
+                android:background="@drawable/next_icon" />
+        </LinearLayout>
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_info" />
-
+        <LinearLayout
+            android:id="@+id/about_chat"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_info" />
+            <TextView
+                android:text="关于微聊"
+                android:textSize="16sp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#3a3a3a"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="6dp"
+                android:layout_height="11dp"
+                android:background="@drawable/next_icon" />
+        </LinearLayout>
         <TextView
-            android:textSize="16sp"
-            android:textColor="#3a3a3a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:text="@string/text_personnel_information" />
+            android:gravity="center"
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/shape_white_r2"
+            android:focusable="true"
+            android:text="退出登陆"
+            android:textColor="#666666"
+            android:textSize="17sp" />
+    </LinearLayout>
 
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="11dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/next_icon" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/share_chat"
-        android:background="@color/white"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_info" />
-
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#3a3a3a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:text="推荐给朋友" />
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="11dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/next_icon" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/feed_back"
-        android:background="@color/white"
-        android:layout_marginTop="10dp"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_info" />
-
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#3a3a3a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:text="帮助与反馈" />
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="11dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/next_icon" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/up_data"
-        android:background="@color/white"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_info" />
-
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#3a3a3a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:text="版本更新" />
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="11dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/next_icon" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/about_chat"
-        android:background="@color/white"
-        android:layout_marginTop="10dp"
-        android:layout_height="50dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/user_info" />
-
-        <TextView
-            android:textSize="16sp"
-            android:textColor="#3a3a3a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:text="关于微聊" />
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="11dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/next_icon" />
-    </RelativeLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -42,19 +42,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.amap.api.v2.apikey" android:value="c06da13d27dcfabd0afd32a34451c0d8"/>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.EditUserInfoActivity"/>
+        <activity android:name=".activity.MainActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".activity.UserInfoActivity"/>
 
         <activity android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".activity.RegisterActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".activity.ConversationActivity"/>
+        <activity android:name=".activity.LauncherActivity"
+            android:theme="@style/FullTransTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.ConversationActivity"/>
         <!--推送-->
         <receiver
             android:name=".receiver.PushReceiver"
@@ -79,23 +83,6 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
                 <category android:name="com.flyer.chat" />
             </intent-filter>
-        </receiver>
-        <!-- im-->
-        <receiver
-            android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false" />
-
-        <!-- im-->
-        <provider
-            android:name="cn.jpush.android.service.DataProvider"
-            android:authorities="com.flyer.chat.DataProvider"
-            android:exported="false" />
-
-        <!-- im-->
-        <receiver
-            android:name="cn.jpush.im.android.helpers.IMReceiver"
-            android:enabled="true"
-            android:exported="false">
         </receiver>
     </application>
 

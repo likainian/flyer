@@ -46,6 +46,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/register_scroll"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -79,7 +80,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="用户名："
+                    android:text="手机号："
                     android:textColor="#333333"
                     android:textSize="15sp" />
 
@@ -88,6 +89,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:hint="请输入手机号"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
@@ -109,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="密码："
+                    android:text="密    码："
                     android:textColor="#333333"
                     android:textSize="15sp" />
 
@@ -118,6 +120,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:hint="请输入密码"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
@@ -162,7 +165,8 @@
 
             </RelativeLayout>
 
-            <Button
+            <TextView
+                android:gravity="center"
                 android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
@@ -171,7 +175,7 @@
                 android:enabled="false"
                 android:focusable="true"
                 android:text="下一步"
-                android:textColor="#999999"
+                android:textColor="#666666"
                 android:textSize="17sp" />
 
             <FrameLayout
@@ -185,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginTop="40dp"
                     android:text="遇到问题"
                     android:textColor="#999999"
                     android:textSize="13sp" />

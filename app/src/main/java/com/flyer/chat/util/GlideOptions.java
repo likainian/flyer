@@ -11,4 +11,7 @@ public class GlideOptions {
     public static RequestOptions UserOptions(){
         return new RequestOptions().centerCrop().placeholder(R.drawable.default_head).error(R.drawable.default_head);
     }
+    public static RequestOptions ImageOptions(){
+        return new RequestOptions().centerCrop().placeholder(R.drawable.default_image).error(R.drawable.default_image);
+    }
 }
