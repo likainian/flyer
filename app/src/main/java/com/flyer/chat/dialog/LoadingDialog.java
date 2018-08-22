@@ -12,7 +12,7 @@ import com.flyer.chat.R;
  */
 
 public class LoadingDialog extends AlertDialog {
-    private TextView tvMessage;
+    private String message;
 
     public LoadingDialog(Context context) {
         super(context,R.style.LoadingDialog);
@@ -22,14 +22,15 @@ public class LoadingDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_loading_layout);
-        tvMessage = findViewById(R.id.tv_message);
-    }
-
-    @Override
-    public void setMessage(CharSequence message) {
-        super.setMessage(message);
+        setCanceledOnTouchOutside(false);
+        TextView tvMessage = findViewById(R.id.tv_message);
         if (tvMessage != null) {
             tvMessage.setText(message);
         }
+    }
+
+    public LoadingDialog setMessage(String message) {
+        this.message = message;
+        return this;
     }
 }

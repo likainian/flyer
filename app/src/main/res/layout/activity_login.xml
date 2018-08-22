@@ -17,6 +17,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="3">
                 <ImageView
+                    android:layout_margin="20dp"
                     android:id="@+id/user_photo"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
@@ -25,6 +26,7 @@
                     android:src="@drawable/ic_launcher" />
             </FrameLayout>
             <LinearLayout
+                android:background="@drawable/list_bg_line"
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
@@ -43,7 +45,7 @@
                     android:hint="请输入手机号"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/white"
+                    android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
                     android:textCursorDrawable="@drawable/edit_cursor"
@@ -57,12 +59,8 @@
                     android:src="@drawable/more_down" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#dddddd" />
-
             <LinearLayout
+                android:background="@drawable/list_bg_line"
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
@@ -81,7 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="请输入密码"
-                    android:background="@color/white"
+                    android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
                     android:textCursorDrawable="@drawable/edit_cursor"
@@ -94,11 +92,6 @@
                     android:scaleType="center"
                     android:src="@drawable/password_colse_eye" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#dddddd" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -172,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
                     android:text="遇到问题"
-                    android:layout_marginBottom="20dp"
+                    android:layout_margin="20dp"
                     android:textColor="#999999"
                     android:textSize="13sp" />
             </FrameLayout>

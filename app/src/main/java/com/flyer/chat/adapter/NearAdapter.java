@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.ConversationActivity;
 import com.flyer.chat.bean.User;
-import com.flyer.chat.util.ConstantUtil;
+import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.GlideOptions;
 
 /**
@@ -27,7 +27,7 @@ public class NearAdapter extends BaseQuickAdapter<User,BaseViewHolder>{
     @Override
     protected void convert(BaseViewHolder helper, final User item) {
         ImageView userImg = helper.getView(R.id.user_img);
-        Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(ConstantUtil.getImageUrl(item.getImg())).into(userImg);
+        Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(CommonUtil.getImageUrl(item.getImg())).into(userImg);
         helper.setText(R.id.user_name,item.getName());
         helper.setText(R.id.user_sex,item.getSex());
         helper.setText(R.id.user_age,String.valueOf(item.getAge()));

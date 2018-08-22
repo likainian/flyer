@@ -22,9 +22,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.flyer.chat.R;
 import com.flyer.chat.bean.User;
-import com.flyer.chat.util.ConstantUtil;
+import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.GlideOptions;
-import com.flyer.chat.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class PoiOverlay {
         this.users = users;
         for (final User user:users){
             Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions())
-                    .asBitmap().load(ConstantUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
+                    .asBitmap().load(CommonUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                     View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
@@ -95,8 +94,6 @@ public class PoiOverlay {
             LatLng position = marker.getOptions().getPosition();
             b.include(position);
         }
-        User user = SharedPreferencesHelper.getInstance().getUser();
-        b.include(new LatLng(user.getLatitude(),user.getLongitude()));
         return b.build();
     }
 }

@@ -10,7 +10,6 @@ import android.util.DisplayMetrics;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flyer.chat.app.ChatApplication;
-import com.flyer.chat.bean.User;
 import com.flyer.chat.fragment.HomeFragment;
 
 import java.util.ArrayList;
@@ -28,10 +27,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SharedPreferencesHelper {
     private static SharedPreferencesHelper instance;
     private SharedPreferences sharedPreferences;
-    private String SHARED_USER_SESSION = "shared_user_session";
     public static final String LANGUAGE = "language";
-    public static final String HOME_MODE = "home_mode";
-    public static final String USER = "user";
     public static final String CHINA = "zh_CN";
     public static final String ENGLISH = "en";
     public SharedPreferencesHelper(Application application) {
@@ -59,20 +55,20 @@ public class SharedPreferencesHelper {
         sharedPreferences.edit().putString(key,value).apply();
     }
 
-    public void putBoolean(String key,boolean value) {
-        sharedPreferences.edit().putBoolean(key,value).apply();
-    }
-
-    private void putLong(String key,long value){
-        sharedPreferences.edit().putLong(key,value).apply();
-    }
-
     public String getString(String key, String value) {
         return sharedPreferences.getString(key, value);
     }
 
+    public void putBoolean(String key,boolean value) {
+        sharedPreferences.edit().putBoolean(key,value).apply();
+    }
+
     public boolean getBoolean(String key, boolean value) {
         return sharedPreferences.getBoolean(key, value);
+    }
+
+    private void putLong(String key,long value){
+        sharedPreferences.edit().putLong(key,value).apply();
     }
 
     public long getLong(String key, long value) {
@@ -100,6 +96,14 @@ public class SharedPreferencesHelper {
         }
     }
 
+    public <T> void putObjectList(String key, List<T> list) {
+        if (CheckUtil.isNotEmpty(list)) {
+            putString(key, JSON.toJSONString(list));
+        } else {
+            remove(key);
+        }
+    }
+
     public <T> List<T> getObjectList(String key, Class<T> clazz) {
         String jsonString = getString(key, "");
         if (CheckUtil.isNotEmpty(jsonString)) {
@@ -109,20 +113,15 @@ public class SharedPreferencesHelper {
         }
     }
 
-    public <T> void putObjectList(String key, List<T> list) {
-        if (CheckUtil.isNotEmpty(list)) {
-            putString(key, JSON.toJSONString(list));
-        } else {
-            remove(key);
-        }
-    }
     public void setUserName(String name){
         putString("user_name",name);
         setUserNameList(name);
     }
+
     public String getUserName(){
         return getString("user_name","");
     }
+
     public void setUserNameList(String name){
         if(CheckUtil.isEmpty(name))return;
         List<String> userNameList = getUserNameList();
@@ -131,40 +130,30 @@ public class SharedPreferencesHelper {
         }
         putObjectList("user_name_list",userNameList);
     }
+
     public List<String> getUserNameList(){
         return getObjectList("user_name_list",String.class);
     }
+    
     public String getPassWord(){
         return getString("pass_word_"+getUserName(),"");
     }
+
     public void setPassWord(String passWord){
         putString("pass_word_"+getUserName(),passWord);
     }
-    public User getUser(){
-        User user = getObject(USER, User.class);
-        if(user==null){
-            user = new User();
-            user.setUdid(getUdid());
-            user.setName(getUserName());
-            user.setSex("未知");
-            user.setAge(22);
-            putObject(USER,user);
-        }
-        return user;
-    }
-    public void setUser(User user){
-        putObject(USER,user);
-    }
+
     public String getUdid() {
-        String uuid = sharedPreferences.getString(SHARED_USER_SESSION, "");
+        String uuid = sharedPreferences.getString("shared_user_session", "");
         if(CheckUtil.isEmpty(uuid)){
             String deviceUuid = DeviceUtil.getDeviceUuid().toString();
-            sharedPreferences.edit().putString(SHARED_USER_SESSION,deviceUuid).apply();
+            sharedPreferences.edit().putString("shared_user_session",deviceUuid).apply();
             return deviceUuid;
         }else {
             return uuid;
         }
     }
+
     public String getLanguage(){
         Configuration config = ChatApplication.getInstance().getResources().getConfiguration();
         Locale sysLocale;
@@ -198,10 +187,12 @@ public class SharedPreferencesHelper {
         res.updateConfiguration(conf, dm);
         TimeUtil.switchLocal(locale);
     }
+
     public void putHomeMode(String mode){
-        putString(HOME_MODE,mode);
+        putString("home_mode",mode);
     }
+
     public String getHomeMode(){
-        return getString(HOME_MODE, HomeFragment.LIST_MODE);
+        return getString("home_mode", HomeFragment.LIST_MODE);
     }
 }

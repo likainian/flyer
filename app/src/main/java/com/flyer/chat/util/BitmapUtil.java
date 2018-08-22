@@ -53,7 +53,7 @@ public class BitmapUtil {
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         int options = 90;
         // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-        while (baos.toByteArray().length / 1024 > 100) {
+        while (baos.toByteArray().length / 1024 > 200) {
             baos.reset();// 重置baos即清空baos
             // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);

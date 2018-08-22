@@ -2,7 +2,6 @@ package com.flyer.chat.network;
 
 import com.flyer.chat.network.interceptor.HeaderInterceptor;
 import com.flyer.chat.network.interceptor.LogInterceptor;
-import com.flyer.chat.util.ConstantUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +19,7 @@ class RetrofitClient {
     public synchronized static Retrofit getInstance(){
         if(retrofit==null){
             retrofit = new Retrofit.Builder()
-                    .baseUrl(ConstantUtil.getBaseUrl())
+                    .baseUrl("http://192.168.2.64:8081/")
                     .client( new OkHttpClient.Builder()
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)

@@ -8,7 +8,7 @@ public class BaseContract {
     public interface BaseView{
         boolean isActive();
         void showLoadingDialog();
-        void showLoadingDialog(boolean isCancel, String message);
+        void showLoadingDialog(String message);
         void closeLoadingDialog();
     }
     public interface BasePresenter{

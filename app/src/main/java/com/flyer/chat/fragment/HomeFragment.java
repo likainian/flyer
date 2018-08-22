@@ -100,6 +100,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         this.mHomeMap = rootView.findViewById(R.id.home_map);
         mToolbarMiddle.setText("附近的人");
         mToolbarLeft.setOnClickListener(this);
+        mToolbarRight.setOnClickListener(this);
     }
 
     @Override
@@ -112,6 +113,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     SharedPreferencesHelper.getInstance().putHomeMode(MAP_MODE);
                 }
                 switchMode();
+                break;
+
+            case R.id.toolbar_right:
+
                 break;
         }
     }

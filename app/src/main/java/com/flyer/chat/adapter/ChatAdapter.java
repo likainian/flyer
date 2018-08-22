@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.ConversationActivity;
-import com.flyer.chat.util.ConstantUtil;
+import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.GlideOptions;
 import com.flyer.chat.util.TimeUtil;
 
@@ -33,7 +33,7 @@ public class ChatAdapter extends BaseQuickAdapter<Conversation,BaseViewHolder>{
     protected void convert(BaseViewHolder helper, final Conversation item) {
         UserInfo userInfo = (UserInfo) item.getTargetInfo();
         ImageView userImg = helper.getView(R.id.user_img);
-        Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(ConstantUtil.getImageUrl(userInfo.getAvatar())).into(userImg);
+        Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(CommonUtil.getImageUrl(userInfo.getAvatar())).into(userImg);
         helper.setText(R.id.user_name,item.getTitle());
         helper.setText(R.id.last_message,item.getLatestText());
         helper.setText(R.id.last_message_time, TimeUtil.longToYMDHM(item.getLastMsgDate()));

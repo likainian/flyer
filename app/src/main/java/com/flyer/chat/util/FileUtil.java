@@ -12,13 +12,13 @@ import java.io.IOException;
  */
 
 public class FileUtil {
-    public static void saveCacheBitmap(String path, Bitmap bitmap) {
-        String fullPath = ConstantUtil.getSavePicturePath(path);
+    public static void saveCacheBitmap(String name, Bitmap bitmap) {
+        String fullPath = DeviceUtil.getSavePicturePath(name);
         File file = new File(fullPath);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,8 +33,8 @@ public class FileUtil {
         }
     }
 
-    public static Bitmap getCacheBitmap(String path) {
-        String fullPath = ConstantUtil.getSavePicturePath(path);
+    public static Bitmap getCacheBitmap(String name) {
+        String fullPath = DeviceUtil.getSavePicturePath(name);
         return BitmapFactory.decodeFile(fullPath);
     }
 

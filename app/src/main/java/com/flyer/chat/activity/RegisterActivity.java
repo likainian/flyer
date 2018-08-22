@@ -101,7 +101,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void gotResult(int i, String s) {
                         if(i==0){
-                            UserInfoActivity.startActivity(RegisterActivity.this,true);
+
                         }else if(898001==i){
                             ToastHelper.showToast("用户名已存在");
                         }else {

@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,9 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.chat.R;
-import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseFragment;
 import com.flyer.chat.bean.User;
 import com.flyer.chat.map.PoiOverlay;
-import com.flyer.chat.util.SharedPreferencesHelper;
 
 import java.util.List;
 
@@ -91,12 +88,6 @@ public class MapFragment extends BaseFragment implements AMap.OnMyLocationChange
 
     @Override
     public void onMyLocationChange(Location location) {
-        Log.i("ttt", "onLocationChange: "+location.getLatitude()+":"+location.getLongitude());
-        User user = SharedPreferencesHelper.getInstance().getUser();
-        user.setLatitude(location.getLatitude());
-        user.setLongitude(location.getLongitude());
-        SharedPreferencesHelper.getInstance().setUser(user);
-        ChatApplication.updateUser();
     }
 
     @Override

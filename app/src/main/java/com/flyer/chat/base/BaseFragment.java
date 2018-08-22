@@ -30,10 +30,10 @@ public abstract class BaseFragment extends Fragment implements BaseContract.Base
     }
 
     @Override
-    public void showLoadingDialog(boolean isCancel, String message) {
+    public void showLoadingDialog(String message) {
         BaseActivity activity = (BaseActivity) getActivity();
         if (activity != null) {
-            activity.showLoadingDialog(isCancel,message);
+            activity.showLoadingDialog(message);
         }
     }
 

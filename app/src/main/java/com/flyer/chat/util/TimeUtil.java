@@ -1,6 +1,7 @@
 package com.flyer.chat.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -27,5 +28,33 @@ public class TimeUtil {
     public static String longToYMDHM(Long time){
         sdf.applyPattern(YMDHM);
         return sdf.format(time);
+    }
+
+    public static int longToAge(Long time){
+        Calendar calNow = Calendar.getInstance();
+        calNow.setTimeInMillis(System.currentTimeMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        if (calNow.before(cal)) {
+            return 0;
+        }
+        int yearNow = calNow.get(Calendar.YEAR);
+        int monthNow = calNow.get(Calendar.MONTH);
+        int dayOfMonthNow = calNow.get(Calendar.DAY_OF_MONTH);
+
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+
+        int age = yearNow - yearBirth;
+
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) age--;
+            }else{
+                age--;
+            }
+        }
+        return age;
     }
 }

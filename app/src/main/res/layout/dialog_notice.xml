@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/shape_white_r5"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/notice_title"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="温馨提示" />
+
+    <TextView
+        android:id="@+id/notice_message"
+        android:textSize="15sp"
+        android:text="您确定吗？"
+        android:textColor="#3a3a3a"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/light_gray"
+        android:layout_height="0.66dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/negative_button"
+            android:textSize="20sp"
+            android:text="取消"
+            android:textColor="#3a3a3a"
+            android:layout_width="0px"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"/>
+        <View
+            android:layout_width="0.66dp"
+            android:background="@color/light_gray"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/positive_button"
+            android:text="确定"
+            android:textSize="20sp"
+            android:textColor="#3a3a3a"
+            android:layout_width="0px"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

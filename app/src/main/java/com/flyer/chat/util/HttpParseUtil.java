@@ -28,6 +28,10 @@ public class HttpParseUtil {
         return t;
     }
 
+    public static <T> List<T> parseArray(String json, Class<T> clazz) {
+        return JSON.parseArray(json, clazz);
+    }
+
     public static <T> List<T> parseArray(String json, String paramString, Class<T> clazz) {
         List<T> list = new ArrayList<>();
         if (null != paramString) {

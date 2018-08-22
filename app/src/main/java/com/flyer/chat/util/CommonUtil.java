@@ -13,6 +13,10 @@ import com.flyer.chat.app.ChatApplication;
  */
 
 public class CommonUtil {
+    public static String getImageUrl(String imageId){
+        return "image/"+imageId+".jpg";
+    }
+
     public static String getString(@StringRes int id) {
         return ChatApplication.getInstance().getString(id);
     }

@@ -69,14 +69,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
 
     @Override
     public void showLoadingDialog() {
-        showLoadingDialog(false, CommonUtil.getString(R.string.text_loading));
+        showLoadingDialog(CommonUtil.getString(R.string.text_loading));
     }
 
     @Override
-    public void showLoadingDialog(boolean isCancel,String message) {
-        loadingDialog = new LoadingDialog(this);
-        loadingDialog.setMessage(message);
-        loadingDialog.setCancelable(isCancel);
+    public void showLoadingDialog(String message) {
+        loadingDialog = new LoadingDialog(this).setMessage(message);
         loadingDialog.show();
     }
 

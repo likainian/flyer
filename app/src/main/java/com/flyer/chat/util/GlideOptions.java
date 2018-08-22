@@ -1,5 +1,6 @@
 package com.flyer.chat.util;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.flyer.chat.R;
 
@@ -13,5 +14,8 @@ public class GlideOptions {
     }
     public static RequestOptions ImageOptions(){
         return new RequestOptions().centerCrop().placeholder(R.drawable.default_image).error(R.drawable.default_image);
+    }
+    public static RequestOptions ImageOptionsNoCache(){
+        return new RequestOptions().centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.default_image).error(R.drawable.default_image);
     }
 }

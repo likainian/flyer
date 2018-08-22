@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.flyer.chat.BuildConfig;
 import com.flyer.chat.R;
-import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.dialog.TitleSelectDialog;
 import com.flyer.chat.listener.EditTextWatcher;
@@ -112,13 +111,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 RegisterActivity.startActivity(this);
                 break;
             case R.id.user_more:
-                List<String> userNameList = SharedPreferencesHelper.getInstance().getUserNameList();
-                new TitleSelectDialog(this, userNameList, new TitleSelectDialog.OnSelectListener() {
-                    @Override
-                    public void OnSelect(int position) {
-                        ToastHelper.showToast(String.valueOf(position));
-                    }
-                }).show();
+                final List<String> userNameList = SharedPreferencesHelper.getInstance().getUserNameList();
+                new TitleSelectDialog(this)
+                        .setTitle("选择手机号")
+                        .setList(userNameList)
+                        .setCheck(mUserName.getText().toString().trim())
+                        .setOnSelectListener(new TitleSelectDialog.OnSelectListener() {
+                            @Override
+                            public void OnSelect(int position) {
+                                mUserName.setText(userNameList.get(position));
+                            }
+                        }).show();
                 break;
         }
     }
@@ -129,7 +132,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private void login(final String name, final String password) {
         LogUtil.i("ttt",name+"="+password);
-        showLoadingDialog();
+        showLoadingDialog("正在登陆…");
         JMessageClient.login(name,password, new BasicCallback() {
             @Override
             public void gotResult(int i, String s) {
@@ -140,10 +143,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     SharedPreferencesHelper.getInstance().setUserName(name);
                     SharedPreferencesHelper.getInstance().setPassWord(password);
                     MainActivity.startActivity(LoginActivity.this);
-                    ChatApplication.updateUser();
                     finish();
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+        super.onBackPressed();
     }
 }

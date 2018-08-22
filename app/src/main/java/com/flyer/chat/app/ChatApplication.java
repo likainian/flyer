@@ -1,14 +1,11 @@
 package com.flyer.chat.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.flyer.chat.BuildConfig;
-import com.flyer.chat.network.CallBack;
-import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.receiver.EventReceiver;
-import com.flyer.chat.util.ConstantUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
-import com.flyer.chat.util.ToastHelper;
 
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jpush.android.api.JPushInterface;
@@ -25,9 +22,16 @@ public class ChatApplication extends Application {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
         //极光推送
         JPushInterface.setDebugMode(BuildConfig.DEBUG);
         JPushInterface.init(this);
@@ -39,13 +43,5 @@ public class ChatApplication extends Application {
         JMessageClient.setDebugMode(BuildConfig.DEBUG);
         JMessageClient.init(this);
         JMessageClient.registerEventReceiver(new EventReceiver());
-    }
-    public static void updateUser(){
-        RetrofitService.getInstance().requestPost(ConstantUtil.ACCOUNT_ADD_USER, SharedPreferencesHelper.getInstance().getUser(),new CallBack<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(BuildConfig.DEBUG) ToastHelper.showToast("更新成功");
-            }
-        });
     }
 }

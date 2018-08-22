@@ -1,10 +1,12 @@
 package com.flyer.chat.util;
 
 import android.content.Context;
+import android.os.Environment;
 import android.provider.Settings;
 
 import com.flyer.chat.app.ChatApplication;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
@@ -34,9 +36,14 @@ public class DeviceUtil {
                         .getResources().getDisplayMetrics().heightPixels);
     }
 
-    public static boolean checkSdCard() {
-        return android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED);
+    public static String getCameraPhonePath(String fileName){
+        return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"picture"+File.separator+fileName+".jpg");
+    }
+
+    public static String getSavePicturePath(String fileName){
+        return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"cache"+File.separator+fileName+".jpg");
     }
 
     public static UUID getDeviceUuid() {

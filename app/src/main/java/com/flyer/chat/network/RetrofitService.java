@@ -11,9 +11,9 @@ import com.flyer.chat.activity.LoginActivity;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.bean.HttpCode;
 import com.flyer.chat.util.CommonUtil;
-import com.flyer.chat.util.ConstantUtil;
 import com.flyer.chat.util.ErrorUtil;
 import com.flyer.chat.util.FileUtil;
+import com.flyer.chat.util.MD5Util;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,31 +37,21 @@ public class RetrofitService {
 
     //普通Get
     public void requestGet(String path, CallBack<String> callBack){
-        handString(retrofitApi.requestGet(ConstantUtil.getBaseUrl() + path),callBack);
+        handString(retrofitApi.requestGet(path),callBack);
     }
 
     //普通Post
     public void requestPost(String path, @NonNull RequestBody requestBody, CallBack<String> callBack){
-        handString(retrofitApi.requestPost(ConstantUtil.getBaseUrl() + path,requestBody),callBack);
-    }
-
-    //普通Post
-    public void requestPost(String path, @NonNull Object object, CallBack<String> callBack){
-        handString(retrofitApi.requestPost(ConstantUtil.getBaseUrl() + path,object),callBack);
-    }
-
-    //用特定Url的普通post
-    public void requestPostFullPath(String url, @NonNull RequestBody requestBody, CallBack<String> callBack){
-        handString(retrofitApi.requestPost(url,requestBody),callBack);
+        handString(retrofitApi.requestPost(path,requestBody),callBack);
     }
 
     //上传图片
     public void uploadImage(String path, MultipartBody.Part part, CallBack<String> callBack){
-        handString(retrofitApi.uploadImage(ConstantUtil.getBaseUrl() + path,part),callBack);
+        handString(retrofitApi.uploadImage(path,part),callBack);
     }
 
     //下载无缓存图片
-    public void requestImageNoCache(final String url, final CallBack<Bitmap> callBack){
+    public void downloadImageNoCache(final String url, final CallBack<Bitmap> callBack){
         retrofitApi.requestImage(url).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Bitmap>() {
@@ -78,8 +68,8 @@ public class RetrofitService {
     }
 
     //下载图片
-    public void requestImage(final String url, final CallBack<Bitmap> callBack){
-        Bitmap cacheBitmap = FileUtil.getCacheBitmap(url);
+    public void downloadImage(final String url, final CallBack<Bitmap> callBack){
+        Bitmap cacheBitmap = FileUtil.getCacheBitmap(MD5Util.toMD5(url));
         if(cacheBitmap!=null){
             callBack.onResponse(cacheBitmap);
             return;
@@ -90,7 +80,7 @@ public class RetrofitService {
                     @Override
                     public void accept(Bitmap bitmap) throws Exception {
                         callBack.onResponse(bitmap);
-                        FileUtil.saveCacheBitmap(url,bitmap);
+                        FileUtil.saveCacheBitmap(MD5Util.toMD5(url),bitmap);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

@@ -30,10 +30,11 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+    <!--对话框背景变暗的Theme-->
     <style name="SelectDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
+    <!--底部升起的动画-->
     <style name="anim_y_bottom">
         <item name="android:windowEnterAnimation">@anim/anim_y_up_in</item>
         <item name="android:windowExitAnimation">@anim/anim_y_down_out</item>
