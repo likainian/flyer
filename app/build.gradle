@@ -55,6 +55,7 @@ dependencies {
     implementation 'jp.wasabeef:blurry:2.1.1'
     //刷新
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+    implementation 'com.google.zxing:core:3.3.1'
     //适配状态栏
     implementation 'com.amap.api:3dmap:6.3.0'
     //极光

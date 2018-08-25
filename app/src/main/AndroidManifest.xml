@@ -70,6 +70,12 @@
         <activity android:name=".activity.BigPictureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme"/>
+        <!--二维码-->
+        <activity android:name=".activity.setting.CodeActivity"
+            android:screenOrientation="portrait"/>
+        <!--二维码-->
+        <activity android:name=".activity.setting.ScanActivity"
+            android:screenOrientation="portrait"/>
         <!--启动页-->
         <activity android:name=".activity.LauncherActivity"
             android:screenOrientation="portrait"

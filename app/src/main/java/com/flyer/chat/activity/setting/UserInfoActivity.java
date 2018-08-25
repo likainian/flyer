@@ -215,6 +215,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }).setDate(instance).setRangDate(null,end).build().show();
                 break;
             case R.id.code_layout:
+                CodeActivity.startActivity(this);
                 break;
             case R.id.location_layout:
                 String json = AssetsUtil.getJson(this, "province.json");
@@ -248,7 +249,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }else {
                             myInfo.setAddress(p+c+a);
                         }
-                        JMessageClient.updateMyInfo(UserInfo.Field.birthday, myInfo, new CreateGroupCallback() {
+                        JMessageClient.updateMyInfo(UserInfo.Field.address, myInfo, new CreateGroupCallback() {
                             @Override
                             public void gotResult(int i, String s, long l) {
                                 if(i==0){

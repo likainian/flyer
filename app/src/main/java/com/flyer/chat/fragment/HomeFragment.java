@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
+import com.flyer.chat.activity.setting.ScanActivity;
 import com.flyer.chat.adapter.NearAdapter;
 import com.flyer.chat.base.BaseFragment;
 import com.flyer.chat.bean.User;
@@ -101,6 +102,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mToolbarMiddle.setText("附近的人");
         mToolbarLeft.setOnClickListener(this);
         mToolbarRight.setOnClickListener(this);
+        mToolbarRight.setBackgroundResource(R.drawable.menu_more);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
 
             case R.id.toolbar_right:
-
+                ScanActivity.startActivity(getActivity());
                 break;
         }
     }
