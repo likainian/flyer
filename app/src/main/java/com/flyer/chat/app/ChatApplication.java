@@ -8,6 +8,8 @@ import com.flyer.chat.BuildConfig;
 import com.flyer.chat.receiver.EventReceiver;
 
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import cn.jiguang.share.android.api.JShareInterface;
+import cn.jiguang.share.android.api.PlatformConfig;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.im.android.api.JMessageClient;
 
@@ -43,5 +45,11 @@ public class ChatApplication extends Application {
         JMessageClient.setDebugMode(BuildConfig.DEBUG);
         JMessageClient.init(this);
         JMessageClient.registerEventReceiver(new EventReceiver());
+
+        PlatformConfig platformConfig = new PlatformConfig();
+        platformConfig.setQQ("1104821188","b8jg87xzWbOqbrYK");
+        platformConfig.setWechat("wxd394162c6dfffd44","d2b2636a4c7d6b18dbe64f6fdae8237c");
+        JShareInterface.setDebugMode(BuildConfig.DEBUG);
+        JShareInterface.init(this,platformConfig);
     }
 }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,9 +13,14 @@ import android.widget.TextView;
 import com.flyer.chat.R;
 import com.flyer.chat.adapter.ConversationAdapter;
 import com.flyer.chat.base.BaseActivity;
+import com.flyer.chat.bean.MessageItem;
 import com.flyer.chat.util.CheckUtil;
+import com.flyer.chat.util.SharedPreferencesHelper;
 import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.widget.KeyboardView;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.im.android.api.JMessageClient;
@@ -35,11 +39,13 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
     private TextView mToolbarRight;
     private RelativeLayout mToolbar;
     private RecyclerView mRecyclerView;
-    private EditText mMessageText;
-    private TextView mMessageSend;
+    private KeyboardView mKeyboard;
     private String name;
+    private ConversationAdapter conversationAdapter;
 
     public static void startActivity(Context context, String name) {
+        if(context==null||name==null)return;
+        if(name.equals(SharedPreferencesHelper.getInstance().getUserName()))return;
         JMessageClient.enterSingleConversation(name);
         Intent intent = new Intent(context, ConversationActivity.class);
         intent.putExtra("name", name);
@@ -59,12 +65,23 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
         }
         initView();
         initAdapter();
+        initData();
+    }
+
+    private void initData() {
+        List<Message> allMessage = conversation.getAllMessage();
+        List<MessageItem> allMessageItem = new ArrayList<>();
+        for (Message message:allMessage){
+            allMessageItem.add(new MessageItem(message));
+        }
+        conversationAdapter.setNewData(allMessageItem);
+        mRecyclerView.scrollToPosition(conversationAdapter.getItemCount()-1);
     }
 
     private void initAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Message> allMessage = conversation.getAllMessage();
-        mRecyclerView.setAdapter(new ConversationAdapter(allMessage));
+        conversationAdapter = new ConversationAdapter();
+        mRecyclerView.setAdapter(conversationAdapter);
     }
 
     private void initView() {
@@ -73,11 +90,35 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
         mToolbarRight = findViewById(R.id.toolbar_right);
         mToolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
-        mMessageText = findViewById(R.id.message_text);
-        mMessageSend = findViewById(R.id.message_send);
+        mKeyboard = findViewById(R.id.keyboard);
         mToolbarLeft.setOnClickListener(this);
-        mMessageSend.setOnClickListener(this);
         mToolbarMiddle.setText(name);
+        mKeyboard.setContentView(mRecyclerView);
+        mKeyboard.setOnSendListener(new KeyboardView.OnSendListener() {
+            @Override
+            public void sendText(String text) {
+                if (CheckUtil.isNotEmpty(text)) {
+                    Message msg = conversation.createSendTextMessage(text);
+                    msg.setOnSendCompleteCallback(new BasicCallback() {
+                        @Override
+                        public void gotResult(int i, String s) {
+                            initData();
+                        }
+                    });
+                    JMessageClient.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void sendFile(File file) {
+
+            }
+
+            @Override
+            public void sendVoice(File file, int duration) {
+
+            }
+        });
     }
 
     @Override
@@ -86,18 +127,6 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
             case R.id.toolbar_left:
                 onBackPressed();
                 break;
-            case R.id.message_send:
-                if(CheckUtil.isNotEmpty(mMessageText.getText().toString().trim())){
-                    Message msg = conversation.createSendTextMessage(mMessageText.getText().toString().trim());
-                    msg.setOnSendCompleteCallback(new BasicCallback() {
-                        @Override
-                        public void gotResult(int i, String s) {
-
-                        }
-                    });
-                    JMessageClient.sendMessage(msg);
-                }
-                break;
         }
     }
 
@@ -105,5 +134,12 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
     protected void onStop() {
         JMessageClient.exitConversation();
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mKeyboard.hideKeyboardAndPanel()){
+            super.onBackPressed();
+        }
     }
 }

@@ -76,16 +76,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="手机号："
-                    android:textColor="#333333"
-                    android:textSize="15sp" />
+                    android:padding="12dp"
+                    android:src="@drawable/login_user_normal"/>
 
-                <EditText
+                <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/edit_user_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -107,16 +106,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="密    码："
-                    android:textColor="#333333"
-                    android:textSize="15sp" />
+                    android:padding="12dp"
+                    android:src="@drawable/login_psw_normal"/>
 
-                <EditText
+                <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/password"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -175,7 +173,7 @@
                 android:background="@drawable/select_login_button"
                 android:enabled="false"
                 android:focusable="true"
-                android:text="下一步"
+                android:text="注册"
                 android:textColor="#666666"
                 android:textSize="17sp" />
 
@@ -189,7 +187,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
-                    android:layout_margin="20dp"
+                    android:layout_margin="40dp"
                     android:text="遇到问题"
                     android:textColor="#999999"
                     android:textSize="13sp" />

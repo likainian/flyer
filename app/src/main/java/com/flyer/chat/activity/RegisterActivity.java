@@ -15,6 +15,7 @@ import com.flyer.chat.R;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
+import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.KeyBoardUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.ToastHelper;
@@ -79,7 +80,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
         KeyBoardUtil.register(this, new KeyBoardUtil.KeyBoardStatusListener() {
             @Override
-            public void onKeyBoardStateChanged(boolean isShowKeyBoard, int keyBoardTop) {
+            public void onKeyBoardStateChanged(boolean isShow, int height) {
+                int keyBoardTop = DeviceUtil.getDisplayHeight(RegisterActivity.this) - height;
                 int[] location = new int[2];
                 mBtnRegister.getLocationOnScreen(location);
                 final int scrollY = location[1] + mBtnRegister.getHeight()-keyBoardTop;

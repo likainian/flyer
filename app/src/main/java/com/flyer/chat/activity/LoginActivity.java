@@ -17,6 +17,7 @@ import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.dialog.TitleSelectDialog;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
+import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.KeyBoardUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.SharedPreferencesHelper;
@@ -84,7 +85,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         });
         KeyBoardUtil.register(this, new KeyBoardUtil.KeyBoardStatusListener() {
             @Override
-            public void onKeyBoardStateChanged(boolean isShowKeyBoard, int keyBoardTop) {
+            public void onKeyBoardStateChanged(boolean isShow, int height) {
+                int keyBoardTop = DeviceUtil.getDisplayHeight(LoginActivity.this) - height;
                 int[] location = new int[2];
                 mBtnLogin.getLocationOnScreen(location);
                 final int scrollY = location[1] + mBtnLogin.getHeight()-keyBoardTop;
@@ -140,6 +142,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 closeLoadingDialog();
                 if (BuildConfig.DEBUG) ToastHelper.showToast(i == 0 ? "im登陆成功" : "im登陆失败");
                 if (i == 0) {
+                    KeyBoardUtil.hideKeyBoard(mBtnLogin);
                     SharedPreferencesHelper.getInstance().setUserName(name);
                     SharedPreferencesHelper.getInstance().setPassWord(password);
                     MainActivity.startActivity(LoginActivity.this);

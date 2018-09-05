@@ -21,6 +21,7 @@ import com.flyer.chat.activity.BigPictureActivity;
 import com.flyer.chat.activity.LoginActivity;
 import com.flyer.chat.activity.setting.UserInfoActivity;
 import com.flyer.chat.base.BaseFragment;
+import com.flyer.chat.dialog.ShareDialog;
 import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.FileUtil;
 import com.flyer.chat.util.SharedPreferencesHelper;
@@ -111,8 +112,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         this.mUpData = rootView.findViewById(R.id.up_data);
         this.mAboutChat = rootView.findViewById(R.id.about_chat);
         mBtnLogout = rootView.findViewById(R.id.btn_logout);
-        mMeInfo.setOnClickListener(this);
         mHeadBack.setOnClickListener(this);
+        mMeInfo.setOnClickListener(this);
+        mShareChat.setOnClickListener(this);
         mBtnLogout.setOnClickListener(this);
     }
 
@@ -132,6 +134,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 SharedPreferencesHelper.getInstance().setPassWord("");
                 JMessageClient.logout();
                 LoginActivity.startActivity(getActivity());
+                break;
+            case R.id.share_chat:
+                new ShareDialog(getActivity()).show();
                 break;
         }
     }

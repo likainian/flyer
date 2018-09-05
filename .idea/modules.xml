@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
       <module fileurl="file://E:\flyer\flyer\android.iml" filepath="E:\flyer\flyer\android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://E:\flyer\flyer\app\app.iml" filepath="E:\flyer\flyer\app\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/flyer.iml" filepath="$PROJECT_DIR$/flyer.iml" />
+      <module fileurl="file://E:\flyer\android\flyer.iml" filepath="E:\flyer\android\flyer.iml" />
     </modules>
   </component>
 </project>

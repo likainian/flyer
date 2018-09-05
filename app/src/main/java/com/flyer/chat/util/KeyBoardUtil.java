@@ -15,22 +15,22 @@ import com.flyer.chat.app.ChatApplication;
 
 public class KeyBoardUtil {
     public interface KeyBoardStatusListener{
-        void onKeyBoardStateChanged(boolean isShowKeyBoard, final int keyBoardTop);
+        void onKeyBoardStateChanged(boolean isShow, final int height);
     }
     public static void register(final Activity activity, final KeyBoardStatusListener keyBoardStatusListener){
-        final View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        final View rootView = activity.getWindow().getDecorView();
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
+                activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
                 //视图变化
-                int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
-                int keyBoardTop = DeviceUtil.getDisplayHeight(activity) - heightDiff;
+                int heightDiff = rootView.getRootView().getHeight() - r.bottom;
                 if (heightDiff > 100) {
-                    keyBoardStatusListener.onKeyBoardStateChanged(true,keyBoardTop);
+                    SharedPreferencesHelper.getInstance().setKeyboardHeight(heightDiff);
+                    keyBoardStatusListener.onKeyBoardStateChanged(true,heightDiff);
                 } else {
-                    keyBoardStatusListener.onKeyBoardStateChanged(false,keyBoardTop);
+                    keyBoardStatusListener.onKeyBoardStateChanged(false,heightDiff);
                 }
             }
         });

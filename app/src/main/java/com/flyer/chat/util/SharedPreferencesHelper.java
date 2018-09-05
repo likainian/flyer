@@ -59,6 +59,14 @@ public class SharedPreferencesHelper {
         return sharedPreferences.getString(key, value);
     }
 
+    public void putInteger(String key,int value) {
+        sharedPreferences.edit().putInt(key,value).apply();
+    }
+
+    public int getInteger(String key, int value) {
+        return sharedPreferences.getInt(key, value);
+    }
+
     public void putBoolean(String key,boolean value) {
         sharedPreferences.edit().putBoolean(key,value).apply();
     }
@@ -141,6 +149,14 @@ public class SharedPreferencesHelper {
 
     public void setPassWord(String passWord){
         putString("pass_word_"+getUserName(),passWord);
+    }
+
+    public void setKeyboardHeight(int height){
+        putInteger("keyboard_height",height);
+    }
+
+    public int getKeyboardHight(){
+        return getInteger("keyboard_height",600);
     }
 
     public String getUdid() {

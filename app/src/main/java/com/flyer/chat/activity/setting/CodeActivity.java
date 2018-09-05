@@ -10,15 +10,8 @@ import android.widget.Toast;
 
 import com.flyer.chat.R;
 import com.flyer.chat.base.BaseActivity;
+import com.flyer.chat.util.CodeUtil;
 import com.flyer.chat.util.LogUtil;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
@@ -49,7 +42,7 @@ public class CodeActivity extends BaseActivity {
             public void gotResult(int i, String s, Bitmap bitmap) {
                 LogUtil.i(i+s);
                 if(i==0){
-                    Bitmap code = generateBitmap(myInfo.getUserName());
+                    Bitmap code = CodeUtil.encode(myInfo.getUserName());
                     Bitmap logoCode = addLogo(code, bitmap);
                     codeView.setImageBitmap(logoCode);
                 }
@@ -57,34 +50,6 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
-    //对输入的内容生成二维码
-    private Bitmap generateBitmap(String content) {
-        int width = 500;int height = 500;
-        if("".equals(content)||null==content){
-            Toast.makeText(CodeActivity.this,"输入内容为空!",Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        Map<EncodeHintType, String> hints = new HashMap<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-        try {
-            BitMatrix encode = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-            int[] pixels = new int[width * height];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (encode.get(j, i)) {
-                        pixels[i * width + j] = 0x00000000;
-                    } else {
-                        pixels[i * width + j] = 0xffffffff;
-                    }
-                }
-            }
-            return Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.RGB_565);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     //添加二维码中心logo
     private Bitmap addLogo(Bitmap qrBitmap, Bitmap logoBitmap) {
         if (null==logoBitmap){

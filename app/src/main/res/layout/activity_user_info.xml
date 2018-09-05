@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f4f4f4"
     android:orientation="vertical">
 
@@ -54,8 +55,9 @@
             android:textColor="#3a3a3a"
             android:textSize="16sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.itheima.roundedimageview.RoundedImageView
             android:id="@+id/head"
+            app:riv_corner_radius="25dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/default_head" />

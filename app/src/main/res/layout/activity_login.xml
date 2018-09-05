@@ -30,16 +30,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="手机号："
-                    android:textColor="#333333"
-                    android:textSize="15sp" />
+                    android:padding="12dp"
+                    android:src="@drawable/login_user_normal"/>
 
-                <EditText
+                <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/edit_user_name"
                     android:layout_width="0dp"
                     android:hint="请输入手机号"
@@ -64,16 +63,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:minWidth="60dp"
-                    android:text="密    码："
-                    android:textColor="#333333"
-                    android:textSize="15sp" />
-
-                <EditText
+                    android:padding="12dp"
+                    android:src="@drawable/login_psw_normal"/>
+                <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/password"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -165,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
                     android:text="遇到问题"
-                    android:layout_margin="20dp"
+                    android:layout_margin="40dp"
                     android:textColor="#999999"
                     android:textSize="13sp" />
             </FrameLayout>

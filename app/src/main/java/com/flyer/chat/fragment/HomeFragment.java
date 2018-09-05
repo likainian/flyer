@@ -1,5 +1,6 @@
 package com.flyer.chat.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyer.chat.R;
 import com.flyer.chat.activity.setting.ScanActivity;
@@ -21,6 +23,8 @@ import com.flyer.chat.network.CallBack;
 import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.util.HttpParseUtil;
 import com.flyer.chat.util.SharedPreferencesHelper;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
@@ -118,8 +122,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
 
             case R.id.toolbar_right:
-                ScanActivity.startActivity(getActivity());
+                IntentIntegrator.forSupportFragment(this).setCaptureActivity(ScanActivity.class).initiateScan();
                 break;
+        }
+    }
+    // Get the results:
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

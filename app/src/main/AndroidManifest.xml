@@ -40,6 +40,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.amap.api.v2.apikey" android:value="c06da13d27dcfabd0afd32a34451c0d8"/>
+
         <!--首页-->
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
@@ -75,6 +76,11 @@
             android:screenOrientation="portrait"/>
         <!--二维码-->
         <activity android:name=".activity.setting.ScanActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"/>
+        <!--查找朋友-->
+        <activity android:name=".activity.setting.FindFriendActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait"/>
         <!--启动页-->
         <activity android:name=".activity.LauncherActivity"

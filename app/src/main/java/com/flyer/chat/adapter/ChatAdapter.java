@@ -13,8 +13,6 @@ import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.GlideOptions;
 import com.flyer.chat.util.TimeUtil;
 
-import java.util.List;
-
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.UserInfo;
 
@@ -24,8 +22,8 @@ import cn.jpush.im.android.api.model.UserInfo;
 
 public class ChatAdapter extends BaseQuickAdapter<Conversation,BaseViewHolder>{
     private Context context;
-    public ChatAdapter(Context context,List<Conversation> data) {
-        super(R.layout.item_chat_view,data);
+    public ChatAdapter(Context context) {
+        super(R.layout.item_chat_view);
         this.context = context;
     }
 
