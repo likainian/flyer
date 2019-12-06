@@ -16,7 +16,7 @@ import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.bean.MessageItem;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.SharedPreferencesHelper;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 import com.flyer.chat.widget.KeyboardView;
 
 import java.io.File;
@@ -59,9 +59,9 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
         name = getIntent().getStringExtra("name");
         conversation = Conversation.createSingleConversation(name);
         if(conversation==null){
-            ToastHelper.showToast(name+"创建对话失败");
+            ToastUtil.showToast(name+"创建对话失败");
         }else {
-            ToastHelper.showToast(name+"创建对话成功");
+            ToastUtil.showToast(name+"创建对话成功");
         }
         initView();
         initAdapter();

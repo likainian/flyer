@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.flyer.chat.activity.PickPictureActivity;
 import com.flyer.chat.dialog.SelectDialog;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.LogUtil;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -64,7 +63,7 @@ public abstract class MediaActivity extends BaseActivity{
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {
-                            ToastHelper.showToast("请开启相机权限");
+                            ToastUtil.showToast("请开启相机权限");
                         }
                     }
                 });
@@ -76,9 +75,9 @@ public abstract class MediaActivity extends BaseActivity{
                     @Override
                     public void accept(Permission permission) throws Exception {
                         if(permission.granted){
-                            PickPictureActivity.startActivity(MediaActivity.this,needCount,PICK_PICTURE);
+                            PickPictureActivity.startActivityForResult(MediaActivity.this,needCount);
                         }else {
-                            ToastHelper.showToast("请开启读写权限");
+                            ToastUtil.showToast("请开启读写权限");
                         }
                     }
                 });

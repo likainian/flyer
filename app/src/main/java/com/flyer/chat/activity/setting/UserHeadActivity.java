@@ -12,7 +12,7 @@ import com.flyer.chat.R;
 import com.flyer.chat.base.MediaActivity;
 import com.flyer.chat.util.BitmapUtil;
 import com.flyer.chat.util.LogUtil;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 import com.flyer.chat.widget.PhotoView;
 
 import java.util.ArrayList;
@@ -50,11 +50,11 @@ public class UserHeadActivity extends MediaActivity implements View.OnClickListe
                 closeLoadingDialog();
                 LogUtil.i(i+s);
                 if(i==0){
-                    ToastHelper.showToast("修改头像成功");
+                    ToastUtil.showToast("修改头像成功");
                     sendBroadcast(new Intent(UserInfoActivity.ACTION_USER));
                     setHead();
                 }else {
-                    ToastHelper.showToast("上传头像失败");
+                    ToastUtil.showToast("上传头像失败");
                     imgPathList.clear();
                 }
             }
@@ -71,7 +71,7 @@ public class UserHeadActivity extends MediaActivity implements View.OnClickListe
                 if (i == 0) {
                     mPhotoView.setImageBitmap(bitmap);
                 } else {
-                    ToastHelper.showToast("下载头像失败");
+                    ToastUtil.showToast("下载头像失败");
                 }
             }
         });

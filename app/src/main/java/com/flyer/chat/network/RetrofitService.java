@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.alibaba.fastjson.JSONObject;
 import com.flyer.chat.BuildConfig;
 import com.flyer.chat.R;
-import com.flyer.chat.activity.LoginActivity;
+import com.flyer.chat.activity.account.LoginActivity;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.bean.HttpCode;
 import com.flyer.chat.util.CommonUtil;

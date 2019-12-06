@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +22,7 @@ import com.flyer.chat.widget.PhotoView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mike.li on 2018/8/20.
@@ -30,10 +32,10 @@ public class BigPictureActivity extends BaseActivity {
     private ViewPager mPager;
     private TextView mTvCount;
 
-    public static void startActivity(Context context, ArrayList<String> imgPathList, int imgIndex) {
+    public static void startActivity(Context context, List<String> imgPathList, int imgIndex) {
         if (context == null || CheckUtil.isEmpty(imgPathList)) return;
         Intent intent = new Intent(context, BigPictureActivity.class);
-        intent.putStringArrayListExtra("imgPath", imgPathList);
+        intent.putStringArrayListExtra("imgPath", (ArrayList<String>) imgPathList);
         intent.putExtra("imgIndex", imgIndex);
         context.startActivity(intent);
     }
@@ -52,6 +54,13 @@ public class BigPictureActivity extends BaseActivity {
     private void initView() {
         mPager = findViewById(R.id.pager);
         mTvCount = findViewById(R.id.tv_count);
+        FrameLayout mFlLeft = findViewById(R.id.fl_left);
+        mFlLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
     private class PicturePagerAdapter extends PagerAdapter{
         private ArrayList<String> imgPathList;
@@ -94,7 +103,7 @@ public class BigPictureActivity extends BaseActivity {
         @Override
         public void finishUpdate(@NonNull ViewGroup container) {
             super.finishUpdate(container);
-            mTvCount.setText((mPager.getCurrentItem() + 1) + "/"+ imgPathList.size());
+            mTvCount.setText(String.format("%d/%d", mPager.getCurrentItem() + 1, imgPathList.size()));
         }
     }
 }

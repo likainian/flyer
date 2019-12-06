@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import com.flyer.chat.BuildConfig;
 import com.flyer.chat.receiver.EventReceiver;
 
+import cn.bmob.v3.Bmob;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jiguang.share.android.api.JShareInterface;
 import cn.jiguang.share.android.api.PlatformConfig;
@@ -51,5 +52,7 @@ public class ChatApplication extends Application {
         platformConfig.setWechat("wxd394162c6dfffd44","d2b2636a4c7d6b18dbe64f6fdae8237c");
         JShareInterface.setDebugMode(BuildConfig.DEBUG);
         JShareInterface.init(this,platformConfig);
+
+        Bmob.initialize(this,"0421c676074eef0cf5e75b563ac2c079");
     }
 }

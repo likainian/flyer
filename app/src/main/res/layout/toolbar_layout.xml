@@ -1,43 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/toolbar"
-    android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="45dp">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/toolbar_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        android:src="@drawable/back_icon" />
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <FrameLayout
+            android:id="@+id/toolbar_left"
+            android:layout_width="45dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/back_icon" />
+        </FrameLayout>
 
-    <TextView
-        android:id="@+id/toolbar_middle"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:maxLines="1"
-        android:maxWidth="300dp"
-        android:textColor="#333333"
-        android:textSize="17sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        <TextView
+            android:id="@+id/toolbar_middle"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:maxWidth="300dp"
+            android:textColor="#333333"
+            android:textSize="17sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-    <TextView
-        android:id="@+id/toolbar_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#333333"
-        android:textSize="15sp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp" />
+        <FrameLayout
+            android:id="@+id/toolbar_right"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:minWidth="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/toolbar_right_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/toolbar_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#666666"
+                android:textSize="15sp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp" />
+        </FrameLayout>
+    </RelativeLayout>
     <View
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rl_toolbar"
         android:background="#dddddd"
         android:layout_width="match_parent"
         android:layout_height="0.33dp"/>

@@ -126,6 +126,15 @@ public class SharedPreferencesHelper {
         setUserNameList(name);
     }
 
+    public String getPhoneNum(){
+        return getString("phone_num","");
+    }
+
+    public void setPhoneNum(String name){
+        putString("phone_num",name);
+        setUserNameList(name);
+    }
+
     public String getUserName(){
         return getString("user_name","");
     }
@@ -143,11 +152,11 @@ public class SharedPreferencesHelper {
         return getObjectList("user_name_list",String.class);
     }
     
-    public String getPassWord(){
+    public String getPassword(){
         return getString("pass_word_"+getUserName(),"");
     }
 
-    public void setPassWord(String passWord){
+    public void setPassword(String passWord){
         putString("pass_word_"+getUserName(),passWord);
     }
 

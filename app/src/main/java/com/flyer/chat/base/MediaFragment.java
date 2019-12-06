@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import com.flyer.chat.dialog.SelectDialog;
 import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.LogUtil;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -61,7 +61,7 @@ public abstract class MediaFragment extends BaseFragment{
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {
-                            ToastHelper.showToast("请开启相机权限");
+                            ToastUtil.showToast("请开启相机权限");
                         }
                     }
                 });
@@ -79,7 +79,7 @@ public abstract class MediaFragment extends BaseFragment{
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {
-                            ToastHelper.showToast("请开启读写权限");
+                            ToastUtil.showToast("请开启读写权限");
                         }
                     }
                 });

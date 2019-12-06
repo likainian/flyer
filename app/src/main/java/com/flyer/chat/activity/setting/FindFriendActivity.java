@@ -16,7 +16,7 @@ import com.flyer.chat.R;
 import com.flyer.chat.activity.ConversationActivity;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.util.CheckUtil;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
@@ -102,7 +102,7 @@ public class FindFriendActivity extends BaseActivity implements View.OnClickList
                     mResultName.setText(userInfo.getUserName());
                 }else {
                     mSearchResult.setVisibility(View.GONE);
-                    ToastHelper.showToast("不存在的用户");
+                    ToastUtil.showToast("不存在的用户");
                 }
             }
         });

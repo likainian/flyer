@@ -1,4 +1,4 @@
-package com.flyer.chat.adapter;
+package com.flyer.chat.base.adapter;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
-import com.flyer.chat.bean.PictureMap;
+import com.flyer.chat.base.bean.PictureMap;
 import com.flyer.chat.util.GlideOptions;
 
 import java.io.File;

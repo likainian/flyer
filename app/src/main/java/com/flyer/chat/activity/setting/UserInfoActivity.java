@@ -26,7 +26,7 @@ import com.flyer.chat.util.AssetsUtil;
 import com.flyer.chat.util.HttpParseUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.TimeUtil;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -143,7 +143,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 onBackPressed();
                 break;
             case R.id.name_layout:
-                ToastHelper.showToast("手机号不能更改");
+                ToastUtil.showToast("手机号不能更改");
                 break;
             case R.id.head_layout:
             UserHeadActivity.startActivity(this);
@@ -167,7 +167,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                         if(i==0){
                                             mGender.setText(myInfo.getGender().name());
                                         }else {
-                                            ToastHelper.showToast("修改失败");
+                                            ToastUtil.showToast("修改失败");
                                         }
                                     }
                                 });
@@ -180,7 +180,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                         if(i==0){
                                             mGender.setText(myInfo.getGender().name());
                                         }else {
-                                            ToastHelper.showToast("修改失败");
+                                            ToastUtil.showToast("修改失败");
                                         }
                                     }
                                 });
@@ -207,7 +207,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                 if(i==0){
                                     mAge.setText(String.valueOf(TimeUtil.longToAge(myInfo.getBirthday())));
                                 }else {
-                                    ToastHelper.showToast("修改失败");
+                                    ToastUtil.showToast("修改失败");
                                 }
                             }
                         });
@@ -255,7 +255,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                 if(i==0){
                                     mLocation.setText(myInfo.getAddress());
                                 }else {
-                                    ToastHelper.showToast("修改失败");
+                                    ToastUtil.showToast("修改失败");
                                 }
                             }
                         });
@@ -284,7 +284,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                             if(i==0){
                                 mNickName.setText(myInfo.getNickname());
                             }else {
-                                ToastHelper.showToast("修改失败");
+                                ToastUtil.showToast("修改失败");
                             }
                         }
                     });
@@ -297,7 +297,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                             if(i==0){
                                 mSign.setText(myInfo.getSignature());
                             }else {
-                                ToastHelper.showToast("修改失败");
+                                ToastUtil.showToast("修改失败");
                             }
                         }
                     });

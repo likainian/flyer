@@ -1,4 +1,4 @@
-package com.flyer.chat.adapter;
+package com.flyer.chat.base.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -9,8 +9,9 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.BigPictureActivity;
 import com.flyer.chat.util.GlideOptions;
-import com.flyer.chat.util.ToastHelper;
+import com.flyer.chat.util.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,11 +51,11 @@ public class GridPictureAdapter extends BaseQuickAdapter<File,BaseViewHolder>{
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, final File item) {
+    protected void convert(final BaseViewHolder helper, final File item) {
         ImageView image = helper.getView(R.id.image);
         final CheckBox imageSelect = helper.getView(R.id.image_select);
         Glide.with(context).applyDefaultRequestOptions(GlideOptions.ImageOptions()).load(item).into(image);
-        image.setOnClickListener(new View.OnClickListener() {
+        imageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(select.contains(item)){
@@ -62,7 +63,7 @@ public class GridPictureAdapter extends BaseQuickAdapter<File,BaseViewHolder>{
                     imageSelect.setChecked(false);
                 }else {
                     if(select.size()>=maxCount){
-                        ToastHelper.showToast("最多只能选"+maxCount+"张图片");
+                        ToastUtil.showToast("最多只能选"+maxCount+"张图片");
                     }else {
                         select.add(item);
                         imageSelect.setChecked(true);
@@ -71,6 +72,17 @@ public class GridPictureAdapter extends BaseQuickAdapter<File,BaseViewHolder>{
                 if(onPictureClickListener!=null){
                     onPictureClickListener.onPictureClick(select.size());
                 }
+            }
+        });
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> list = new ArrayList<>();
+                for (File file:getData()) {
+                    String path = file.getAbsolutePath();
+                    list.add(path);
+                }
+                BigPictureActivity.startActivity(context,list,helper.getAdapterPosition());
             }
         });
     }

@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,20 +16,16 @@ import android.widget.TextView;
 
 import com.flyer.chat.R;
 import com.flyer.chat.activity.BigPictureActivity;
-import com.flyer.chat.activity.LoginActivity;
+import com.flyer.chat.activity.account.LoginActivity;
 import com.flyer.chat.activity.setting.UserInfoActivity;
 import com.flyer.chat.base.BaseFragment;
 import com.flyer.chat.dialog.ShareDialog;
 import com.flyer.chat.util.DeviceUtil;
-import com.flyer.chat.util.FileUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
+import cn.bmob.v3.BmobUser;
 import cn.jpush.im.android.api.model.UserInfo;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -85,21 +79,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void setHead() {
-        myInfo = JMessageClient.getMyInfo();
-        myInfo.getBigAvatarBitmap(new GetAvatarBitmapCallback() {
-            @Override
-            public void gotResult(int i, String s, Bitmap bitmap) {
-                if(i==0){
-                    FileUtil.saveCacheBitmap("avatar",bitmap);
-                    mHead.setImageBitmap(bitmap);
-                    Blurry.with(getActivity()).sampling(1).async().from(bitmap).into(mHeadBack);
-                }else {
-                    Bitmap bitmapD = BitmapFactory.decodeResource(getResources(),R.drawable.default_head);
-                    mHead.setImageBitmap(bitmapD);
-                    Blurry.with(getActivity()).sampling(1).async().from(bitmapD).into(mHeadBack);
-                }
-            }
-        });
     }
 
     private void initView(View rootView) {
@@ -130,9 +109,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 BigPictureActivity.startActivity(getActivity(),list,0);
                 break;
             case R.id.btn_logout:
-                SharedPreferencesHelper.getInstance().setUserName("");
-                SharedPreferencesHelper.getInstance().setPassWord("");
-                JMessageClient.logout();
+                BmobUser.logOut();
                 LoginActivity.startActivity(getActivity());
                 break;
             case R.id.share_chat:

@@ -16,7 +16,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.chat.R;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.bean.User;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.map.PoiOverlay;
 
 import java.util.List;

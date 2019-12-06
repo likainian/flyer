@@ -1,60 +1,66 @@
 package com.flyer.chat.base;
 
-import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
 
 
 public abstract class ToolbarActivity extends BaseActivity{
-
-    protected ImageView mToolbarLeft;
-    protected TextView mToolbarMiddle;
-    protected TextView mToolbarRight;
-    protected RelativeLayout mToolbar;
+    private FrameLayout mToolbarLeft;
+    private TextView mToolbarMiddle;
+    private FrameLayout mToolbarRight;
+    private TextView mToolbarRightText;
+    private ImageView mToolbarRightImage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
+    public void setContentView(View view) {
+        super.setContentView(view);
         initToolbarView();
     }
 
-    protected abstract int getLayoutId();
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        initToolbarView();
+    }
 
-    protected void initToolbarView() {
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+        initToolbarView();
+    }
+
+    private void initToolbarView() {
         mToolbarLeft = findViewById(R.id.toolbar_left);
         mToolbarMiddle = findViewById(R.id.toolbar_middle);
         mToolbarRight = findViewById(R.id.toolbar_right);
-        mToolbar = findViewById(R.id.toolbar);
+        mToolbarRightText = findViewById(R.id.toolbar_right_text);
+        mToolbarRightImage = findViewById(R.id.toolbar_right_image);
         if(mToolbarLeft!=null)mToolbarLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
     }
     public void setToolbarMiddleText(String title){
         if(mToolbarMiddle!=null)mToolbarMiddle.setText(title);
     }
-    public void setToolbarLeftResource(@DrawableRes int resId){
-        if(mToolbarLeft!=null)mToolbarLeft.setImageResource(resId);
+    public void setToolbarRightText(String menu){
+        if(mToolbarRightText!=null)mToolbarRightText.setText(menu);
     }
-    public void setToolbarRightText(String title){
-        if(mToolbarRight!=null)mToolbarRight.setText(title);
+    public void setToolbarRightImage(@DrawableRes int resId){
+        if(mToolbarRightImage!=null)mToolbarRightImage.setImageResource(resId);
     }
-    public void setToolbarBackgroundColor(@ColorInt int color){
-        if(mToolbar!=null)mToolbar.setBackgroundColor(color);
+    public void setToolbarLeftClick(View.OnClickListener onClickListener){
+        if(mToolbarLeft!=null)mToolbarLeft.setOnClickListener(onClickListener);
     }
-    public void showToolbar(){
-        if(mToolbar!=null)mToolbar.setVisibility(View.VISIBLE);
-    }
-    public void hideToolbar(){
-        if(mToolbar!=null)mToolbar.setVisibility(View.GONE);
+    public void setToolbarRightClick(View.OnClickListener onClickListener){
+        if(mToolbarRight!=null)mToolbarRight.setOnClickListener(onClickListener);
     }
 }

@@ -1,14 +1,8 @@
 package com.flyer.chat.map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -17,13 +11,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.flyer.chat.R;
-import com.flyer.chat.bean.User;
-import com.flyer.chat.util.CommonUtil;
-import com.flyer.chat.util.GlideOptions;
+import com.flyer.chat.activity.account.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,24 +41,24 @@ public class PoiOverlay {
     public void addUsers(List<User> users){
         this.users = users;
         for (final User user:users){
-            Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions())
-                    .asBitmap().load(CommonUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
-                    ImageView userImg = view.findViewById(R.id.user_img);
-                    userImg.setImageBitmap(resource);
-                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
-                }
-
-                @Override
-                public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
-                    ImageView userImg = view.findViewById(R.id.user_img);
-                    userImg.setImageDrawable(errorDrawable);
-                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
-                }
-            });
+//            Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions())
+//                    .asBitmap().load(CommonUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
+//                @Override
+//                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
+//                    ImageView userImg = view.findViewById(R.id.user_img);
+//                    userImg.setImageBitmap(resource);
+//                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
+//                }
+//
+//                @Override
+//                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+//                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
+//                    ImageView userImg = view.findViewById(R.id.user_img);
+//                    userImg.setImageDrawable(errorDrawable);
+//                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
+//                }
+//            });
         }
     }
     private void addMarker(double latitude, double longitude, View view,User user) {

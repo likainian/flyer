@@ -2,7 +2,7 @@ package com.flyer.chat.network;
 
 import android.graphics.Bitmap;
 
-import com.flyer.chat.bean.User;
+import com.flyer.chat.activity.account.bean.User;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;

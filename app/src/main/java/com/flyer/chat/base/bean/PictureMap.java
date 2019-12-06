@@ -1,4 +1,4 @@
-package com.flyer.chat.bean;
+package com.flyer.chat.base.bean;
 
 import android.text.TextUtils;
 

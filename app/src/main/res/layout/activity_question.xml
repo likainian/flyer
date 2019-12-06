@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:clipChildren="false"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:clipChildren="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/et_message"
+                android:hint="请详细描述问题..."
+                android:layout_width="match_parent"
+                android:minHeight="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:gravity="left|top"
+                android:textColor="#666666"
+                android:textCursorDrawable="@drawable/edit_cursor"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_commit"
+                android:layout_below="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/select_login_button"
+                android:enabled="false"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="提交"
+                android:textColor="#666666"
+                android:textSize="17sp" />
+            <TextView
+                android:id="@+id/tv_delete"
+                android:text="拖拽到此处删除"
+                android:gravity="center"
+                android:background="#F44336"
+                android:textColor="#fff"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@+id/et_message"
+                android:id="@+id/recycler_view"
+                android:layout_margin="5dp"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

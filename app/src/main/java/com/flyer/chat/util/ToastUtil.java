@@ -1,16 +1,23 @@
 package com.flyer.chat.util;
 
+import android.view.Gravity;
 import android.widget.Toast;
 
+import com.flyer.chat.R;
 import com.flyer.chat.app.ChatApplication;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import cn.bmob.v3.exception.BmobException;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
-public class ToastHelper {
+public class ToastUtil {
     private static Toast toast;
     private static String oldMsg;
     private static long time;
@@ -24,6 +31,7 @@ public class ToastHelper {
                         toast.cancel();
                     }
                     toast = Toast.makeText(ChatApplication.getInstance(), message, Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     time = System.currentTimeMillis();
                 } else {
@@ -33,6 +41,7 @@ public class ToastHelper {
                             toast.cancel();
                         }
                         toast = Toast.makeText(ChatApplication.getInstance(), message, Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                         time = System.currentTimeMillis();
                     }
@@ -40,5 +49,14 @@ public class ToastHelper {
             }
         }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
         oldMsg = message;
+    }
+    public static void showToast(BmobException throwable){
+        switch (throwable.getErrorCode()){
+            case 202:
+                break;
+        }
+    }
+    public static void showToast(Throwable throwable){
+
     }
 }

@@ -1,4 +1,4 @@
-package com.flyer.chat.activity;
+package com.flyer.chat.activity.home;
 
 import android.Manifest;
 import android.content.Context;
@@ -33,9 +33,9 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity {
     public static void startActivity(Context context){
-        context.startActivity(new Intent(context,MainActivity.class));
+        context.startActivity(new Intent(context, HomeActivity.class));
     }
     private TabLayout mHomeTab;
     private List<Fragment> fragmentList;

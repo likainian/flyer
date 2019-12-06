@@ -18,7 +18,7 @@ import com.flyer.chat.R;
 import com.flyer.chat.activity.setting.ScanActivity;
 import com.flyer.chat.adapter.NearAdapter;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.bean.User;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.network.CallBack;
 import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.util.HttpParseUtil;

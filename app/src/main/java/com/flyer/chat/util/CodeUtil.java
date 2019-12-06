@@ -46,7 +46,7 @@ public class CodeUtil {
         }
         //Toast出内容
         if (re != null) {
-            ToastHelper.showToast(re.getText());
+            ToastUtil.showToast(re.getText());
         }
     }
 
