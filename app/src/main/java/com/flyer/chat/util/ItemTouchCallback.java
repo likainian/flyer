@@ -9,19 +9,19 @@ import android.widget.TextView;
 
 import com.flyer.chat.activity.feedback.GridPhotoAdapter;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by mike.li on 2019/11/7.
  */
 public class ItemTouchCallback extends ItemTouchHelper.Callback {
     private RecyclerView.Adapter adapter;
-    private ArrayList<String> pictures;
+    private List<String> pictures;
     private TextView tvDelete;
     private boolean flaying;
 
-    public ItemTouchCallback(RecyclerView.Adapter adapter, ArrayList<String> pictures, TextView tvDelete) {
+    public ItemTouchCallback(RecyclerView.Adapter adapter, List<String> pictures, TextView tvDelete) {
         this.adapter = adapter;
         this.pictures = pictures;
         this.tvDelete = tvDelete;

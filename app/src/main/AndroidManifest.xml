@@ -53,13 +53,14 @@
         <!--遇到问题-->
         <activity android:name=".activity.feedback.QuestionActivity"
             android:screenOrientation="portrait"/>
-        <!--密码-->
-        <activity android:name=".activity.account.ForgetPasswordActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-
+        <!--忘记密码-->
+        <activity android:name=".activity.account.ResetPasswordActivity"
+            android:screenOrientation="portrait"/>
         <!--首页-->
         <activity android:name=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".activity.setting.AboutActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleInstance"/>
         <!--我的信息-->
@@ -77,8 +78,6 @@
         <activity android:name=".base.PickPictureActivity"
             android:screenOrientation="portrait"/>
         <!--关于-->
-        <activity android:name=".activity.setting.AboutActivity"
-            android:screenOrientation="portrait"/>
         <!--帮助与反馈-->
         <activity android:name=".activity.setting.FeedBackActivity"
             android:screenOrientation="portrait"/>

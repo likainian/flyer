@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import cn.jiguang.analytics.android.api.CountEvent;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -119,7 +120,7 @@ public class HomeActivity extends BaseActivity {
         if (!this.isExit) {
             this.isExit = true;
             Toast.makeText(this.getApplication(), CommonUtil.getString(R.string.toast_exit_app_press_again), Toast.LENGTH_LONG).show();
-            Observable.just(isExit).subscribeOn(Schedulers.computation()).delay(2, TimeUnit.SECONDS).subscribe(new Consumer<Boolean>() {
+            Disposable subscribe = Observable.just(isExit).subscribeOn(Schedulers.computation()).delay(2, TimeUnit.SECONDS).subscribe(new Consumer<Boolean>() {
                 @Override
                 public void accept(Boolean aBoolean) throws Exception {
                     isExit = false;

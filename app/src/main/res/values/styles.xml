@@ -40,6 +40,11 @@
         <item name="android:windowExitAnimation">@anim/anim_y_down_out</item>
     </style>
 
+    <style name="EditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#999999</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="enable_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">44dp</item>

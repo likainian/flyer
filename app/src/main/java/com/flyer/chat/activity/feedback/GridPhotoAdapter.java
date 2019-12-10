@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.BigPictureActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class GridPhotoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     }
 
     public GridPhotoAdapter(Context context,int maxCount) {
-        super(R.layout.item_grid_photo_view);
+        super(R.layout.item_grid_photo_view,new ArrayList<String>(){{add(DEFAULT);}});
         this.context = context;
         this.maxCount = maxCount;
     }
@@ -46,9 +47,7 @@ public class GridPhotoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
             ivImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<String> paths = getData();
-                    paths.remove(DEFAULT);
-                    BigPictureActivity.startActivity(context,paths,helper.getAdapterPosition());
+                    BigPictureActivity.startActivity(context,getData(),helper.getAdapterPosition());
                 }
             });
         }
@@ -62,6 +61,16 @@ public class GridPhotoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
             data.add(DEFAULT);
         }
         super.setNewData(data);
+    }
+    @Override
+    public List<String> getData() {
+        ArrayList<String> data = new ArrayList<>();
+        for (String item:mData){
+            if(!DEFAULT.equals(item)){
+                data.add(item);
+            }
+        }
+        return data;
     }
 
     public void setOnClickAddListener(OnClickAddListener onClickAddListener) {
