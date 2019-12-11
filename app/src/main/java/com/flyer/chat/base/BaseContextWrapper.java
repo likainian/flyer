@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 
 
-import com.flyer.chat.util.SharedPreferencesHelper;
+import com.flyer.chat.util.SharedPreferencesUtil;
 
 import java.util.Locale;
 
@@ -19,7 +19,7 @@ public class BaseContextWrapper extends ContextWrapper {
         Configuration config = context.getResources().getConfiguration();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Locale locale;
-            if(language.equals(SharedPreferencesHelper.ENGLISH)){
+            if(language.equals(SharedPreferencesUtil.ENGLISH)){
                 locale = Locale.ENGLISH;
             }else {
                 locale = Locale.CHINA;

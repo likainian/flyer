@@ -90,7 +90,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <com.flyer.chat.widget.MultimediaView
-        android:visibility="gone"
         android:name="com.flyer.chat.fragment.MultimediaFragment"
         android:id="@+id/keyboard_multimedia_layout"
         android:layout_width="match_parent"

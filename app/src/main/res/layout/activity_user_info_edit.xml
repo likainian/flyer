@@ -3,13 +3,50 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/light_gray"
     android:layout_height="match_parent">
-    <include layout="@layout/toolbar_layout"/>
-    <EditText
+    <RelativeLayout
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+        <FrameLayout
+            android:id="@+id/toolbar_left"
+            android:layout_width="45dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/back_icon" />
+        </FrameLayout>
+        <TextView
+            android:id="@+id/toolbar_middle"
+            android:textColor="#333333"
+            android:textSize="17sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:background="#dddddd"
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"/>
+        <TextView
+            android:id="@+id/toolbar_right"
+            android:layout_width="45dp"
+            android:text="完成"
+            android:textSize="15sp"
+            android:textColor="@color/selector_enable_color"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <com.flyer.chat.widget.ClearEditText
         android:id="@+id/edit"
         android:layout_marginTop="10dp"
         android:textColor="#333333"
         android:textSize="15sp"
         android:padding="10dp"
+        android:gravity="right"
         android:textCursorDrawable="@drawable/edit_cursor"
         android:background="@color/white"
         android:layout_width="match_parent"

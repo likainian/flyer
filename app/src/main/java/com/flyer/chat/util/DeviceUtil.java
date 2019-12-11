@@ -36,14 +36,13 @@ public class DeviceUtil {
                         .getResources().getDisplayMetrics().heightPixels);
     }
 
-    public static String getCameraPhonePath(String fileName){
-        return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
-                File.separator+"flyer"+File.separator+"picture"+File.separator+fileName+".jpg");
+    public static String getSavePicturePath(){
+        return FileUtil.createPath(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"picture"+File.separator);
     }
-
-    public static String getSavePicturePath(String fileName){
-        return FileUtil.createPathAndFile(Environment.getExternalStorageDirectory().getAbsolutePath()+
-                File.separator+"flyer"+File.separator+"cache"+File.separator+fileName+".jpg");
+    public static String getSaveFilePath(){
+        return FileUtil.createPath(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"file"+File.separator);
     }
 
     public static UUID getDeviceUuid() {

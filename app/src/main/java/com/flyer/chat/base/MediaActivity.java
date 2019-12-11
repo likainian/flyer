@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.flyer.chat.activity.common.PickPictureActivity;
 import com.flyer.chat.dialog.SelectDialog;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.DeviceUtil;
@@ -59,7 +60,7 @@ public abstract class MediaActivity extends BaseActivity{
                         if(permission.granted){
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             // 下面这句指定调用相机拍照后的照片存储的路径
-                            addPicturePath = DeviceUtil.getCameraPhonePath(String.valueOf(System.currentTimeMillis()));
+                            addPicturePath = DeviceUtil.getSavePicturePath()+String.valueOf(System.currentTimeMillis()+".jpg");
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {
@@ -75,7 +76,6 @@ public abstract class MediaActivity extends BaseActivity{
                     @Override
                     public void accept(Permission permission) throws Exception {
                         if(permission.granted){
-                            PickPictureActivity.startActivityForResult(MediaActivity.this,needCount);
                         }else {
                             ToastUtil.showToast("请开启读写权限");
                         }

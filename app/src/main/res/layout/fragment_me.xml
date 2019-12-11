@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#f4f4f4"
+    android:scrollbars="none"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="#f4f4f4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
@@ -33,7 +34,13 @@
                     android:layout_height="100dp" />
                 <TextView
                     android:id="@+id/name"
+                    android:shadowColor="#000000"
+                    android:shadowRadius="5"
+                    android:shadowDx="5"
+                    android:shadowDy="5"
                     android:layout_marginTop="10dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -55,7 +62,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/user_info" />
             <TextView
-                android:text="@string/text_personnel_information"
+                android:text="我的信息"
                 android:textSize="16sp"
                 android:layout_marginLeft="15dp"
                 android:textColor="#3a3a3a"
@@ -81,7 +88,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/user_info" />
+                android:src="@drawable/setting_recommend" />
             <TextView
                 android:text="推荐给朋友"
                 android:textSize="16sp"
@@ -110,7 +117,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/user_info" />
+                android:src="@drawable/setting_help" />
             <TextView
                 android:text="帮助与反馈"
                 android:textSize="16sp"
@@ -138,8 +145,9 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/user_info" />
+                android:src="@drawable/setting_update" />
             <TextView
+                android:id="@+id/app_version"
                 android:text="版本更新"
                 android:textSize="16sp"
                 android:layout_marginLeft="15dp"
@@ -168,7 +176,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/user_info" />
+                android:src="@drawable/setting_about" />
             <TextView
                 android:text="关于微聊"
                 android:textSize="16sp"
@@ -184,10 +192,11 @@
         </LinearLayout>
         <TextView
             android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_margin="30dp"
             android:background="@drawable/shape_white_r2"
             android:focusable="true"
             android:text="退出登陆"

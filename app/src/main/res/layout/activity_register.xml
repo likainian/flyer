@@ -22,8 +22,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_margin="20dp"
@@ -35,25 +34,24 @@
             </FrameLayout>
 
             <LinearLayout
-                android:background="@drawable/list_bg_line"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:layout_height="45dp">
 
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:minWidth="60dp"
-                    android:padding="12dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/login_user_normal"/>
 
                 <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/et_phone"
                     android:layout_width="0dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="请输入手机号"
-                    android:background="@color/transparent"
+                    android:inputType="number"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
                     android:textCursorDrawable="@drawable/edit_cursor"
@@ -61,26 +59,24 @@
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/list_bg_line"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:layout_height="45dp">
 
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:minWidth="60dp"
-                    android:padding="12dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/login_psw_normal"/>
 
                 <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/et_password"
                     android:layout_width="0dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="请输入密码"
                     android:inputType="textPassword"
-                    android:background="@color/transparent"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:textColor="#666666"
                     android:textCursorDrawable="@drawable/edit_cursor"
@@ -95,10 +91,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:background="@drawable/list_bg_line"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="45dp">
+
+            </LinearLayout>
 
                 <ImageView
                     android:layout_width="45dp"
@@ -107,6 +104,59 @@
                     android:minWidth="60dp"
                     android:padding="12dp"
                     android:src="@drawable/login_code"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="45dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/login_psw_normal"/>
+
+                <com.flyer.chat.widget.ClearEditText
+                    android:id="@+id/verify_code_edit"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="请输入验证码"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:textColor="#666666"
+                    android:textCursorDrawable="@drawable/edit_cursor"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/verify_code_get"
+                    android:minWidth="90dp"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="点击获取"
+                    android:textColor="#FF19AA8D"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <LinearLayout
+                android:id="@+id/ll_save_password"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp">
+                <ImageView
+                    android:id="@+id/save_password"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/checkbox_grey"
+                    android:button="@null" />
 
                 <com.flyer.chat.widget.ClearEditText
                     android:id="@+id/et_code"
@@ -140,7 +190,6 @@
                 android:id="@+id/tv_register"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="30dp"
                 android:background="@drawable/select_login_button"
                 android:enabled="false"
                 android:focusable="true"
@@ -148,21 +197,32 @@
                 android:textColor="#666666"
                 android:textSize="17sp" />
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_weight="1"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:id="@+id/tv_help"
+                    android:textColor="#FF999999"
+                    android:textSize="13sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_margin="40dp"
-                    android:text="遇到问题"
-                    android:textColor="#999999"
-                    android:textSize="13sp" />
-            </FrameLayout>
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true"
+                    android:text="已有“微聊”账号？" />
+                <TextView
+                    android:id="@+id/go_login"
+                    android:textColor="#FF2AC3A4"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true"
+                    android:text="立即登陆" />
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

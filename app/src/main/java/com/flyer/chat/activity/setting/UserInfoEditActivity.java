@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
-import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.KeyBoardUtil;
 
 /**
@@ -39,16 +38,16 @@ public class UserInfoEditActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        ImageView mToolbarLeft = findViewById(R.id.toolbar_left);
+        FrameLayout mToolbarLeft = findViewById(R.id.toolbar_left);
         TextView mToolbarMiddle = findViewById(R.id.toolbar_middle);
         mToolbarRight = findViewById(R.id.toolbar_right);
         mEdit = findViewById(R.id.edit);
         mToolbarLeft.setOnClickListener(this);
         String title = getIntent().getStringExtra("title");
+        String name = getIntent().getStringExtra("name");
         mToolbarMiddle.setText(title);
-        mToolbarRight.setText("完成");
+        mEdit.setText(name);
         mToolbarRight.setOnClickListener(this);
-        mToolbarRight.setTextColor(CommonUtil.getColor(R.color.selector_enble_color));
         mEdit.addTextChangedListener(new EditTextWatcher() {
             @Override
             public void OnTextChange(Editable s) {

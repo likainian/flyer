@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+        <FrameLayout
+            android:id="@+id/toolbar_left"
+            android:layout_width="45dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/back_icon" />
+        </FrameLayout>
+        <TextView
+            android:textColor="#333333"
+            android:textSize="17sp"
+            android:text="帮助与反馈"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_alignParentBottom="true"
+            android:background="#dddddd"
+            android:layout_width="match_parent"
+            android:layout_height="0.33dp"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/feed_simple_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_bg_line_padding"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="直接说问题"
+            android:textColor="#3a3a3a"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="11dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/next_icon" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/feed_ui_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_bg_line_padding"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="图标或布局太丑"
+            android:textColor="#3a3a3a"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="11dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/next_icon" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/feed_fun_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_bg_line_padding"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="功能不合理"
+            android:textColor="#3a3a3a"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="11dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/next_icon" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/feed_new_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_bg_line_padding"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="想要新功能"
+            android:textColor="#3a3a3a"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="11dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/next_icon" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/feed_bug_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_bg_line_padding"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="发现一个bug"
+            android:textColor="#3a3a3a"
+            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="11dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/next_icon" />
+    </LinearLayout>
+</LinearLayout>

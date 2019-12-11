@@ -14,7 +14,18 @@ import com.flyer.chat.R;
 import com.flyer.chat.activity.setting.FindFriendActivity;
 import com.flyer.chat.adapter.ChatAdapter;
 import com.flyer.chat.base.BaseFragment;
+import com.flyer.chat.network.IMCallback;
 import com.flyer.chat.util.CommonUtil;
+import com.flyer.chat.util.LogUtil;
+import com.mob.imsdk.MobIM;
+import com.mob.imsdk.MobIMMessageReceiver;
+import com.mob.imsdk.MobIMReceiver;
+import com.mob.imsdk.model.IMConversation;
+import com.mob.imsdk.model.IMMessage;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -24,17 +35,15 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.List;
 
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.model.Conversation;
-import cn.jpush.im.android.api.model.UserInfo;
-
 /**
  * Created by mike.li on 2018/7/9.
  */
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private ChatAdapter chatAdapter;
-    private List<Conversation> conversationList;
+    private List<IMConversation> conversationList;
+    private MobIMMessageReceiver mobIMMessageReceiver;
+    private MobIMReceiver mobIMReceiver;
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
@@ -42,7 +51,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public ImageView mToolbarLeft;
     public TextView mToolbarMiddle;
     public TextView mToolbarRight;
+    public TextView mImStatus;
     public SwipeMenuRecyclerView mRecyclerView;
+    public SmartRefreshLayout mSmartRefresh;
 
     @Nullable
     @Override
@@ -55,6 +66,47 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initAdapter();
+        initReceiver();
+    }
+
+    private void initReceiver() {
+        mobIMMessageReceiver = new MobIMMessageReceiver(){
+
+            @Override
+            public void onMessageReceived(List<IMMessage> list) {
+                LogUtil.i("ttt","收到消息ChatFragment");
+                initData();
+            }
+
+            @Override
+            public void onMsgWithDraw(String s, String s1) {
+
+            }
+        };
+        mobIMReceiver = new MobIMReceiver() {
+            @Override
+            public void onConnected() {
+                LogUtil.i("ttt","onConnected");
+                mImStatus.setVisibility(View.GONE);
+                initData();
+            }
+
+            @Override
+            public void onConnecting() {
+                mImStatus.setVisibility(View.VISIBLE);
+                mImStatus.setText("连接中。。。");
+                LogUtil.i("ttt","onConnecting");
+            }
+
+            @Override
+            public void onDisconnected(int i) {
+                mImStatus.setVisibility(View.VISIBLE);
+                mImStatus.setText("断开连接");
+                LogUtil.i("ttt","onDisconnected"+i);
+            }
+        };
+        MobIM.addMessageReceiver(mobIMMessageReceiver);
+        MobIM.addGeneralReceiver(mobIMReceiver);
     }
 
     @Override
@@ -62,9 +114,33 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onResume();
         initData();
     }
+
+    @Override
+    public void onDestroy() {
+        MobIM.removeMessageReceiver(mobIMMessageReceiver);
+        MobIM.removeGeneralReceiver(mobIMReceiver);
+        super.onDestroy();
+    }
+
     private void initData(){
-        conversationList = JMessageClient.getConversationList();
-        chatAdapter.setNewData(conversationList);
+        MobIM.getChatManager().getAllLocalConversations(new IMCallback<List<IMConversation>>(){
+            @Override
+            public void onSuccess(List<IMConversation> imConversations) {
+                super.onSuccess(imConversations);
+                mSmartRefresh.finishRefresh();
+                LogUtil.i("ttt",imConversations.toString());
+                conversationList = imConversations;
+                chatAdapter.setNewData(imConversations);
+            }
+
+
+            @Override
+            public void onError(int i, String s) {
+                mSmartRefresh.finishRefresh();
+                super.onError(i, s);
+                LogUtil.i("ttt",s);
+            }
+        });
     }
     private void initAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -88,7 +164,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onItemClick(SwipeMenuBridge menuBridge) {
                 menuBridge.closeMenu();
                 int adapterPosition = menuBridge.getAdapterPosition();
-                JMessageClient.deleteSingleConversation(((UserInfo) conversationList.get(adapterPosition).getTargetInfo()).getUserName());
+                MobIM.getChatManager().delConversation(conversationList.get(adapterPosition).getId(),conversationList.get(adapterPosition).getType());
                 initData();
             }
         });
@@ -98,10 +174,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         this.mToolbarLeft = rootView.findViewById(R.id.toolbar_left);
         this.mToolbarMiddle = rootView.findViewById(R.id.toolbar_middle);
         this.mToolbarRight = rootView.findViewById(R.id.toolbar_right);
+        this.mImStatus = rootView.findViewById(R.id.im_status);
         this.mRecyclerView = rootView.findViewById(R.id.recycler_view);
+        this.mSmartRefresh = rootView.findViewById(R.id.smart_refresh);
         mToolbarMiddle.setText("最近联系");
         mToolbarRight.setBackgroundResource(R.drawable.menu_more);
         mToolbarRight.setOnClickListener(this);
+        mSmartRefresh.setRefreshHeader(new BezierRadarHeader(getActivity()).setAccentColorId(R.color.colorPrimaryDark).setPrimaryColorId(R.color.light_gray));
+        mSmartRefresh.setEnableRefresh(true);
+        mSmartRefresh.setEnableLoadMore(false);
+        mSmartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                initData();
+            }
+        });
     }
 
     @Override

@@ -10,7 +10,7 @@ public final class CheckUtil {
     }
 
     public static <T> boolean isEmpty(T obj) {
-        if (null == obj) return true;
+        if (null == obj)return true;
         if (obj instanceof CharSequence) {
             return isEmptyString((CharSequence) obj);
         } else if (obj instanceof Collection) {
@@ -19,8 +19,9 @@ public final class CheckUtil {
             return isEmptyMap((Map) obj);
         } else if (obj.getClass().isArray()) {
             return isEmptyArray((Object[]) obj);
+        }else {
+            return false;
         }
-        return true;
     }
 
     private static boolean isEmptyString(CharSequence obj) {

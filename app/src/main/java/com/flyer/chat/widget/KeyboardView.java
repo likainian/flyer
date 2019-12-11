@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.flyer.chat.R;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.KeyBoardUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
+import com.flyer.chat.util.SharedPreferencesUtil;
 
 import java.io.File;
 
@@ -114,7 +114,7 @@ public class KeyboardView extends FrameLayout implements View.OnClickListener, K
         mKeyboardMultimedia.setOnClickListener(this);
         mKeyboardSend.setOnClickListener(this);
         ViewGroup.LayoutParams layoutParams = mKeyboardMultimediaLayout.getLayoutParams();
-        layoutParams.height = SharedPreferencesHelper.getInstance().getKeyboardHight();
+        layoutParams.height = SharedPreferencesUtil.getInstance().getKeyboardHeight();
         mKeyboardMultimediaLayout.setLayoutParams(layoutParams);
         mKeyboardEmoticonLayout.setLayoutParams(layoutParams);
     }

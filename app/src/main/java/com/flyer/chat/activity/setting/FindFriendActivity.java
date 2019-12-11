@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,17 +17,34 @@ import com.flyer.chat.activity.ConversationActivity;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.ToastUtil;
+import com.flyer.chat.util.HttpParseUtil;
+import com.flyer.chat.util.LogUtil;
+import com.flyer.chat.util.ToastUtil;
+import com.mob.jimu.query.Condition;
+import com.mob.jimu.query.Query;
+import com.mob.jimu.query.data.Text;
+import com.mob.tools.utils.Hashon;
+import com.mob.ums.QueryView;
+import com.mob.ums.UMSSDK;
+import com.mob.ums.User;
 
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetUserInfoCallback;
-import cn.jpush.im.android.api.model.UserInfo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mike.li on 2018/8/28.
  */
 
 public class FindFriendActivity extends BaseActivity implements View.OnClickListener {
-    private ImageView mToolbarLeft;
+    private FrameLayout mToolbarLeft;
     private TextView mToolbarMiddle;
     private TextView mToolbarRight;
     private RelativeLayout mToolbar;
@@ -76,7 +93,7 @@ public class FindFriendActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.toolbar_left:
                 onBackPressed();
                 break;
@@ -84,27 +101,54 @@ public class FindFriendActivity extends BaseActivity implements View.OnClickList
                 UserInfoActivity.startActivity(this);
                 break;
             case R.id.btn_search:
-                if(CheckUtil.isEmpty(mEditName.getText().toString().trim()))return;
+                if (CheckUtil.isEmpty(mEditName.getText().toString().trim())) return;
                 searchFriend(mEditName.getText().toString().trim());
                 break;
 
             case R.id.search_result:
-                ConversationActivity.startActivity(this,mResultName.getText().toString().trim());
+                ConversationActivity.startActivity(this, mResultName.getText().toString().trim());
                 break;
         }
     }
-    private void searchFriend(String userName){
-        JMessageClient.getUserInfo(userName, new GetUserInfoCallback() {
+
+    private void searchFriend(final String userName) {
+        Observable.create(new ObservableOnSubscribe<User>() {
             @Override
-            public void gotResult(int i, String s, UserInfo userInfo) {
-                if(i==0){
-                    mSearchResult.setVisibility(View.VISIBLE);
-                    mResultName.setText(userInfo.getUserName());
-                }else {
-                    mSearchResult.setVisibility(View.GONE);
-                    ToastUtil.showToast("不存在的用户");
+            public void subscribe(ObservableEmitter<User> emitter) throws Exception {
+                try {
+                    Query query = UMSSDK.getQuery(QueryView.USERS);
+                    Query condition = query.condition(Condition.eq("phone", Text.valueOf(userName)));
+                    String result = condition.query();
+                    List<String> list = HttpParseUtil.parseArray(result, "list", String.class);
+                    ArrayList<User> users = new ArrayList<>();
+                    for (String s : list) {
+                        HashMap<String, Object> map = new Hashon().fromJson(s);
+                        User user = new User();
+                        user.parseFromMap(map);
+                        users.add(user);
+                    }
+                    LogUtil.i("ttt", users.toString());
+                    if (users.size() > 0) {
+                        emitter.onNext(users.get(0));
+                    }
+                } catch (Throwable throwable) {
+                    throw  new Exception(throwable);
                 }
             }
-        });
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
+                        mSearchResult.setVisibility(View.VISIBLE);
+                        mResultName.setText(user.phone.get());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        ToastUtil.showToast("没有查到该用户");
+                    }
+                });
     }
 }

@@ -1,18 +1,16 @@
 package com.flyer.chat.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.flyer.chat.BuildConfig;
-import com.flyer.chat.receiver.EventReceiver;
+import com.flyer.chat.util.CheckUtil;
+import com.mob.MobSDK;
 
 import cn.bmob.v3.Bmob;
-import cn.jiguang.analytics.android.api.JAnalyticsInterface;
-import cn.jiguang.share.android.api.JShareInterface;
-import cn.jiguang.share.android.api.PlatformConfig;
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.im.android.api.JMessageClient;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -20,6 +18,7 @@ import cn.jpush.im.android.api.JMessageClient;
 
 public class ChatApplication extends Application {
     private static ChatApplication instance;
+    public ArrayList<Activity> activities = new ArrayList<>();
     public static synchronized ChatApplication getInstance() {
         return instance;
     }
@@ -34,25 +33,34 @@ public class ChatApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
-        //极光推送
-        JPushInterface.setDebugMode(BuildConfig.DEBUG);
-        JPushInterface.init(this);
-        //极光统计
-        JAnalyticsInterface.setDebugMode(BuildConfig.DEBUG);
-        JAnalyticsInterface.init(this);
-        JAnalyticsInterface.initCrashHandler(this);
-        //极光im
-        JMessageClient.setDebugMode(BuildConfig.DEBUG);
-        JMessageClient.init(this);
-        JMessageClient.registerEventReceiver(new EventReceiver());
-
-        PlatformConfig platformConfig = new PlatformConfig();
-        platformConfig.setQQ("1104821188","b8jg87xzWbOqbrYK");
-        platformConfig.setWechat("wxd394162c6dfffd44","d2b2636a4c7d6b18dbe64f6fdae8237c");
-        JShareInterface.setDebugMode(BuildConfig.DEBUG);
-        JShareInterface.init(this,platformConfig);
+        MobSDK.init(this);
 
         Bmob.initialize(this,"0421c676074eef0cf5e75b563ac2c079");
     }
+
+    public void addActivity(Activity activity) {
+        if (activity == null)return;
+        activities.add(activity);
+    }
+
+    public void removeActivity(Activity activity) {
+        if (activity == null) return;
+        activities.remove(activity);
+    }
+
+    public void clearAllActivities() {
+        if (CheckUtil.isEmpty(activities)) return;
+        Iterator<Activity> iterator = activities.iterator();
+        while (iterator.hasNext()) {
+            Activity activity = iterator.next();
+            if (activity == null) {
+                iterator.remove();
+                continue;
+            }
+            iterator.remove();
+            if(activity.isFinishing()) return;
+            activity.finish();
+        }
+    }
+
 }

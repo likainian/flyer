@@ -1,4 +1,51 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "27c26553656c0"
+    appSecret "49cdf831cd0a050b75f6fa3c824cd056"
+    CMSSDK {
+        gui false
+    }
+    MobPush {}
+    MobIM {
+        gui false
+    }
+    UMSSDK {
+        gui false
+    }
+    SMSSDK {
+        gui false
+    }
+    ShareSDK {
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient true
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                shareByAppClient true
+                bypassApproval false
+            }
+            Alipay {
+                appId "2015072400185895"
+            }
+        }
+    }
+}
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION
@@ -7,20 +54,13 @@ android {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         multiDexEnabled true // 分dex
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "x86"//, "arm64-v8a","arm64-v8a","x86_64"
         }
-        manifestPlaceholders = [
-                JPUSH_PKGNAME : applicationId,
-                JSHARE_PKGNAME : "com.irenshi.personneltreasure",
-                JPUSH_APPKEY  : "eaa55c30696293983d30fa74", //JPush上注册的包名对应的appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-                TENCENT_APPID : "b8jg87xzWbOqbrYK",//腾讯开放平台注册应用得到的appId
-        ]
     }
 
     buildTypes {
@@ -49,7 +89,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
-    implementation 'com.alibaba:fastjson:1.2.40'
     //ui
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.3'
@@ -57,12 +96,11 @@ dependencies {
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'jp.wasabeef:blurry:2.1.1'
-    //刷新
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     implementation 'com.google.zxing:core:3.3.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.yanzhenjie:recyclerview-swipe:1.1.2'
-    //适配状态栏
+    //地图
     implementation 'com.amap.api:3dmap:6.3.0'
     //极光
     implementation 'cn.jiguang.sdk:jmessage:2.6.1'

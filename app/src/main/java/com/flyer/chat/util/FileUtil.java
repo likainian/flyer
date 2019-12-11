@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class FileUtil {
     public static void saveCacheBitmap(String name, Bitmap bitmap) {
-        String fullPath = DeviceUtil.getSavePicturePath(name);
+        String fullPath = DeviceUtil.getSavePicturePath()+name+".jpg";
         File file = new File(fullPath);
         FileOutputStream fos = null;
         try {
@@ -34,7 +34,7 @@ public class FileUtil {
     }
 
     public static Bitmap getCacheBitmap(String name) {
-        String fullPath = DeviceUtil.getSavePicturePath(name);
+        String fullPath = DeviceUtil.getSavePicturePath()+name+".jpg";
         return BitmapFactory.decodeFile(fullPath);
     }
 

@@ -27,7 +27,7 @@ public class KeyBoardUtil {
                 //视图变化
                 int heightDiff = rootView.getRootView().getHeight() - r.bottom;
                 if (heightDiff > 100) {
-                    SharedPreferencesHelper.getInstance().setKeyboardHeight(heightDiff);
+                    SharedPreferencesUtil.getInstance().setKeyboardHeight(heightDiff);
                     keyBoardStatusListener.onKeyBoardStateChanged(true,heightDiff);
                 } else {
                     keyBoardStatusListener.onKeyBoardStateChanged(false,heightDiff);

@@ -5,10 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,53 +18,47 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bumptech.glide.Glide;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.common.CodeActivity;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.bean.Province;
 import com.flyer.chat.dialog.SelectDialog;
+import com.flyer.chat.network.UMSCallback;
 import com.flyer.chat.util.AssetsUtil;
+import com.flyer.chat.util.GlideOptions;
 import com.flyer.chat.util.HttpParseUtil;
-import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.TimeUtil;
 import com.flyer.chat.util.ToastUtil;
+import com.mob.ums.UMSSDK;
+import com.mob.ums.User;
+import com.mob.ums.datatype.Gender;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.CreateGroupCallback;
-import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
-import cn.jpush.im.android.api.model.UserInfo;
 
 /**
  * Created by mike.li on 2018/8/10.
  */
 
-public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
+public class UserInfoActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.UserInfoView {
     public static final String ACTION_USER = "com.flyer.chat.user";
     public static final int EDIT_NICK_NAME = 12;
     public static final int EDIT_SIGN = 13;
-    private ImageView mToolbarLeft;
-    private TextView mToolbarMiddle;
-    private LinearLayout mHeadLayout;
     private ImageView mHead;
-    private LinearLayout mNameLayout;
     private TextView mNickName;
-    private LinearLayout mNickNameLayout;
     private TextView mName;
-    private LinearLayout mAgeLayout;
     private TextView mGender;
-    private LinearLayout mGenderLayout;
     private TextView mAge;
-    private LinearLayout mCodeLayout;
-    private LinearLayout mLocationLayout;
     private TextView mLocation;
-    private LinearLayout mSignLayout;
     private TextView mSign;
+
     private BroadcastReceiver avatarBroadcastReceiver;
-    private UserInfo myInfo;
+    private User myInfo;
+    private UserInfoPresenter mPresenter;
 
 
     public static void startActivity(Context context) {
@@ -75,38 +69,36 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+        mPresenter = new UserInfoPresenter(this);
         initView();
-        initInfo();
+        mPresenter.getUserInfo();
         avatarBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                initInfo();
+                mPresenter.getUserInfo();
             }
         };
         registerReceiver(avatarBroadcastReceiver,new IntentFilter(ACTION_USER));
     }
 
     private void initView() {
-        mToolbarLeft = findViewById(R.id.toolbar_left);
+        FrameLayout mToolbarLeft = findViewById(R.id.toolbar_left);
         mToolbarLeft.setOnClickListener(this);
-        mNameLayout = findViewById(R.id.name_layout);
-        mNameLayout.setOnClickListener(this);
-        mHeadLayout = findViewById(R.id.head_layout);
+        LinearLayout mHeadLayout = findViewById(R.id.head_layout);
         mHeadLayout.setOnClickListener(this);
-        mNickNameLayout = findViewById(R.id.nick_name_layout);
+        LinearLayout mNickNameLayout = findViewById(R.id.nick_name_layout);
         mNickNameLayout.setOnClickListener(this);
-        mGenderLayout = findViewById(R.id.gender_layout);
+        LinearLayout mGenderLayout = findViewById(R.id.gender_layout);
         mGenderLayout.setOnClickListener(this);
-        mAgeLayout = findViewById(R.id.age_layout);
+        LinearLayout mAgeLayout = findViewById(R.id.age_layout);
         mAgeLayout.setOnClickListener(this);
-        mLocationLayout = findViewById(R.id.location_layout);
+        LinearLayout mLocationLayout = findViewById(R.id.location_layout);
         mLocationLayout.setOnClickListener(this);
-        mSignLayout = findViewById(R.id.sign_layout);
+        LinearLayout mSignLayout = findViewById(R.id.sign_layout);
         mSignLayout.setOnClickListener(this);
-        mCodeLayout = findViewById(R.id.code_layout);
+        LinearLayout mCodeLayout = findViewById(R.id.code_layout);
         mCodeLayout.setOnClickListener(this);
 
-        mToolbarMiddle = findViewById(R.id.toolbar_middle);
         mName = findViewById(R.id.name);
         mHead = findViewById(R.id.head);
         mNickName = findViewById(R.id.nick_name);
@@ -117,18 +109,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    private void initInfo() {
-        mToolbarMiddle.setText("个人信息");
-        myInfo = JMessageClient.getMyInfo();
-        if(myInfo==null)return;
-        mName.setText(myInfo.getUserName());
-        setHead();
-        mNickName.setText(myInfo.getNickname());
-        mAge.setText(String.valueOf(TimeUtil.longToAge(myInfo.getBirthday())));
-        mGender.setText(myInfo.getGender().name());
-        mLocation.setText(myInfo.getAddress());
-        mSign.setText(myInfo.getSignature());
-    }
 
     @Override
     protected void onDestroy() {
@@ -142,50 +122,34 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.toolbar_left:
                 onBackPressed();
                 break;
-            case R.id.name_layout:
-                ToastUtil.showToast("手机号不能更改");
-                break;
             case R.id.head_layout:
-            UserHeadActivity.startActivity(this);
-            break;
+                UserHeadActivity.startActivity(this);
+                break;
             case R.id.nick_name_layout:
-                UserInfoEditActivity.startActivityForResult(this,"设置名字",myInfo.getNickname(),EDIT_NICK_NAME);
+                UserInfoEditActivity.startActivityForResult(this,"设置名字",myInfo.nickname.get(),EDIT_NICK_NAME);
                 break;
             case R.id.gender_layout:
-                ArrayList<String> list = new ArrayList<>();
+                final ArrayList<String> list = new ArrayList<>();
                 list.add("男");
                 list.add("女");
                 new SelectDialog(this).setList(list).setOnSelectListener(new SelectDialog.OnSelectListener() {
                     @Override
-                    public void OnSelect(int position) {
-                        switch (position){
-                            case 0:
-                                myInfo.setGender(UserInfo.Gender.male);
-                                JMessageClient.updateMyInfo(UserInfo.Field.gender, myInfo, new CreateGroupCallback() {
-                                    @Override
-                                    public void gotResult(int i, String s, long l) {
-                                        if(i==0){
-                                            mGender.setText(myInfo.getGender().name());
-                                        }else {
-                                            ToastUtil.showToast("修改失败");
-                                        }
-                                    }
-                                });
-                                break;
-                            case 1:
-                                myInfo.setGender(UserInfo.Gender.female);
-                                JMessageClient.updateMyInfo(UserInfo.Field.gender, myInfo, new CreateGroupCallback() {
-                                    @Override
-                                    public void gotResult(int i, String s, long l) {
-                                        if(i==0){
-                                            mGender.setText(myInfo.getGender().name());
-                                        }else {
-                                            ToastUtil.showToast("修改失败");
-                                        }
-                                    }
-                                });
-                                break;
+                    public void OnSelect(final int position) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        Gender gender;
+                        if(position==0){
+                            gender = Gender.Male.INSTANCE;
+                        }else {
+                            gender = Gender.Female.INSTANCE;
                         }
+                        map.put("gender",gender);
+                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                super.onSuccess(aVoid);
+                                mGender.setText(list.get(position));
+                            }
+                        });
                     }
                 }).show();
                 break;
@@ -196,19 +160,21 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 Calendar start = Calendar.getInstance();
                 start.setTimeInMillis(Long.MIN_VALUE);
                 Calendar instance = Calendar.getInstance();
-                instance.setTimeInMillis(myInfo.getBirthday());
+                if(myInfo.birthday.get()!=null){
+                    instance.setTimeInMillis(myInfo.birthday.get().getTime());
+                }else {
+                    instance.setTimeInMillis(System.currentTimeMillis());
+                }
                 new TimePickerBuilder(this, new OnTimeSelectListener() {
                     @Override
-                    public void onTimeSelect(Date date, View v) {
-                        myInfo.setBirthday(date.getTime());
-                        JMessageClient.updateMyInfo(UserInfo.Field.birthday, myInfo, new CreateGroupCallback() {
+                    public void onTimeSelect(final Date date, View v) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("birthday",date);
+                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
                             @Override
-                            public void gotResult(int i, String s, long l) {
-                                if(i==0){
-                                    mAge.setText(String.valueOf(TimeUtil.longToAge(myInfo.getBirthday())));
-                                }else {
-                                    ToastUtil.showToast("修改失败");
-                                }
+                            public void onSuccess(Void aVoid) {
+                                super.onSuccess(aVoid);
+                                mAge.setText(String.valueOf(TimeUtil.longToAge(date.getTime())));
                             }
                         });
                     }
@@ -244,19 +210,23 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         String p = options1Items.get(options1);
                         String c = options2Items.get(options1).get(option2);
                         String a = options3Items.get(options1).get(option2).get(options3);
+                        final String address;
                         if(TextUtils.equals(p,c)){
-                            myInfo.setAddress(c+a);
+                            address = c+a;
                         }else {
-                            myInfo.setAddress(p+c+a);
+                            address = p+c+a;
                         }
-                        JMessageClient.updateMyInfo(UserInfo.Field.address, myInfo, new CreateGroupCallback() {
+                        HashMap<String, Object> map = new HashMap<>();
+                        String oldAddress = myInfo.address.get();
+                        if(oldAddress.contains("-")){
+                            oldAddress = oldAddress.substring(0,oldAddress.indexOf("-")+1)+address;
+                        }
+                        map.put("addr",oldAddress);
+                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
                             @Override
-                            public void gotResult(int i, String s, long l) {
-                                if(i==0){
-                                    mLocation.setText(myInfo.getAddress());
-                                }else {
-                                    ToastUtil.showToast("修改失败");
-                                }
+                            public void onSuccess(Void aVoid) {
+                                super.onSuccess(aVoid);
+                                mLocation.setText(address);
                             }
                         });
                     }
@@ -265,40 +235,37 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 pvOptions.show();
                 break;
             case R.id.sign_layout:
-                UserInfoEditActivity.startActivityForResult(this,"设置签名",myInfo.getSignature(),EDIT_SIGN);
+                UserInfoEditActivity.startActivityForResult(this,"设置签名",myInfo.signature.get(),EDIT_SIGN);
                 break;
 
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
+            HashMap<String, Object> map = new HashMap<>();
             switch (requestCode){
                 case EDIT_NICK_NAME:
-                    myInfo.setNickname(data.getStringExtra("name"));
-                    JMessageClient.updateMyInfo(UserInfo.Field.nickname, myInfo, new CreateGroupCallback() {
+                    final String nickName = data.getStringExtra("name");
+                    map.put("nickname",nickName);
+                    UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
                         @Override
-                        public void gotResult(int i, String s, long l) {
-                            if(i==0){
-                                mNickName.setText(myInfo.getNickname());
-                            }else {
-                                ToastUtil.showToast("修改失败");
-                            }
+                        public void onSuccess(Void aVoid) {
+                            super.onSuccess(aVoid);
+                            mNickName.setText(nickName);
                         }
                     });
                     break;
                 case EDIT_SIGN:
-                    myInfo.setSignature(data.getStringExtra("name"));
-                    JMessageClient.updateMyInfo(UserInfo.Field.signature, myInfo, new CreateGroupCallback() {
+                    final String signature = data.getStringExtra("name");
+                    map.put("signature",signature);
+                    UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
                         @Override
-                        public void gotResult(int i, String s, long l) {
-                            if(i==0){
-                                mSign.setText(myInfo.getSignature());
-                            }else {
-                                ToastUtil.showToast("修改失败");
-                            }
+                        public void onSuccess(Void aVoid) {
+                            super.onSuccess(aVoid);
+                            mSign.setText(signature);
                         }
                     });
                     break;
@@ -307,15 +274,26 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void setHead(){
-        myInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
-            @Override
-            public void gotResult(int i, String s, Bitmap bitmap) {
-                LogUtil.i(i+s);
-                if(i==0){
-                    mHead.setImageBitmap(bitmap);
-                }
-            }
-        });
+    @Override
+    public void showUserInfo(User user) {
+        myInfo = user;
+        mName.setText(myInfo.phone.get());
+        String[] strings = myInfo.avatar.get();
+        if(strings==null){
+            mHead.setImageResource(R.drawable.default_head);
+        }else {
+            Glide.with(UserInfoActivity.this).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(myInfo.avatar.get()[0]).into(mHead);
+        }
+        mNickName.setText(myInfo.nickname.get());
+        if(myInfo.gender.get()!=null){
+            mGender.setText(myInfo.gender.get()==Gender.Male.INSTANCE?"男":"女");
+        }else {
+            mGender.setText("未知");
+        }
+        int age = TimeUtil.longToAge(myInfo.birthday.get()!=null?myInfo.birthday.get().getTime():System.currentTimeMillis());
+        mAge.setText(String.valueOf(age));
+        String address = myInfo.address.get();
+        mLocation.setText(address);
+        mSign.setText(myInfo.signature.get());
     }
 }

@@ -16,8 +16,9 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.chat.R;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.activity.account.bean.User;
+import com.flyer.chat.bean.MapUser;
 import com.flyer.chat.map.PoiOverlay;
+import com.flyer.chat.util.LogUtil;
 
 import java.util.List;
 
@@ -30,6 +31,14 @@ public class MapFragment extends BaseFragment implements AMap.OnMyLocationChange
     private MapView mMapView;
     private AMap aMap;
     private PoiOverlay poiOverlay;
+    public OnLocationChangeListener onLocationChangeListener;
+    public interface OnLocationChangeListener{
+        void onMyLocationChange(Location location);
+    }
+
+    public void setOnLocationChangeListener(OnLocationChangeListener onLocationChangeListener) {
+        this.onLocationChangeListener = onLocationChangeListener;
+    }
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -62,14 +71,14 @@ public class MapFragment extends BaseFragment implements AMap.OnMyLocationChange
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         //定位一次，且将视角移动到地图中心点。
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher));
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW);
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setMyLocationEnabled(true);
         aMap.setOnMyLocationChangeListener(this);
         aMap.setOnMarkerClickListener(this);
     }
 
-    public void setNewData(List<User> users){
+    public void setNewData(List<MapUser> users){
         if(users==null)return;
         poiOverlay.removeUsers();
         poiOverlay.addUsers(users);
@@ -88,6 +97,10 @@ public class MapFragment extends BaseFragment implements AMap.OnMyLocationChange
 
     @Override
     public void onMyLocationChange(Location location) {
+        LogUtil.i("ttt","定位成功："+location.toString());
+        if(onLocationChangeListener!=null){
+            onLocationChangeListener.onMyLocationChange(location);
+        }
     }
 
     @Override

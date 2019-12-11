@@ -25,7 +25,7 @@ public class EmoticonView extends FrameLayout{
     }
 
     private void initView(final Context context) {
-        View.inflate(context, R.layout.emoticon_view, this);
+        View.inflate(context, R.layout.view_emoticon_layout, this);
 
     }
 

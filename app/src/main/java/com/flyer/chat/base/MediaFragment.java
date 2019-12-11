@@ -57,7 +57,7 @@ public abstract class MediaFragment extends BaseFragment{
                         if(permission.granted){
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             // 下面这句指定调用相机拍照后的照片存储的路径
-                            addPicturePath = DeviceUtil.getCameraPhonePath(String.valueOf(System.currentTimeMillis()));
+                            addPicturePath = DeviceUtil.getSavePicturePath()+String.valueOf(System.currentTimeMillis()+".jpg");
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {
@@ -75,7 +75,7 @@ public abstract class MediaFragment extends BaseFragment{
                         if(permission.granted){
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             // 下面这句指定调用相机拍照后的照片存储的路径
-                            addPicturePath = DeviceUtil.getCameraPhonePath(String.valueOf(System.currentTimeMillis()));
+                            addPicturePath = DeviceUtil.getSavePicturePath()+String.valueOf(System.currentTimeMillis()+".jpg");
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(addPicturePath)));
                             startActivityForResult(intent, TAKE_PICTURE);
                         }else {

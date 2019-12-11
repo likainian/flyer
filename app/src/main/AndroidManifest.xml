@@ -53,11 +53,13 @@
         <!--遇到问题-->
         <activity android:name=".activity.feedback.QuestionActivity"
             android:screenOrientation="portrait"/>
-        <!--忘记密码-->
+        <!--密码-->
         <activity android:name=".activity.account.ForgetPasswordActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+
         <!--首页-->
-        <activity android:name=".activity.home.HomeActivity"
+        <activity android:name=".activity.HomeActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleInstance"/>
         <!--我的信息-->
@@ -74,14 +76,35 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".base.PickPictureActivity"
             android:screenOrientation="portrait"/>
+        <!--关于-->
+        <activity android:name=".activity.setting.AboutActivity"
+            android:screenOrientation="portrait"/>
+        <!--帮助与反馈-->
+        <activity android:name=".activity.setting.FeedBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.setting.FeedSimpleBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.setting.FeedUiBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.setting.FeedFunBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.setting.FeedNewBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.setting.FeedBugBackActivity"
+            android:screenOrientation="portrait"/>
+
+        <!--会话-->
+        <activity android:name=".activity.common.PickPictureActivity"
+            android:screenOrientation="portrait"/>
         <!--图片浏览-->
-        <activity android:name=".activity.BigPictureActivity"
+        <activity android:name=".activity.common.BigPictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme"/>
+        <!--二维码-->
+        <activity android:name=".activity.common.CodeActivity"
             android:screenOrientation="portrait"/>
         <!--二维码-->
-        <activity android:name=".activity.setting.CodeActivity"
-            android:screenOrientation="portrait"/>
-        <!--二维码-->
-        <activity android:name=".activity.setting.ScanActivity"
+        <activity android:name=".activity.common.ScanActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"/>
         <!--查找朋友-->
@@ -89,7 +112,7 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"/>
         <!--启动页-->
-        <activity android:name=".activity.LauncherActivity"
+        <activity android:name=".activity.account.LauncherActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullTransTheme">
             <intent-filter>
@@ -98,31 +121,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--推送-->
-        <receiver
-            android:name=".receiver.PushReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <!--注册所得到的注册 ID-->
-                <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!--收到了自定义消息-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!--收到了通知-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!--用户点击了通知-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-                <!--用户点击了通知栏中自定义的按钮-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
-                <!--服务的连接状态发生变化-->
-                <action android:name="cn.jpush.android.intent.CONNECTION" />
-                <category android:name="com.flyer.chat" />
-            </intent-filter>
-            <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <category android:name="com.flyer.chat" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

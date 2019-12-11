@@ -6,7 +6,6 @@ package com.flyer.chat.base;
 
 public class BaseContract {
     public interface BaseView{
-        boolean isActive();
         void showLoadingDialog();
         void showLoadingDialog(String message);
         void closeLoadingDialog();

@@ -13,7 +13,16 @@ import java.util.List;
 public class HttpParseUtil {
 
     public static <T> T parseObject(String json, Class<T> clazz) {
-        return JSON.parseObject(json, clazz);
+        T t = null;
+        if (json!=null) {
+            try {
+                t = JSON.parseObject(json, clazz);
+            }catch (Exception e){
+                return null;
+            }
+
+        }
+        return t;
     }
 
     public static <T> T parseObject(String json, String paramString, Class<T> clazz) {

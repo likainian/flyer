@@ -1,7 +1,9 @@
 package com.flyer.chat.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -19,6 +21,21 @@ public class TimeUtil {
     private static SimpleDateFormat sdf = new SimpleDateFormat(YMD,Locale.CHINA);
     public static void switchLocal(Locale locale) {
         sdf = new SimpleDateFormat(YMD,locale);
+    }
+
+    public static Long parseToLong(String time,String format){
+        sdf.applyPattern(format);
+        Date date = new Date();
+        try {
+            date = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+    public static String longToString(long time,String format){
+        sdf.applyPattern(format);
+        return sdf.format(time);
     }
 
     public static String longToYMD(Long time){

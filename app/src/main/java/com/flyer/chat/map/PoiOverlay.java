@@ -11,7 +11,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.flyer.chat.activity.account.bean.User;
+import com.flyer.chat.bean.MapUser;
+import com.flyer.chat.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class PoiOverlay {
     private Context context;
     private AMap aMap;
     private List<Marker> markers = new ArrayList<>();
-    private List<User> users = new ArrayList<>();
+    private List<MapUser> users = new ArrayList<>();
     public PoiOverlay(Context context,AMap aMap) {
         this.context = context;
         this.aMap = aMap;
@@ -38,33 +39,15 @@ public class PoiOverlay {
             }
         }
     }
-    public void addUsers(List<User> users){
+    public void addUsers(List<MapUser> users){
         this.users = users;
-        for (final User user:users){
-//            Glide.with(context).applyDefaultRequestOptions(GlideOptions.UserOptions())
-//                    .asBitmap().load(CommonUtil.getImageUrl(user.getImg())).into(new SimpleTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
-//                    ImageView userImg = view.findViewById(R.id.user_img);
-//                    userImg.setImageBitmap(resource);
-//                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
-//                }
-//
-//                @Override
-//                public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                    View view = LayoutInflater.from(context).inflate(R.layout.map_user_info, null);
-//                    ImageView userImg = view.findViewById(R.id.user_img);
-//                    userImg.setImageDrawable(errorDrawable);
-//                    addMarker(user.getLatitude(),user.getLongitude(),view,user);
-//                }
-//            });
-        }
     }
-    private void addMarker(double latitude, double longitude, View view,User user) {
-        Log.d("ttt", "addMarker: "+latitude+":"+longitude);
+    private void addMarker(View view,MapUser user) {
+        LogUtil.i("ttt",user.toString());
+        String location = user.getLocation();
+        String[] split = location.split(",");
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(latitude,longitude));
+        markerOptions.position(new LatLng(Double.parseDouble(split[0]),Double.parseDouble(split[1])));
         markerOptions.icon(BitmapDescriptorFactory.fromView(view));
         Marker marker = aMap.addMarker(markerOptions);
         marker.setObject(user);

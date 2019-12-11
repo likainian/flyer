@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -17,7 +19,6 @@ import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.KeyBoardUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
 import com.flyer.chat.util.ToastUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -38,7 +39,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by mike.li on 2018/8/8.
  */
 
-public class RegisterActivity extends ToolbarActivity implements View.OnClickListener {
+public class RegisterActivity extends ToolbarActivity implements View.OnClickListener{
     private ScrollView mScrollView;
     private EditText mEtPhone;
     private EditText mEtPassword;
@@ -46,6 +47,8 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
     private EditText mEtCode;
     private TextView mTvCode;
     private Disposable disposable;
+    private TextView mPassword;
+    private ImageSwitcher mSeePassword;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, RegisterActivity.class));
@@ -104,17 +107,19 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
     }
 
     @Override
-    public void onClick(final View v) {
+    public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.see_password:
+                switchShowPassword();
+                break;
             case R.id.tv_register:
                 checkCode();
-                break;
-            case R.id.tv_help:
-                QuestionActivity.startActivity(this);
                 break;
             case R.id.tv_code:
                 getCode();
                 break;
+            case R.id.tv_help:
+                QuestionActivity.startActivity(this);
         }
     }
 
@@ -122,6 +127,27 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
         return CheckUtil.isNotEmpty(mEtPhone.getText().toString().trim())
                 &&CheckUtil.isNotEmpty(mEtCode.getText().toString().trim())
                 &&CheckUtil.isNotEmpty(mEtPassword.getText().toString().trim());
+    }
+
+    private void switchShowPassword() {
+        if (mPassword.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            mSeePassword.setImageResource(R.drawable.password_open_eye);
+            mPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            mSeePassword.setImageResource(R.drawable.password_colse_eye);
+            mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+    }
+
+    private void getCode(){
+        BmobSMS.requestSMSCode(mEtPhone.getText().toString().trim(), "", new QueryListener<Integer>() {
+            @Override
+            public void done(Integer smsId, BmobException e) {
+                if (e == null) {
+                    showVerifyCode();
+                }
+            }
+        });
     }
 
     public void showVerifyCode() {
@@ -150,17 +176,6 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
                 });
     }
 
-    private void getCode(){
-        BmobSMS.requestSMSCode(mEtPhone.getText().toString().trim(), "", new QueryListener<Integer>() {
-            @Override
-            public void done(Integer smsId, BmobException e) {
-                if (e == null) {
-                    showVerifyCode();
-                }
-            }
-        });
-    }
-
     private void checkCode(){
         BmobUser.signOrLoginByMobilePhone(mEtPhone.getText().toString().trim(), mEtCode.getText().toString().trim(), new LogInListener<BmobUser>() {
             @Override
@@ -173,8 +188,6 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
                     bmobUser.update(new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            SharedPreferencesHelper.getInstance().setPhoneNum(mEtPhone.getText().toString().trim());
-                            SharedPreferencesHelper.getInstance().setPassword(mEtPassword.getText().toString().trim());
                             ToastUtil.showToast("注册成功");
                             finish();
                         }
@@ -183,5 +196,4 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
             }
         });
     }
-
 }

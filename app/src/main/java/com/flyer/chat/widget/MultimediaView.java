@@ -25,7 +25,7 @@ public class MultimediaView extends FrameLayout {
     }
 
     private void initView(final Context context) {
-        View.inflate(context, R.layout.multimedia_view, this);
+        View.inflate(context, R.layout.view_multimedia_layout, this);
 
     }
 }

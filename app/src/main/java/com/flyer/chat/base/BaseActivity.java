@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyer.chat.R;
+import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.dialog.LoadingDialog;
 import com.flyer.chat.util.CommonUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
+import com.flyer.chat.util.SharedPreferencesUtil;
 import com.gyf.barlibrary.ImmersionBar;
 
 public abstract class BaseActivity extends AppCompatActivity implements BaseContract.BaseView{
@@ -21,14 +22,22 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(BaseContextWrapper.wrap(newBase, SharedPreferencesHelper.getInstance().getLanguage()));
+        super.attachBaseContext(BaseContextWrapper.wrap(newBase, SharedPreferencesUtil.getInstance().getLanguage()));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ChatApplication.getInstance().addActivity(this);
         //适配状态栏黑色字体，不能改变这加入0.5透明度遮盖
         mImmersionBar  = ImmersionBar.with(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        ChatApplication.getInstance().removeActivity(this);
+        if (mImmersionBar != null)mImmersionBar.destroy();
+        super.onDestroy();
     }
 
     @Override
@@ -49,22 +58,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         mImmersionBar.statusBarDarkFont(true,0).statusBarColor(R.color.colorPrimary).init();
     }
 
-    @Override
-    protected void onDestroy() {
-        if (mImmersionBar != null)mImmersionBar.destroy();
-        super.onDestroy();
-    }
-
     protected void addFragment(@IdRes int layoutFragmentId, Fragment fragment) {
         if (null == fragment) {
             return;
         }
         getSupportFragmentManager().beginTransaction().add(layoutFragmentId, fragment).commit();
-    }
-
-    @Override
-    public boolean isActive() {
-        return !isFinishing();
     }
 
     @Override

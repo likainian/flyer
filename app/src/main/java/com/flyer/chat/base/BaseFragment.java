@@ -9,11 +9,6 @@ import android.support.v4.app.Fragment;
 
 public abstract class BaseFragment extends Fragment implements BaseContract.BaseView {
 
-    @Override
-    public boolean isActive() {
-        return !this.isDetached()&&this.isAdded();
-    }
-
     protected void addChildFragment(Fragment fragment, @IdRes int layoutFragmentId) {
         if (null == fragment) {
             return;
