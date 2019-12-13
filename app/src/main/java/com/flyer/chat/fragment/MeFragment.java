@@ -16,18 +16,16 @@ import android.widget.TextView;
 
 import com.flyer.chat.BuildConfig;
 import com.flyer.chat.R;
-import com.flyer.chat.activity.BigPictureActivity;
 import com.flyer.chat.activity.account.LoginActivity;
+import com.flyer.chat.activity.common.BigPictureActivity;
 import com.flyer.chat.activity.setting.AboutActivity;
 import com.flyer.chat.activity.setting.UserInfoActivity;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.dialog.ShareDialog;
 import com.flyer.chat.util.DeviceUtil;
 
 import java.util.ArrayList;
 
 import cn.bmob.v3.BmobUser;
-import cn.jpush.im.android.api.model.UserInfo;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -43,7 +41,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public LinearLayout mLlUpData;
     public LinearLayout mLlAbout;
     private TextView mTvLogout;
-    private UserInfo myInfo;
     private BroadcastReceiver avatarBroadcastReceiver;
     private TextView mTvVersion;
 
@@ -112,7 +109,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.head_back:
                 ArrayList<String> list = new ArrayList<>();
-                list.add(DeviceUtil.getSavePicturePath("avatar"));
+                list.add(DeviceUtil.getSavePicturePath());
                 BigPictureActivity.startActivity(getActivity(),list,0);
                 break;
             case R.id.ll_about:
@@ -123,7 +120,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 LoginActivity.startActivity(getActivity());
                 break;
             case R.id.share_chat:
-                new ShareDialog(getActivity()).show();
                 break;
         }
     }

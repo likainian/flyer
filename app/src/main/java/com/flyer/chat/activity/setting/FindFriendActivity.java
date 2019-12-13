@@ -16,28 +16,6 @@ import com.flyer.chat.R;
 import com.flyer.chat.activity.ConversationActivity;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.util.CheckUtil;
-import com.flyer.chat.util.ToastUtil;
-import com.flyer.chat.util.HttpParseUtil;
-import com.flyer.chat.util.LogUtil;
-import com.flyer.chat.util.ToastUtil;
-import com.mob.jimu.query.Condition;
-import com.mob.jimu.query.Query;
-import com.mob.jimu.query.data.Text;
-import com.mob.tools.utils.Hashon;
-import com.mob.ums.QueryView;
-import com.mob.ums.UMSSDK;
-import com.mob.ums.User;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mike.li on 2018/8/28.
@@ -112,43 +90,5 @@ public class FindFriendActivity extends BaseActivity implements View.OnClickList
     }
 
     private void searchFriend(final String userName) {
-        Observable.create(new ObservableOnSubscribe<User>() {
-            @Override
-            public void subscribe(ObservableEmitter<User> emitter) throws Exception {
-                try {
-                    Query query = UMSSDK.getQuery(QueryView.USERS);
-                    Query condition = query.condition(Condition.eq("phone", Text.valueOf(userName)));
-                    String result = condition.query();
-                    List<String> list = HttpParseUtil.parseArray(result, "list", String.class);
-                    ArrayList<User> users = new ArrayList<>();
-                    for (String s : list) {
-                        HashMap<String, Object> map = new Hashon().fromJson(s);
-                        User user = new User();
-                        user.parseFromMap(map);
-                        users.add(user);
-                    }
-                    LogUtil.i("ttt", users.toString());
-                    if (users.size() > 0) {
-                        emitter.onNext(users.get(0));
-                    }
-                } catch (Throwable throwable) {
-                    throw  new Exception(throwable);
-                }
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
-                    @Override
-                    public void accept(User user) throws Exception {
-                        mSearchResult.setVisibility(View.VISIBLE);
-                        mResultName.setText(user.phone.get());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                        ToastUtil.showToast("没有查到该用户");
-                    }
-                });
     }
 }

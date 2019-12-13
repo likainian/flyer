@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
@@ -13,7 +16,6 @@ import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.ToastUtil;
-import com.flyer.chat.widget.ClearEditText;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,9 +34,10 @@ import io.reactivex.schedulers.Schedulers;
  * Created by mike.li on 2019/10/29.
  */
 public class ResetPasswordActivity extends ToolbarActivity implements View.OnClickListener {
-    private ClearEditText mEtPhone;
-    private ClearEditText mEtCode;
-    private ClearEditText mEtPassword;
+    private EditText mEtPhone;
+    private EditText mEtCode;
+    private EditText mEtPassword;
+    private ImageView mIvPassword;
     private TextView mTvCode;
     private TextView mBtNext;
     private Disposable disposable;
@@ -55,11 +58,13 @@ public class ResetPasswordActivity extends ToolbarActivity implements View.OnCli
         mEtPhone = findViewById(R.id.et_phone);
         mEtCode = findViewById(R.id.et_code);
         mEtPassword = findViewById(R.id.et_password);
+        mIvPassword = findViewById(R.id.iv_password);
         mTvCode = findViewById(R.id.tv_code);
         mBtNext = findViewById(R.id.bt_next);
 
         setToolbarMiddleText("重置密码");
         mBtNext.setOnClickListener(this);
+        mIvPassword.setOnClickListener(this);
         mTvCode.setOnClickListener(this);
         mBtNext.setEnabled(nextEnable());
         mEtPhone.addTextChangedListener(new EditTextWatcher() {
@@ -92,11 +97,24 @@ public class ResetPasswordActivity extends ToolbarActivity implements View.OnCli
             case R.id.bt_next:
                 resetPassword();
                 break;
+            case R.id.iv_password:
+                switchShowPassword();
+                break;
         }
     }
     private boolean nextEnable(){
         return CheckUtil.isNotEmpty(mEtPhone.getText().toString().trim())
                 &&CheckUtil.isNotEmpty(mEtCode.getText().toString().trim());
+    }
+
+    private void switchShowPassword() {
+        if (mEtPassword.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            mIvPassword.setImageResource(R.drawable.password_open_eye);
+            mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            mIvPassword.setImageResource(R.drawable.password_colse_eye);
+            mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
     }
 
     public void showVerifyCode() {

@@ -7,7 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -43,12 +43,11 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
     private ScrollView mScrollView;
     private EditText mEtPhone;
     private EditText mEtPassword;
+    private ImageView mIvPassword;
     private TextView mTvRegister;
     private EditText mEtCode;
     private TextView mTvCode;
     private Disposable disposable;
-    private TextView mPassword;
-    private ImageSwitcher mSeePassword;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, RegisterActivity.class));
@@ -65,6 +64,7 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
         mScrollView = findViewById(R.id.scroll_view);
         mEtPhone = findViewById(R.id.et_phone);
         mEtPassword = findViewById(R.id.et_password);
+        mIvPassword = findViewById(R.id.iv_password);
         mTvRegister = findViewById(R.id.tv_register);
         mEtCode = findViewById(R.id.et_code);
         mTvCode = findViewById(R.id.tv_code);
@@ -73,6 +73,7 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
         setToolbarMiddleText("注册账号");
         mTvRegister.setOnClickListener(this);
         mTvHelp.setOnClickListener(this);
+        mIvPassword.setOnClickListener(this);
         mTvCode.setOnClickListener(this);
         mEtPhone.addTextChangedListener(new EditTextWatcher() {
             @Override
@@ -109,17 +110,18 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.see_password:
+            case R.id.iv_password:
                 switchShowPassword();
                 break;
             case R.id.tv_register:
                 checkCode();
                 break;
+            case R.id.tv_help:
+                QuestionActivity.startActivity(this);
+                break;
             case R.id.tv_code:
                 getCode();
                 break;
-            case R.id.tv_help:
-                QuestionActivity.startActivity(this);
         }
     }
 
@@ -130,12 +132,12 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
     }
 
     private void switchShowPassword() {
-        if (mPassword.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
-            mSeePassword.setImageResource(R.drawable.password_open_eye);
-            mPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        if (mEtPassword.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            mIvPassword.setImageResource(R.drawable.password_open_eye);
+            mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         } else {
-            mSeePassword.setImageResource(R.drawable.password_colse_eye);
-            mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            mIvPassword.setImageResource(R.drawable.password_colse_eye);
+            mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 

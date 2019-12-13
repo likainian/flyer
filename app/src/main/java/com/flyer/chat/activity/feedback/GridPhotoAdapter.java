@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
-import com.flyer.chat.activity.BigPictureActivity;
+import com.flyer.chat.activity.common.BigPictureActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.account.LoginActivity;
 import com.flyer.chat.base.BaseActivity;
-import com.flyer.chat.activity.home.HomeActivity;
 
 import cn.bmob.v3.BmobUser;
 
@@ -24,5 +23,6 @@ public class LauncherActivity extends BaseActivity{
         } else {
             LoginActivity.startActivity(this);
         }
+        finish();
     }
 }

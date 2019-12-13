@@ -15,12 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyer.chat.R;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.common.ScanActivity;
 import com.flyer.chat.adapter.NearAdapter;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.activity.account.bean.User;
-import com.flyer.chat.network.CallBack;
-import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.bean.LinkUser;
 import com.flyer.chat.bean.MapUser;
 import com.flyer.chat.util.CheckUtil;
@@ -147,8 +145,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void showUserInfo(com.mob.ums.User user) {
-        LinkUser linkUser = HttpParseUtil.parseObject(user.nickname.get(), LinkUser.class);
+    public void showUserInfo(User user) {
+        LinkUser linkUser = HttpParseUtil.parseObject("", LinkUser.class);
         if(linkUser!=null){
             this.mapId = linkUser.getMapId();
             if(latitude==0&&longitude==0)return;

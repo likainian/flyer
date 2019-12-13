@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
 import com.flyer.chat.bean.MessageItem;
-import com.mob.imsdk.model.IMMessage;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,5 @@ public class ConversationAdapter extends BaseMultiItemQuickAdapter<MessageItem,B
 
     @Override
     protected void convert(BaseViewHolder helper, MessageItem item) {
-        IMMessage message = item.getMessage();
-        helper.setText(R.id.text,message.getBody());
     }
 }

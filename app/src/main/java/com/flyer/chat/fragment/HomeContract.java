@@ -1,8 +1,8 @@
 package com.flyer.chat.fragment;
 
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.base.BaseContract;
 import com.flyer.chat.bean.MapUser;
-import com.mob.ums.User;
 
 import java.util.List;
 

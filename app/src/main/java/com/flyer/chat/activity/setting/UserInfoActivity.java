@@ -18,21 +18,14 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.bumptech.glide.Glide;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.common.CodeActivity;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.bean.Province;
 import com.flyer.chat.dialog.SelectDialog;
-import com.flyer.chat.network.UMSCallback;
 import com.flyer.chat.util.AssetsUtil;
-import com.flyer.chat.util.GlideOptions;
 import com.flyer.chat.util.HttpParseUtil;
-import com.flyer.chat.util.TimeUtil;
-import com.flyer.chat.util.ToastUtil;
-import com.mob.ums.UMSSDK;
-import com.mob.ums.User;
-import com.mob.ums.datatype.Gender;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +37,7 @@ import java.util.List;
  * Created by mike.li on 2018/8/10.
  */
 
-public class UserInfoActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.UserInfoView {
+public abstract class UserInfoActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.UserInfoView {
     public static final String ACTION_USER = "com.flyer.chat.user";
     public static final int EDIT_NICK_NAME = 12;
     public static final int EDIT_SIGN = 13;
@@ -126,7 +119,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 UserHeadActivity.startActivity(this);
                 break;
             case R.id.nick_name_layout:
-                UserInfoEditActivity.startActivityForResult(this,"设置名字",myInfo.nickname.get(),EDIT_NICK_NAME);
+                UserInfoEditActivity.startActivityForResult(this,"设置名字","",EDIT_NICK_NAME);
                 break;
             case R.id.gender_layout:
                 final ArrayList<String> list = new ArrayList<>();
@@ -136,20 +129,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void OnSelect(final int position) {
                         HashMap<String, Object> map = new HashMap<>();
-                        Gender gender;
-                        if(position==0){
-                            gender = Gender.Male.INSTANCE;
-                        }else {
-                            gender = Gender.Female.INSTANCE;
-                        }
-                        map.put("gender",gender);
-                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                super.onSuccess(aVoid);
-                                mGender.setText(list.get(position));
-                            }
-                        });
                     }
                 }).show();
                 break;
@@ -160,23 +139,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 Calendar start = Calendar.getInstance();
                 start.setTimeInMillis(Long.MIN_VALUE);
                 Calendar instance = Calendar.getInstance();
-                if(myInfo.birthday.get()!=null){
-                    instance.setTimeInMillis(myInfo.birthday.get().getTime());
-                }else {
-                    instance.setTimeInMillis(System.currentTimeMillis());
-                }
                 new TimePickerBuilder(this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(final Date date, View v) {
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("birthday",date);
-                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                super.onSuccess(aVoid);
-                                mAge.setText(String.valueOf(TimeUtil.longToAge(date.getTime())));
-                            }
-                        });
                     }
                 }).setDate(instance).setRangDate(null,end).build().show();
                 break;
@@ -217,25 +184,18 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                             address = p+c+a;
                         }
                         HashMap<String, Object> map = new HashMap<>();
-                        String oldAddress = myInfo.address.get();
+                        String oldAddress = "";
                         if(oldAddress.contains("-")){
                             oldAddress = oldAddress.substring(0,oldAddress.indexOf("-")+1)+address;
                         }
                         map.put("addr",oldAddress);
-                        UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                super.onSuccess(aVoid);
-                                mLocation.setText(address);
-                            }
-                        });
                     }
                 }).build();
                 pvOptions.setPicker(options1Items, options2Items, options3Items);
                 pvOptions.show();
                 break;
             case R.id.sign_layout:
-                UserInfoEditActivity.startActivityForResult(this,"设置签名",myInfo.signature.get(),EDIT_SIGN);
+                UserInfoEditActivity.startActivityForResult(this,"设置签名","",EDIT_SIGN);
                 break;
 
         }
@@ -250,50 +210,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 case EDIT_NICK_NAME:
                     final String nickName = data.getStringExtra("name");
                     map.put("nickname",nickName);
-                    UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            super.onSuccess(aVoid);
-                            mNickName.setText(nickName);
-                        }
-                    });
                     break;
                 case EDIT_SIGN:
                     final String signature = data.getStringExtra("name");
                     map.put("signature",signature);
-                    UMSSDK.updateUserInfo(map,new UMSCallback<Void>(){
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            super.onSuccess(aVoid);
-                            mSign.setText(signature);
-                        }
-                    });
                     break;
             }
 
         }
-    }
-
-    @Override
-    public void showUserInfo(User user) {
-        myInfo = user;
-        mName.setText(myInfo.phone.get());
-        String[] strings = myInfo.avatar.get();
-        if(strings==null){
-            mHead.setImageResource(R.drawable.default_head);
-        }else {
-            Glide.with(UserInfoActivity.this).applyDefaultRequestOptions(GlideOptions.UserOptions()).load(myInfo.avatar.get()[0]).into(mHead);
-        }
-        mNickName.setText(myInfo.nickname.get());
-        if(myInfo.gender.get()!=null){
-            mGender.setText(myInfo.gender.get()==Gender.Male.INSTANCE?"男":"女");
-        }else {
-            mGender.setText("未知");
-        }
-        int age = TimeUtil.longToAge(myInfo.birthday.get()!=null?myInfo.birthday.get().getTime():System.currentTimeMillis());
-        mAge.setText(String.valueOf(age));
-        String address = myInfo.address.get();
-        mLocation.setText(address);
-        mSign.setText(myInfo.signature.get());
     }
 }

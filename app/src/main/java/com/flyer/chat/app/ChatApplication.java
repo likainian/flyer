@@ -6,11 +6,11 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.flyer.chat.util.CheckUtil;
-import com.mob.MobSDK;
 
-import cn.bmob.v3.Bmob;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by mike.li on 2018/7/9.
@@ -33,8 +33,6 @@ public class ChatApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        MobSDK.init(this);
-
         Bmob.initialize(this,"0421c676074eef0cf5e75b563ac2c079");
     }
 

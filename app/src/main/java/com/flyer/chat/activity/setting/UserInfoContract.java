@@ -1,7 +1,7 @@
 package com.flyer.chat.activity.setting;
 
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.base.BaseContract;
-import com.mob.ums.User;
 
 /**
  * Created by mike.li on 2018/11/6.

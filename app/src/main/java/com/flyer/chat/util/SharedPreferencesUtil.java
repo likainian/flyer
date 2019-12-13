@@ -124,7 +124,7 @@ public class SharedPreferencesUtil {
 
     public void setUserName(String name){
         putString("user_name",name);
-        setUserNameList(name);
+        setMobileNoList(name);
     }
 
     public String getPhoneNum(){
@@ -133,14 +133,14 @@ public class SharedPreferencesUtil {
 
     public void setPhoneNum(String name){
         putString("phone_num",name);
-        setUserNameList(name);
+        setMobileNoList(name);
     }
 
     public String getUserName(){
         return getString("user_name","");
     }
 
-    public void setUserNameList(String name){
+    public void setMobileNoList(String name){
         if(CheckUtil.isEmpty(name))return;
         List<String> userNameList = getMobileNoList();
         if(!userNameList.contains(name)){
@@ -155,7 +155,7 @@ public class SharedPreferencesUtil {
 
     public void setMobileNo(String mobileNo){
         putString("user_mobile",mobileNo);
-        setUserNameList(mobileNo);
+        setMobileNoList(mobileNo);
     }
 
     public String getMobileNo(){

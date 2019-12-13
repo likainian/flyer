@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.flyer.chat.bean.MapUser;
 import com.flyer.chat.network.CallBack;
 import com.flyer.chat.network.RetrofitService;
-import com.flyer.chat.network.UMSCallback;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.HttpParseUtil;
 import com.flyer.chat.util.LogUtil;
-import com.mob.ums.UMSSDK;
-import com.mob.ums.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +25,6 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void getUserInfo() {
-        UMSSDK.getLoginUser(new UMSCallback<User>(){
-            @Override
-            public void onSuccess(User user) {
-                super.onSuccess(user);
-                mView.showUserInfo(user);
-            }
-        });
     }
 
     @Override

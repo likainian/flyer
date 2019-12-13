@@ -19,7 +19,6 @@ import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.fragment.ChatFragment;
 import com.flyer.chat.fragment.HomeFragment;
 import com.flyer.chat.fragment.MeFragment;
-import com.flyer.chat.fragment.NoteFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class HomeActivity extends BaseActivity {
         fragmentList = new ArrayList<>();
         fragmentList.add(HomeFragment.newInstance());
         fragmentList.add(ChatFragment.newInstance());
-        fragmentList.add(NoteFragment.newInstance());
+        fragmentList.add(ChatFragment.newInstance());
         fragmentList.add(MeFragment.newInstance());
         for (Fragment fragment:fragmentList){
             getSupportFragmentManager().beginTransaction().add(R.id.frame_layout,fragment).hide(fragment).commit();

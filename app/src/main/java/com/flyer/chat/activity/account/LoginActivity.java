@@ -13,17 +13,18 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
-import com.flyer.chat.activity.feedback.QuestionActivity;
-import com.flyer.chat.activity.home.HomeActivity;
-import com.flyer.chat.base.BaseActivity;
+import com.flyer.chat.activity.HomeActivity;
 import com.flyer.chat.activity.account.bean.User;
+import com.flyer.chat.activity.feedback.QuestionActivity;
+import com.flyer.chat.app.ChatApplication;
+import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.dialog.TitleSelectDialog;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.KeyBoardUtil;
-import com.flyer.chat.util.SharedPreferencesHelper;
+import com.flyer.chat.util.SharedPreferencesUtil;
 import com.flyer.chat.util.ToastUtil;
 
 import java.util.List;
@@ -47,10 +48,6 @@ import io.reactivex.schedulers.Schedulers;
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private Disposable disposable;
-
-    public static void startActivity(Context context){
-        context.startActivity(new Intent(context,LoginActivity.class));
-    }
     private ScrollView mScrollView;
     private EditText mEtPhone;
     private EditText mEtPassword;
@@ -60,9 +57,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private TextView mTvLogin;
     private LinearLayout mLlPassword;
     private LinearLayout mLlCode;
+    private TextView mTvSwitch;
+
+    public static void startActivity(Context context){
+        context.startActivity(new Intent(context,LoginActivity.class));
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ChatApplication.getInstance().clearAllActivities();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
@@ -77,7 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         mEtCode = findViewById(R.id.et_code);
         mTvCode = findViewById(R.id.tv_code);
         TextView mTvForgetPassword = findViewById(R.id.tv_forget_password);
-        TextView mTvSwitch = findViewById(R.id.tv_switch);
+        mTvSwitch = findViewById(R.id.tv_switch);
         mTvLogin = findViewById(R.id.tv_login);
         TextView mTvRegister = findViewById(R.id.tv_register);
         TextView mTvHelp = findViewById(R.id.tv_help);
@@ -92,8 +96,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         mIvPassword.setOnClickListener(this);
         mTvCode.setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
-        mEtPhone.setText(SharedPreferencesHelper.getInstance().getPhoneNum());
-        mEtPassword.setText(SharedPreferencesHelper.getInstance().getPassword());
+        mEtPhone.setText(SharedPreferencesUtil.getInstance().getPhoneNum());
+        mEtPassword.setText(SharedPreferencesUtil.getInstance().getPassword());
 
         mEtPhone.addTextChangedListener(new EditTextWatcher() {
             @Override
@@ -102,6 +106,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             }
         });
         mEtPassword.addTextChangedListener(new EditTextWatcher() {
+            @Override
+            public void OnTextChange(Editable s) {
+                mTvLogin.setEnabled(loginEnable());
+            }
+        });
+        mEtCode.addTextChangedListener(new EditTextWatcher() {
             @Override
             public void OnTextChange(Editable s) {
                 mTvLogin.setEnabled(loginEnable());
@@ -119,7 +129,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 }
             }
         });
-        if(CheckUtil.isEmpty(SharedPreferencesHelper.getInstance().getUserNameList())){
+        if(CheckUtil.isEmpty(SharedPreferencesUtil.getInstance().getMobileNoList())){
             mIvMore.setVisibility(View.GONE);
         }else {
             mIvMore.setVisibility(View.VISIBLE);
@@ -145,7 +155,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 switchShowPassword();
                 break;
             case R.id.iv_more:
-                final List<String> userNameList = SharedPreferencesHelper.getInstance().getUserNameList();
+                final List<String> userNameList = SharedPreferencesUtil.getInstance().getMobileNoList();
                 new TitleSelectDialog(this)
                         .setTitle("选择手机号")
                         .setList(userNameList)
@@ -173,10 +183,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         if(mLlCode.isShown()){
             mLlPassword.setVisibility(View.VISIBLE);
             mLlCode.setVisibility(View.GONE);
+            mTvSwitch.setText("验证码登陆");
         }else {
             mLlPassword.setVisibility(View.GONE);
             mLlCode.setVisibility(View.VISIBLE);
+            mTvSwitch.setText("密码登陆");
         }
+        mTvLogin.setEnabled(loginEnable());
     }
 
     private void switchShowPassword() {
@@ -190,9 +203,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private boolean loginEnable(){
-        return CheckUtil.isNotEmpty(mEtPhone.getText().toString().trim())
-                &&((mLlCode.isShown()&&CheckUtil.isNotEmpty(mEtCode.getText().toString().trim()))
-                ||(mLlPassword.isShown()&&CheckUtil.isNotEmpty(mEtPassword.getText().toString().trim())));
+        if(CheckUtil.isEmpty(mEtPhone.getText().toString().trim())){
+            return false;
+        }
+        if(CheckUtil.isEmpty(mEtPassword.getText().toString().trim())){
+            return false;
+        }
+        if((mLlCode.isShown()&&CheckUtil.isEmpty(mEtCode.getText().toString().trim()))){
+            return false;
+        }
+        return true;
     }
 
     private void login() {
@@ -213,8 +233,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void done(User user, BmobException e) {
                     if (e == null) {
-                        SharedPreferencesHelper.getInstance().setPhoneNum(mEtPhone.getText().toString().trim());
-                        SharedPreferencesHelper.getInstance().setPassword(mEtPassword.getText().toString().trim());
+                        SharedPreferencesUtil.getInstance().setPhoneNum(mEtPhone.getText().toString().trim());
+                        SharedPreferencesUtil.getInstance().setPassword(mEtPassword.getText().toString().trim());
                         HomeActivity.startActivity(LoginActivity.this);
                     } else {
                         ToastUtil.showToast(e.getMessage());

@@ -1,11 +1,11 @@
 package com.flyer.chat.map;
 
 import com.alibaba.fastjson.JSON;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.network.CallBack;
 import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.HttpParseUtil;
-import com.mob.ums.User;
 
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ public class MapCloud {
     public static final String tableId = "5bfe5ef27bbf195c0724cb46";
     public static void CreateMapUser(User user, final CallBack<String> callBack){
         HashMap<String, Object> data = new HashMap<>();
-        data.put("_name",user.id.get());
+        data.put("_name","");
         data.put("_location","104.394729,31.125698");
         String string = JSON.toJSONString(data);
         final HashMap<String, Object> map = new HashMap<>();
