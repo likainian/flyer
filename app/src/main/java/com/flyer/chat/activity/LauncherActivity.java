@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.flyer.chat.R;
 import com.flyer.chat.activity.account.LoginActivity;
+import com.flyer.chat.activity.home.HomeActivity;
 import com.flyer.chat.base.BaseActivity;
 
 import cn.bmob.v3.BmobUser;

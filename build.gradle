@@ -23,6 +23,8 @@ allprojects {
         jcenter()
         //com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.3
         maven { url "https://jitpack.io" }
+        //蒲公英
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
     }
     ext {
         COMPILE_SDK_VERSION = 28

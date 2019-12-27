@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
+import com.flyer.chat.activity.common.adapter.GridPhotoAdapter;
 import com.flyer.chat.activity.feedback.bean.Question;
 import com.flyer.chat.base.ToolbarActivity;
 import com.flyer.chat.listener.EditTextWatcher;
@@ -35,12 +36,18 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by mike.li on 2019/10/29.
  */
 public class QuestionActivity extends ToolbarActivity{
+    public static final String QUESTION_TYPE = "QUESTION_TYPE";
+    public static final String NORMAL_TYPE = "NORMAL_TYPE";//简单问题
+    public static final String UI_TYPE = "UI_TYPE";//布局UI
+    public static final String NEW_TYPE = "NEW_TYPE";//新功能
+    public static final String FUN_TYPE = "FUN_TYPE";//不合理
+    public static final String BUG_TYPE = "BUG_TYPE";//bug
     private EditText mEtMessage;
     private EditText mEtContact;
     private TextView mTvCommit;
     private GridPhotoAdapter gridPhotoAdapter;
 
-    public static void startActivity(Context context) {
+    public static void startActivity(Context context,String type) {
         context.startActivity(new Intent(context, QuestionActivity.class));
     }
 

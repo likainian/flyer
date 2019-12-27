@@ -15,8 +15,8 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.base.BaseFragment;
-import com.flyer.chat.bean.MapUser;
 import com.flyer.chat.map.PoiOverlay;
 import com.flyer.chat.util.LogUtil;
 
@@ -78,7 +78,7 @@ public class MapFragment extends BaseFragment implements AMap.OnMyLocationChange
         aMap.setOnMarkerClickListener(this);
     }
 
-    public void setNewData(List<MapUser> users){
+    public void setNewData(List<User> users){
         if(users==null)return;
         poiOverlay.removeUsers();
         poiOverlay.addUsers(users);

@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.bean.LinkUser;
-import com.flyer.chat.fragment.HomeFragment;
+import com.flyer.chat.activity.home.NearFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,7 +224,7 @@ public class SharedPreferencesUtil {
     }
 
     public String getHomeMode(){
-        return getString("home_mode", HomeFragment.LIST_MODE);
+        return getString("home_mode", NearFragment.LIST_MODE);
     }
 
     public void setLinkUser(LinkUser linkUser){

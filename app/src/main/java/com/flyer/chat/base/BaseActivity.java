@@ -15,7 +15,7 @@ import com.flyer.chat.util.CommonUtil;
 import com.flyer.chat.util.SharedPreferencesUtil;
 import com.gyf.barlibrary.ImmersionBar;
 
-public abstract class BaseActivity extends AppCompatActivity implements BaseContract.BaseView{
+public abstract class BaseActivity extends AppCompatActivity{
 
     private LoadingDialog loadingDialog;
     public ImmersionBar mImmersionBar;
@@ -65,18 +65,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         getSupportFragmentManager().beginTransaction().add(layoutFragmentId, fragment).commit();
     }
 
-    @Override
     public void showLoadingDialog() {
         showLoadingDialog(CommonUtil.getString(R.string.text_loading));
     }
 
-    @Override
     public void showLoadingDialog(String message) {
         loadingDialog = new LoadingDialog(this).setMessage(message);
         loadingDialog.show();
     }
 
-    @Override
     public void closeLoadingDialog() {
         if(loadingDialog!= null){
             loadingDialog.dismiss();

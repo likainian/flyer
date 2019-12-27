@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
@@ -105,7 +106,7 @@ public class PhotoView extends AppCompatImageView {
     private void init() {
         super.setScaleType(ScaleType.MATRIX);
         if (mScaleType == null) mScaleType = ScaleType.CENTER_INSIDE;
-        mRotateDetector = new RotateGestureDetector(mRotateListener);
+        mRotateDetector = new RotateGestureDetector();
         mDetector = new GestureDetector(getContext(), mGestureListener);
         mScaleDetector = new ScaleGestureDetector(getContext(), mScaleListener);
         float density = getResources().getDisplayMetrics().density;
@@ -599,22 +600,6 @@ public class PhotoView extends AppCompatImageView {
         return Math.abs(Math.round(rect.left) - (mWidgetRect.width() - rect.width()) / 2) < 1;
     }
 
-    private RotateGestureDetector.OnRotateListener mRotateListener = new RotateGestureDetector.OnRotateListener() {
-        @Override
-        public void onRotate(float degrees, float focusX, float focusY) {
-            mRotateFlag += degrees;
-            if (canRotate) {
-                mDegrees += degrees;
-                mAnimaMatrix.postRotate(degrees, focusX, focusY);
-            } else {
-                if (Math.abs(mRotateFlag) >= MIN_ROTATE) {
-                    canRotate = true;
-                    mRotateFlag = 0;
-                }
-            }
-        }
-    };
-
     private ScaleGestureDetector.OnScaleGestureListener mScaleListener = new ScaleGestureDetector.OnScaleGestureListener() {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
@@ -804,8 +789,8 @@ public class PhotoView extends AppCompatImageView {
 
             mTranslate.stop();
 
-            float from = 1;
-            float to = 1;
+            float from;
+            float to;
 
             float imgcx = mImgRect.left + mImgRect.width() / 2;
             float imgcy = mImgRect.top + mImgRect.height() / 2;
@@ -1214,6 +1199,90 @@ public class PhotoView extends AppCompatImageView {
 
             mCompleteCallBack = completeCallBack;
             mTranslate.start();
+        }
+    }
+
+    public class RotateGestureDetector {
+
+        private static final int MAX_DEGREES_STEP = 120;
+
+        private float mPrevSlope;
+        private float mCurrSlope;
+
+        private float x1;
+        private float y1;
+        private float x2;
+        private float y2;
+
+        public RotateGestureDetector() {
+        }
+
+        public void onTouchEvent(MotionEvent event) {
+
+            final int Action = event.getActionMasked();
+
+            switch (Action) {
+                case MotionEvent.ACTION_POINTER_DOWN:
+                case MotionEvent.ACTION_POINTER_UP:
+                    if (event.getPointerCount() == 2) mPrevSlope = calculateSlope(event);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (event.getPointerCount() > 1) {
+                        mCurrSlope = calculateSlope(event);
+
+                        double currDegrees = Math.toDegrees(Math.atan(mCurrSlope));
+                        double prevDegrees = Math.toDegrees(Math.atan(mPrevSlope));
+
+                        double deltaSlope = currDegrees - prevDegrees;
+
+                        if (Math.abs(deltaSlope) <= MAX_DEGREES_STEP) {
+                            mRotateFlag += deltaSlope;
+                            if (canRotate) {
+                                mDegrees += deltaSlope;
+                                mAnimaMatrix.postRotate((float) deltaSlope, (x2 + x1) / 2, (y2 + y1) / 2);
+                            } else {
+                                if (Math.abs(mRotateFlag) >= MIN_ROTATE) {
+                                    canRotate = true;
+                                    mRotateFlag = 0;
+                                }
+                            }
+                        }
+                        mPrevSlope = mCurrSlope;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private float calculateSlope(MotionEvent event) {
+            x1 = event.getX(0);
+            y1 = event.getY(0);
+            x2 = event.getX(1);
+            y2 = event.getY(1);
+            return (y2 - y1) / (x2 - x1);
+        }
+    }
+
+    public class InfoPhotoView {
+        // 内部图片在整个窗口的位置
+        RectF mRect = new RectF();
+        // 控件在窗口的位置
+        RectF mLocalRect = new RectF();
+        RectF mImgRect = new RectF();
+        RectF mWidgetRect = new RectF();
+        float mScale;
+        float mDegrees;
+        ImageView.ScaleType mScaleType;
+
+        public InfoPhotoView(RectF rect, RectF local, RectF img, RectF widget, float scale, float degrees, ImageView.ScaleType scaleType) {
+            mRect.set(rect);
+            mLocalRect.set(local);
+            mImgRect.set(img);
+            mWidgetRect.set(widget);
+            mScale = scale;
+            mScaleType = scaleType;
+            mDegrees = degrees;
         }
     }
 }

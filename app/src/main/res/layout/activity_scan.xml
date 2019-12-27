@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include layout="@layout/toolbar_layout"/>
     <!-- 这个控件就是扫描的窗口了 -->
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:layout_width="match_parent"

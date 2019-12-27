@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
-import com.flyer.chat.util.DeviceUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,8 +67,7 @@ public class TitleSelectDialog extends AlertDialog {
             layoutParams.windowAnimations = R.style.anim_y_bottom;
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            getWindow().getDecorView().setPadding(DeviceUtil.dip2px(context,20), 0,
-                    DeviceUtil.dip2px(context,20), DeviceUtil.dip2px(context,20));
+            getWindow().getDecorView().setPadding(0, 0,0, 0);
             getWindow().setAttributes(layoutParams);
         }
     }

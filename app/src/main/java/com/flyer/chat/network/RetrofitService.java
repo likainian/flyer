@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
-import com.flyer.chat.util.DeviceUtil;
+import com.flyer.chat.util.FileUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -104,7 +104,7 @@ public class RetrofitService {
                     @Override
                     public void accept(ResponseBody responseBody) throws Exception {
                         InputStream is = responseBody.byteStream();
-                        File file = new File(DeviceUtil.getSaveFilePath() + fileName);
+                        File file = new File(FileUtil.getSaveFilePath() + fileName);
                         FileOutputStream fos = new FileOutputStream(file);
                         BufferedInputStream bis = new BufferedInputStream(is);
                         byte[] buffer = new byte[1024];

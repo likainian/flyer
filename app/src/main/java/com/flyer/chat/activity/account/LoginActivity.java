@@ -13,7 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.flyer.chat.R;
-import com.flyer.chat.activity.HomeActivity;
+import com.flyer.chat.activity.home.HomeActivity;
 import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.feedback.QuestionActivity;
 import com.flyer.chat.app.ChatApplication;
@@ -168,7 +168,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         }).show();
                 break;
             case R.id.tv_help:
-                QuestionActivity.startActivity(this);
+                QuestionActivity.startActivity(this,QuestionActivity.QUESTION_TYPE);
                 break;
             case R.id.tv_switch:
                 switchLogin();

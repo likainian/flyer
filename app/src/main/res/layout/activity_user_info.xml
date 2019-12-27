@@ -6,39 +6,13 @@
     android:background="#f4f4f4"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:background="@color/colorPrimaryDark"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="45dp">
-        <FrameLayout
-            android:id="@+id/toolbar_left"
-            android:layout_width="45dp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/back_icon" />
-        </FrameLayout>
-        <TextView
-            android:textColor="#333333"
-            android:textSize="17sp"
-            android:text="个人信息"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <View
-            android:layout_alignParentBottom="true"
-            android:background="#dddddd"
-            android:layout_width="match_parent"
-            android:layout_height="0.33dp"/>
-    </RelativeLayout>
+    <include layout="@layout/toolbar_layout"/>
 
     <LinearLayout
+        android:id="@+id/ll_account"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -46,21 +20,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="手机号"
-            android:textColor="#3a3a3a"
+            android:text="账号"
+            android:textColor="#333333"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/tv_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#999999"
+            android:textColor="#666666"
             android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/head_layout"
-        android:background="@drawable/list_bg_line_padding"
+        android:id="@+id/ll_head"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -78,11 +52,12 @@
             android:textSize="16sp" />
 
         <com.itheima.roundedimageview.RoundedImageView
-            android:id="@+id/head"
-            app:riv_corner_radius="25dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/default_head" />
+            app:riv_corner_radius="5dp"
+            android:id="@+id/iv_head"
+            android:src="@drawable/default_head"
+            android:scaleType="centerCrop"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
 
         <ImageView
             android:layout_width="6dp"
@@ -92,10 +67,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/nick_name_layout"
+        android:id="@+id/ll_nick_name"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -104,11 +79,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="昵称"
-            android:textColor="#3a3a3a"
+            android:textColor="#333333"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/nick_name"
+            android:id="@+id/tv_nick_name"
+            android:hint="未设置"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"
@@ -121,11 +98,12 @@
             android:background="@drawable/next_icon" />
     </LinearLayout>
 
+
     <LinearLayout
-        android:id="@+id/gender_layout"
+        android:id="@+id/ll_sex"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -138,7 +116,9 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/gender"
+            android:id="@+id/tv_sex"
+            android:hint="未知"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"
@@ -151,10 +131,10 @@
             android:background="@drawable/next_icon" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/age_layout"
+        android:id="@+id/ll_age"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -167,7 +147,9 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/age"
+            android:id="@+id/tv_age"
+            android:hint="未设置"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"
@@ -181,10 +163,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/code_layout"
+        android:id="@+id/ll_code"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -209,10 +191,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/location_layout"
+        android:id="@+id/ll_location"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_bg_line_padding"
         android:gravity="center_vertical"
         android:padding="15dp">
 
@@ -225,7 +207,9 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/location"
+            android:id="@+id/tv_location"
+            android:hint="未知"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"
@@ -239,7 +223,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/sign_layout"
+        android:id="@+id/ll_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -255,7 +239,9 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/sign"
+            android:id="@+id/tv_sign"
+            android:hint="未设置"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"

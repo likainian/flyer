@@ -11,6 +11,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.bean.MapUser;
 import com.flyer.chat.util.LogUtil;
 
@@ -25,7 +26,7 @@ public class PoiOverlay {
     private Context context;
     private AMap aMap;
     private List<Marker> markers = new ArrayList<>();
-    private List<MapUser> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
     public PoiOverlay(Context context,AMap aMap) {
         this.context = context;
         this.aMap = aMap;
@@ -39,7 +40,7 @@ public class PoiOverlay {
             }
         }
     }
-    public void addUsers(List<MapUser> users){
+    public void addUsers(List<User> users){
         this.users = users;
     }
     private void addMarker(View view,MapUser user) {

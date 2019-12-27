@@ -1,5 +1,7 @@
 package com.flyer.chat.activity.account.bean;
 
+import java.util.Calendar;
+
 import cn.bmob.v3.BmobUser;
 
 /**
@@ -7,21 +9,23 @@ import cn.bmob.v3.BmobUser;
  */
 
 public class User extends BmobUser {
-    private String imgUrl;
+    private String img;
     private String nikeName;
-    private Integer age;
+    private Integer year = 0;
+    private Integer month = 0;
+    private Integer day = 0;
     private String sex;
     private Double latitude;
     private Double longitude;
     private String location;
     private String sign;
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImg() {
+        return img;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getNikeName() {
@@ -32,12 +36,52 @@ public class User extends BmobUser {
         this.nikeName = nikeName;
     }
 
-    public Integer getAge() {
+    public int getAge() {
+        Calendar birth = Calendar.getInstance();
+        birth.set(year,month,day);
+        Calendar cal = Calendar.getInstance();
+        if (cal.before(birth)) { //出生日期晚于当前时间，无法计算
+            return 0;
+        }
+        int yearNow = cal.get(Calendar.YEAR);  //当前年份
+        int monthNow = cal.get(Calendar.MONTH);  //当前月份
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH); //当前日期
+        int yearBirth = birth.get(Calendar.YEAR);
+        int monthBirth = birth.get(Calendar.MONTH);
+        int dayOfMonthBirth = birth.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;   //计算整岁数
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) age--;//当前日期在生日之前，年龄减一
+            } else {
+                age--;//当前月份在生日之前，年龄减一
+            }
+        }
         return age;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
     }
 
     public String getSex() {
@@ -78,5 +122,22 @@ public class User extends BmobUser {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mobileNum='" + getMobilePhoneNumber() + '\'' +
+                "img='" + img + '\'' +
+                ", nikeName='" + nikeName + '\'' +
+                ", year=" + year +
+                ", month=" + month +
+                ", day=" + day +
+                ", sex='" + sex + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", location='" + location + '\'' +
+                ", sign='" + sign + '\'' +
+                '}';
     }
 }

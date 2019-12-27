@@ -2,6 +2,7 @@ package com.flyer.chat.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class FileUtil {
     public static void saveCacheBitmap(String name, Bitmap bitmap) {
-        String fullPath = DeviceUtil.getSavePicturePath()+name+".jpg";
+        String fullPath = getSavePicturePath()+name+".jpg";
         File file = new File(fullPath);
         FileOutputStream fos = null;
         try {
@@ -34,7 +35,7 @@ public class FileUtil {
     }
 
     public static Bitmap getCacheBitmap(String name) {
-        String fullPath = DeviceUtil.getSavePicturePath()+name+".jpg";
+        String fullPath = getSavePicturePath()+name+".jpg";
         return BitmapFactory.decodeFile(fullPath);
     }
 
@@ -68,6 +69,15 @@ public class FileUtil {
         } else {
             return null;
         }
+    }
+
+    public static String getSavePicturePath(){
+        return FileUtil.createPath(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"picture"+File.separator);
+    }
+    public static String getSaveFilePath(){
+        return FileUtil.createPath(Environment.getExternalStorageDirectory().getAbsolutePath()+
+                File.separator+"flyer"+File.separator+"file"+File.separator);
     }
 
 }

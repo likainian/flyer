@@ -15,41 +15,45 @@
             android:background="#00BF93"
             android:layout_height="200dp">
             <ImageView
-                android:id="@+id/head_back"
+                android:id="@+id/iv_head_back"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <LinearLayout
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.itheima.roundedimageview.RoundedImageView
                     app:riv_border_color="@color/white"
                     app:riv_border_width="1dp"
+                    android:src="@drawable/default_head"
                     app:riv_corner_radius="50dp"
                     android:scaleType="centerCrop"
-                    android:id="@+id/head"
+                    android:id="@+id/iv_head"
                     android:layout_width="100dp"
                     android:layout_height="100dp" />
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/tv_name"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </RelativeLayout>
         <LinearLayout
-            android:id="@+id/me_info"
-            android:background="@drawable/list_bg_line_padding"
+            android:id="@+id/ll_info"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:text="@string/text_personnel_information"
                 android:textSize="16sp"
@@ -63,7 +67,7 @@
                 android:background="@drawable/next_icon" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/share_chat"
+            android:id="@+id/ll_share_chat"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
@@ -85,14 +89,14 @@
                 android:background="@drawable/next_icon" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/feed_back"
-            android:background="@drawable/list_bg_line_padding"
+            android:id="@+id/ll_feed_back"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView

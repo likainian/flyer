@@ -76,7 +76,6 @@ public class FindFriendActivity extends BaseActivity implements View.OnClickList
                 onBackPressed();
                 break;
             case R.id.toolbar_right:
-                UserInfoActivity.startActivity(this);
                 break;
             case R.id.btn_search:
                 if (CheckUtil.isEmpty(mEditName.getText().toString().trim())) return;

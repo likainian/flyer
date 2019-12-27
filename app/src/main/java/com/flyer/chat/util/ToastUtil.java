@@ -3,12 +3,7 @@ package com.flyer.chat.util;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.flyer.chat.R;
 import com.flyer.chat.app.ChatApplication;
-
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 import cn.bmob.v3.exception.BmobException;
 import io.reactivex.Observable;
@@ -57,6 +52,6 @@ public class ToastUtil {
         }
     }
     public static void showToast(Throwable throwable){
-
+        showToast(throwable.getMessage());
     }
 }

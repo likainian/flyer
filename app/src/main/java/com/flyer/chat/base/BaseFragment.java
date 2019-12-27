@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
  * Created by mike.li on 2018/5/7.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseContract.BaseView {
+public abstract class BaseFragment extends Fragment{
 
     protected void addChildFragment(Fragment fragment, @IdRes int layoutFragmentId) {
         if (null == fragment) {
@@ -16,7 +16,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.Base
         this.getChildFragmentManager().beginTransaction().add(layoutFragmentId, fragment).commit();
     }
 
-    @Override
     public void showLoadingDialog() {
         BaseActivity activity = (BaseActivity) getActivity();
         if (activity != null) {
@@ -24,7 +23,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.Base
         }
     }
 
-    @Override
     public void showLoadingDialog(String message) {
         BaseActivity activity = (BaseActivity) getActivity();
         if (activity != null) {
@@ -32,7 +30,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.Base
         }
     }
 
-    @Override
     public void closeLoadingDialog() {
         BaseActivity activity = (BaseActivity) getActivity();
         if (activity != null) {

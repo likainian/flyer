@@ -8,9 +8,18 @@ import cn.bmob.v3.BmobObject;
  * Created by mike.li on 2019/12/9.
  */
 public class Question extends BmobObject {
+    private String type;
     private String message;
     private String contact;
     private ArrayList<String> images;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getMessage() {
         return message;

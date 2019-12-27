@@ -11,6 +11,7 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 /**
  * Created by mike.li on 2019/11/6.
+ * 相册加载的引擎
  */
 public class GlideEngine implements ImageEngine {
     //单例

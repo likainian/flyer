@@ -1,14 +1,12 @@
 package com.flyer.chat.activity.setting;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,38 +19,37 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.common.CodeActivity;
-import com.flyer.chat.base.BaseActivity;
-import com.flyer.chat.bean.Province;
+import com.flyer.chat.base.ToolbarActivity;
+import com.flyer.chat.activity.setting.bean.Province;
 import com.flyer.chat.dialog.SelectDialog;
 import com.flyer.chat.util.AssetsUtil;
+import com.flyer.chat.util.BitmapUtil;
 import com.flyer.chat.util.HttpParseUtil;
+import com.flyer.chat.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+
 /**
- * Created by mike.li on 2018/8/10.
+ * Created by mike.li on 2019/12/16.
  */
+public class UserInfoActivity extends ToolbarActivity implements View.OnClickListener {
 
-public abstract class UserInfoActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.UserInfoView {
-    public static final String ACTION_USER = "com.flyer.chat.user";
-    public static final int EDIT_NICK_NAME = 12;
-    public static final int EDIT_SIGN = 13;
-    private ImageView mHead;
-    private TextView mNickName;
-    private TextView mName;
-    private TextView mGender;
-    private TextView mAge;
-    private TextView mLocation;
-    private TextView mSign;
-
-    private BroadcastReceiver avatarBroadcastReceiver;
-    private User myInfo;
-    private UserInfoPresenter mPresenter;
-
+    private static final int EDIT_NICK_NAME = 23;
+    private static final int EDIT_SIGN = 24;
+    private TextView mTvNickName;
+    private TextView mTvSex;
+    private TextView mTvAge;
+    private TextView mTvLocation;
+    private TextView mTvSign;
+    private TextView mTvAccount;
+    private ImageView mIvHead;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, UserInfoActivity.class));
@@ -62,95 +59,103 @@ public abstract class UserInfoActivity extends BaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        mPresenter = new UserInfoPresenter(this);
         initView();
-        mPresenter.getUserInfo();
-        avatarBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mPresenter.getUserInfo();
-            }
-        };
-        registerReceiver(avatarBroadcastReceiver,new IntentFilter(ACTION_USER));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    private void initData() {
+        User user = BmobUser.getCurrentUser(User.class);
+        mTvAccount.setText(user.getMobilePhoneNumber());
+        mTvNickName.setText(user.getNikeName());
+        mTvSex.setText(user.getSex());
+        mTvAge.setText(String.valueOf(user.getAge()));
+        mTvLocation.setText(user.getLocation());
+        mTvSign.setText(user.getSign());
+        showHead();
+    }
+
+    private void showHead(){
+        User user = BmobUser.getCurrentUser(User.class);
+        Bitmap bitmap = BitmapUtil.base64ToBitmap(user.getImg());
+        if(bitmap!=null){
+            mIvHead.setImageBitmap(bitmap);
+        }
     }
 
     private void initView() {
-        FrameLayout mToolbarLeft = findViewById(R.id.toolbar_left);
-        mToolbarLeft.setOnClickListener(this);
-        LinearLayout mHeadLayout = findViewById(R.id.head_layout);
-        mHeadLayout.setOnClickListener(this);
-        LinearLayout mNickNameLayout = findViewById(R.id.nick_name_layout);
-        mNickNameLayout.setOnClickListener(this);
-        LinearLayout mGenderLayout = findViewById(R.id.gender_layout);
-        mGenderLayout.setOnClickListener(this);
-        LinearLayout mAgeLayout = findViewById(R.id.age_layout);
-        mAgeLayout.setOnClickListener(this);
-        LinearLayout mLocationLayout = findViewById(R.id.location_layout);
-        mLocationLayout.setOnClickListener(this);
-        LinearLayout mSignLayout = findViewById(R.id.sign_layout);
-        mSignLayout.setOnClickListener(this);
-        LinearLayout mCodeLayout = findViewById(R.id.code_layout);
-        mCodeLayout.setOnClickListener(this);
+        LinearLayout mLlNickName = findViewById(R.id.ll_nick_name);
+        mLlNickName.setOnClickListener(this);
+        LinearLayout mLlHead = findViewById(R.id.ll_head);
+        mLlHead.setOnClickListener(this);
+        LinearLayout mLlSex = findViewById(R.id.ll_sex);
+        mLlSex.setOnClickListener(this);
+        LinearLayout mLlAge = findViewById(R.id.ll_age);
+        mLlAge.setOnClickListener(this);
+        LinearLayout mLlLocation = findViewById(R.id.ll_location);
+        mLlLocation.setOnClickListener(this);
+        LinearLayout mLlSign = findViewById(R.id.ll_sign);
+        mLlSign.setOnClickListener(this);
+        LinearLayout mLlCode = findViewById(R.id.ll_code);
+        mLlCode.setOnClickListener(this);
 
-        mName = findViewById(R.id.name);
-        mHead = findViewById(R.id.head);
-        mNickName = findViewById(R.id.nick_name);
-        mAge = findViewById(R.id.age);
-        mGender = findViewById(R.id.gender);
-        mLocation = findViewById(R.id.location);
-        mSign = findViewById(R.id.sign);
+        mTvAccount = findViewById(R.id.tv_account);
+        mTvNickName = findViewById(R.id.tv_nick_name);
+        mIvHead = findViewById(R.id.iv_head);
+        mTvSex = findViewById(R.id.tv_sex);
+        mTvAge = findViewById(R.id.tv_age);
+        mTvLocation = findViewById(R.id.tv_location);
+        mTvSign = findViewById(R.id.tv_sign);
 
-    }
+        setToolbarMiddleText("个人信息");
 
-
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(avatarBroadcastReceiver);
-        super.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.toolbar_left:
-                onBackPressed();
-                break;
-            case R.id.head_layout:
-                UserHeadActivity.startActivity(this);
-                break;
-            case R.id.nick_name_layout:
+            case R.id.ll_nick_name:
                 UserInfoEditActivity.startActivityForResult(this,"设置名字","",EDIT_NICK_NAME);
                 break;
-            case R.id.gender_layout:
+            case R.id.ll_head:
+                UserHeadActivity.startActivity(this);
+                break;
+            case R.id.ll_sex:
                 final ArrayList<String> list = new ArrayList<>();
                 list.add("男");
                 list.add("女");
                 new SelectDialog(this).setList(list).setOnSelectListener(new SelectDialog.OnSelectListener() {
                     @Override
                     public void OnSelect(final int position) {
-                        HashMap<String, Object> map = new HashMap<>();
+                        User user = BmobUser.getCurrentUser(User.class);
+                        user.setSex(list.get(position));
+                        upLoadUser(user);
                     }
                 }).show();
                 break;
 
-            case R.id.age_layout:
-                Calendar end = Calendar.getInstance();
-                end.setTimeInMillis(System.currentTimeMillis());
-                Calendar start = Calendar.getInstance();
-                start.setTimeInMillis(Long.MIN_VALUE);
-                Calendar instance = Calendar.getInstance();
+            case R.id.ll_age:
+                final Calendar instance = Calendar.getInstance();
                 new TimePickerBuilder(this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(final Date date, View v) {
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("birthday",date);
+                        User user = BmobUser.getCurrentUser(User.class);
+                        instance.setTimeInMillis(date.getTime());
+                        user.setYear(instance.get(Calendar.YEAR));
+                        user.setMonth(instance.get(Calendar.MONTH));
+                        user.setDay(instance.get(Calendar.DAY_OF_MONTH));
+                        upLoadUser(user);
                     }
-                }).setDate(instance).setRangDate(null,end).build().show();
+                }).setDate(instance).build().show();
                 break;
-            case R.id.code_layout:
+            case R.id.ll_code:
                 CodeActivity.startActivity(this);
                 break;
-            case R.id.location_layout:
+            case R.id.ll_location:
                 String json = AssetsUtil.getJson(this, "province.json");
                 List<Province> provinces = HttpParseUtil.parseArray(json, Province.class);
                 final ArrayList<String> options1Items = new ArrayList<>();
@@ -183,18 +188,15 @@ public abstract class UserInfoActivity extends BaseActivity implements View.OnCl
                         }else {
                             address = p+c+a;
                         }
-                        HashMap<String, Object> map = new HashMap<>();
-                        String oldAddress = "";
-                        if(oldAddress.contains("-")){
-                            oldAddress = oldAddress.substring(0,oldAddress.indexOf("-")+1)+address;
-                        }
-                        map.put("addr",oldAddress);
+                        User user = BmobUser.getCurrentUser(User.class);
+                        user.setLocation(address);
+                        upLoadUser(user);
                     }
                 }).build();
                 pvOptions.setPicker(options1Items, options2Items, options3Items);
                 pvOptions.show();
                 break;
-            case R.id.sign_layout:
+            case R.id.ll_sign:
                 UserInfoEditActivity.startActivityForResult(this,"设置签名","",EDIT_SIGN);
                 break;
 
@@ -205,18 +207,37 @@ public abstract class UserInfoActivity extends BaseActivity implements View.OnCl
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
-            HashMap<String, Object> map = new HashMap<>();
+            User user = BmobUser.getCurrentUser(User.class);
             switch (requestCode){
                 case EDIT_NICK_NAME:
-                    final String nickName = data.getStringExtra("name");
-                    map.put("nickname",nickName);
+                    String nickName = data.getStringExtra("name");
+                    user.setNikeName(nickName);
+                    upLoadUser(user);
                     break;
                 case EDIT_SIGN:
-                    final String signature = data.getStringExtra("name");
-                    map.put("signature",signature);
+                    String signature = data.getStringExtra("name");
+                    user.setSign(signature);
+                    upLoadUser(user);
                     break;
             }
 
         }
     }
+
+    private void upLoadUser(User user){
+        showLoadingDialog();
+        user.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                closeLoadingDialog();
+                if (e == null) {
+                    initData();
+                    ToastUtil.showToast("更新用户信息成功");
+                } else {
+                    ToastUtil.showToast("更新用户信息失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
 }

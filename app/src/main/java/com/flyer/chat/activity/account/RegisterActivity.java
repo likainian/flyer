@@ -117,7 +117,7 @@ public class RegisterActivity extends ToolbarActivity implements View.OnClickLis
                 checkCode();
                 break;
             case R.id.tv_help:
-                QuestionActivity.startActivity(this);
+                QuestionActivity.startActivity(this,QuestionActivity.QUESTION_TYPE);
                 break;
             case R.id.tv_code:
                 getCode();

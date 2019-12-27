@@ -7,7 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flyer.chat.activity.feedback.GridPhotoAdapter;
+import com.flyer.chat.activity.common.adapter.GridPhotoAdapter;
 
 import java.util.Collections;
 import java.util.List;
