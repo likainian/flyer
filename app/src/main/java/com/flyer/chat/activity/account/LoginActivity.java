@@ -12,10 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.flyer.chat.BuildConfig;
 import com.flyer.chat.R;
-import com.flyer.chat.activity.home.HomeActivity;
 import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.feedback.QuestionActivity;
+import com.flyer.chat.activity.home.HomeActivity;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.dialog.TitleSelectDialog;
@@ -96,8 +97,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         mIvPassword.setOnClickListener(this);
         mTvCode.setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
-        mEtPhone.setText(SharedPreferencesUtil.getInstance().getPhoneNum());
+        mEtPhone.setText(SharedPreferencesUtil.getInstance().getPhoneNumber());
         mEtPassword.setText(SharedPreferencesUtil.getInstance().getPassword());
+
+        if(BuildConfig.DEBUG){
+            mEtPhone.setText("17717512667");
+            mEtPassword.setText("111111");
+        }
 
         mEtPhone.addTextChangedListener(new EditTextWatcher() {
             @Override
@@ -157,7 +163,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.iv_more:
                 final List<String> userNameList = SharedPreferencesUtil.getInstance().getMobileNoList();
                 new TitleSelectDialog(this)
-                        .setTitle("选择手机号")
                         .setList(userNameList)
                         .setCheck(mEtPhone.getText().toString().trim())
                         .setOnSelectListener(new TitleSelectDialog.OnSelectListener() {
@@ -233,7 +238,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void done(User user, BmobException e) {
                     if (e == null) {
-                        SharedPreferencesUtil.getInstance().setPhoneNum(mEtPhone.getText().toString().trim());
+                        SharedPreferencesUtil.getInstance().getPhoneNumber(mEtPhone.getText().toString().trim());
                         SharedPreferencesUtil.getInstance().setPassword(mEtPassword.getText().toString().trim());
                         HomeActivity.startActivity(LoginActivity.this);
                     } else {

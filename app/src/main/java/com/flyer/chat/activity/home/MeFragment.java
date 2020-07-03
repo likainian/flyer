@@ -20,6 +20,8 @@ import com.flyer.chat.activity.account.bean.User;
 import com.flyer.chat.activity.setting.AboutActivity;
 import com.flyer.chat.activity.setting.FeedBackActivity;
 import com.flyer.chat.base.BaseFragment;
+import com.flyer.chat.network.CallBack;
+import com.flyer.chat.network.RetrofitService;
 import com.flyer.chat.util.BitmapUtil;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.util.GlideEngine;
@@ -149,11 +151,16 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     private void showHead(){
         User user = BmobUser.getCurrentUser(User.class);
-        Bitmap bitmap = BitmapUtil.base64ToBitmap(user.getImg());
-        if(bitmap!=null){
-            mIvHead.setImageBitmap(bitmap);
-            Blurry.with(getActivity()).sampling(1).async().from(bitmap).into(mIvHeadBack);
-        }
+        RetrofitService.getInstance().downloadImage("https://www.ihr360.com/gateway/api/image/9a205dd0-2ec0-4796-a805-5d9d5406c362.jpg", new CallBack<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap bitmap) {
+                if(bitmap!=null){
+                    mIvHead.setImageBitmap(bitmap);
+                    Blurry.with(getActivity()).sampling(1).async().from(bitmap).into(mIvHeadBack);
+                }
+            }
+        });
+
         mTvName.setText(user.getMobilePhoneNumber());
         if(CheckUtil.isNotEmpty(user.getNikeName())){
             mTvName.append("("+user.getNikeName()+")");

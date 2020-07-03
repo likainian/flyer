@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
 /**
  * Created by mike.li on 2019/12/9.
  */
-public class Question extends BmobObject {
+public class QuestionEntity extends BmobObject {
     private String type;
     private String message;
     private String contact;

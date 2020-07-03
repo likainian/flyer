@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#dddddd"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/toolbar_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.haibin.calendarview.CalendarView
+                android:id="@+id/calendar_view"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:calendar_height="45dp"
+                app:month_view_show_mode="mode_fix"
+                app:week_bar_view="com.flyer.chat.widget.calendarView.CustomWeekBar"
+                app:month_view="com.flyer.chat.widget.calendarView.DefaultMonthView"
+                app:week_start_with="mon"/>
+            <com.haibin.calendarview.CalendarView
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:calendar_height="45dp"
+                app:month_view_show_mode="mode_fix"
+                app:week_bar_view="com.flyer.chat.widget.calendarView.CustomWeekBar"
+                app:month_view="com.flyer.chat.widget.calendarView.CustomMonthView"
+                app:week_start_with="mon"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -11,7 +11,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.bean.LinkUser;
-import com.flyer.chat.activity.home.NearFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,12 +126,12 @@ public class SharedPreferencesUtil {
         setMobileNoList(name);
     }
 
-    public String getPhoneNum(){
-        return getString("phone_num","");
+    public String getPhoneNumber(){
+        return getString("phone_number","");
     }
 
-    public void setPhoneNum(String name){
-        putString("phone_num",name);
+    public void getPhoneNumber(String name){
+        putString("phone_number",name);
         setMobileNoList(name);
     }
 
@@ -217,14 +216,6 @@ public class SharedPreferencesUtil {
         conf.locale = locale;
         res.updateConfiguration(conf, dm);
         TimeUtil.switchLocal(locale);
-    }
-
-    public void setHomeMode(String mode){
-        putString("home_mode",mode);
-    }
-
-    public String getHomeMode(){
-        return getString("home_mode", NearFragment.LIST_MODE);
     }
 
     public void setLinkUser(LinkUser linkUser){

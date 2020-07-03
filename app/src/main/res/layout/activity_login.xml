@@ -169,7 +169,7 @@
                 android:background="@drawable/select_login_button"
                 android:focusable="true"
                 android:text="登陆"
-                android:textColor="#666666"
+                android:textColor="@color/selector_666666_ffffff_color"
                 android:textSize="17sp" />
 
             <TextView

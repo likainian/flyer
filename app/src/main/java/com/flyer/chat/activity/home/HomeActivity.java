@@ -7,7 +7,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +16,7 @@ import android.widget.Toast;
 import com.flyer.chat.R;
 import com.flyer.chat.app.ChatApplication;
 import com.flyer.chat.base.BaseActivity;
-import com.pgyersdk.update.PgyUpdateManager;
-import com.pgyersdk.update.UpdateManagerListener;
-import com.pgyersdk.update.javabean.AppBean;
+import com.flyer.chat.test.TestFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +28,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class HomeActivity extends BaseActivity {
-    public static void startActivity(Context context){
-        context.startActivity(new Intent(context,HomeActivity.class));
+    public static void startActivity(Context context) {
+        context.startActivity(new Intent(context, HomeActivity.class));
     }
+
     private TabLayout mHomeTab;
     private List<Fragment> fragmentList;
     private boolean isExit;
@@ -46,48 +44,8 @@ public class HomeActivity extends BaseActivity {
         mHomeTab = findViewById(R.id.home_tab);
         initPager();
         initTab();
-       initSwitch();
+        initSwitch();
 
-//        new  PgyUpdateManager.Builder().setUpdateManagerListener(new UpdateManagerListener() {
-//            @Override
-//            public void onNoUpdateAvailable() {
-//                LogUtil.i("ttt","没有更新");
-//            }
-//
-//            @Override
-//            public void onUpdateAvailable(AppBean appBean) {
-//                LogUtil.i("ttt","有更新"+appBean.getReleaseNote()+appBean.getDownloadURL());
-//            }
-//
-//            @Override
-//            public void checkUpdateFailed(Exception e) {
-//                LogUtil.i("ttt","异常"+e.getMessage());
-//            }
-//        }).register();
-        /** 旧版本修改 **/
-        PgyUpdateManager.register(new UpdateManagerListener() {   // 弃用方法，不推介
-            @Override
-            public void onNoUpdateAvailable() {
-                //检测没有跟新的回调
-                Log.d("pgyer", "onNoUpdateAvailable");
-            }
-
-            @Override
-            public void onUpdateAvailable(AppBean appBean) {
-                //检测有更新的回调
-                Log.d("pgyer", "there is new version can update"
-                        + "new versionCode is " + appBean.getVersionCode());
-                //调用以下方法，DownloadFileListener 才有效；
-                //如果完全使用自己的下载方法，不需要设置DownloadFileListener
-                PgyUpdateManager.downLoadApk(appBean.getDownloadURL());
-            }
-
-            @Override
-            public void checkUpdateFailed(Exception e) {   //再回调失败的时候，增加了新的接口
-                //更新拒绝（应用被下架，过期，不在安装有效期，下载次数用尽）以及无网络情况会调用此接口
-                Log.d("pgyer", "checkUpdateFailed"+e.getMessage());
-            }
-        });
     }
 
     private void initSwitch() {
@@ -111,13 +69,13 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initTab() {
-        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_home,R.drawable.selector_home_tab_home)));
-        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_chat,R.drawable.selector_home_tab_chat)));
-        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_note,R.drawable.selector_home_tab_note)));
-        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_me,R.drawable.selector_home_tab_me)));
+        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_test, R.drawable.selector_home_tab_chat)));
+        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_home, R.drawable.selector_home_tab_home)));
+        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_note, R.drawable.selector_home_tab_note)));
+        mHomeTab.addTab(mHomeTab.newTab().setCustomView(getItemView(R.string.text_me, R.drawable.selector_home_tab_me)));
     }
 
-    private View getItemView(@StringRes int title, @DrawableRes int icon){
+    private View getItemView(@StringRes int title, @DrawableRes int icon) {
         View item = LayoutInflater.from(this).inflate(R.layout.view_home_tab_layout, null);
         TextView tv_item_title = item.findViewById(R.id.tv_item_title);
         tv_item_title.setText(title);
@@ -128,12 +86,13 @@ public class HomeActivity extends BaseActivity {
 
     private void initPager() {
         fragmentList = new ArrayList<>();
-        fragmentList.add(NearFragment.newInstance());
-        fragmentList.add(ChatFragment.newInstance());
+        fragmentList.add(TestFragment.newInstance());
+        fragmentList.add(HomeFragment.newInstance());
+//        fragmentList.add(ChatFragment.newInstance());
         fragmentList.add(ChatFragment.newInstance());
         fragmentList.add(MeFragment.newInstance());
-        for (Fragment fragment:fragmentList){
-            getSupportFragmentManager().beginTransaction().add(R.id.frame_layout,fragment).hide(fragment).commit();
+        for (Fragment fragment : fragmentList) {
+            getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fragment).hide(fragment).commit();
         }
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
     }
@@ -145,7 +104,7 @@ public class HomeActivity extends BaseActivity {
             Toast.makeText(this.getApplication(), "再按一次退出程序", Toast.LENGTH_LONG).show();
             Disposable subscribe = Observable.just(isExit).subscribeOn(Schedulers.computation()).delay(2, TimeUnit.SECONDS).subscribe(new Consumer<Boolean>() {
                 @Override
-                public void accept(Boolean aBoolean){
+                public void accept(Boolean aBoolean) {
                     isExit = false;
                 }
             });

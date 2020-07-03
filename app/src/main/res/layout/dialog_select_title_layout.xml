@@ -4,30 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="27dp">
-
-        <View
-            android:layout_width="3dp"
-            android:layout_height="27dp"
-            android:background="@color/colorPrimary"/>
-
-        <TextView
-            android:id="@+id/tv_top_text"
-            android:layout_width="0dp"
-            android:text="选择手机号"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            android:textColor="#999999"/>
-
-    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/select_list"
         android:layout_width="match_parent"

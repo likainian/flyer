@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -31,6 +32,22 @@ public class FileUtil {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+    public static void saveByteFile(String path, byte[] data) {
+//        String fullPath = getSavePicturePath()+name+".jpg";
+        File file = new File(path);
+        if(file.exists()){
+            file.delete();
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(data);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

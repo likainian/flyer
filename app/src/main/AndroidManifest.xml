@@ -33,17 +33,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.amap.api.v2.apikey" android:value="c06da13d27dcfabd0afd32a34451c0d8"/>
-        <!--百度地图-->
+        <service android:name="com.amap.api.location.APSService"/>
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.flyer.chat.BmobContentProvider">
         </provider>
-
-        <!--蒲公英-->
-        <meta-data
-            android:name="PGYER_APPID"
-            android:value="63c00ebf8112b8d636faaba6ae6be972" >
-        </meta-data>
         <!--启动页-->
         <activity android:name=".activity.LauncherActivity"
             android:screenOrientation="portrait"
@@ -54,6 +48,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".test.TestBannerActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestTimeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestCalendarActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestCanvasActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestPictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestSwipeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestRefreshActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestDialogActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestScanActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestNotifyActivity"
+            android:screenOrientation="portrait"/>
         <!--登陆-->
         <activity android:name=".activity.account.LoginActivity"
             android:screenOrientation="portrait"/>
@@ -89,8 +103,7 @@
             android:screenOrientation="portrait"/>
         <!--图片浏览-->
         <activity android:name=".activity.common.BigPictureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullscreenTheme"/>
+            android:screenOrientation="portrait"/>
         <!--二维码-->
         <activity android:name=".activity.common.CodeActivity"
             android:screenOrientation="portrait"/>

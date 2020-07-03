@@ -14,12 +14,23 @@
     <color name="light_gray">#eee</color>
     <color name="dark_gray">#aaa</color>
     <color name="transparent">#00000000</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_8c8c8c">#8c8c8c</color>
+    <color name="color_ff4200">#ff4200</color>
+    <color name="color_e1faf4">#e1faf4</color>
+    <color name="color_f0f0f0">#f0f0f0</color>
     <color name="half_transparent">#60000000</color>
+
+    <color name="actionsheet_blue">#037BFF</color>
+    <color name="alertdialog_line">#c6c6c6</color>
 
     <!--状态栏-->
     <color name="easy_photos_status_bar">#00af93</color>
     <!--前景色-->
     <color name="easy_photos_fg_primary">#333333</color>//3e4145 前景主色，如字体颜色、icon颜色
+<!--    <color name="bg_second_level_menu_easy_photos">#ffffff</color>//3e4145 前景主色，如字体颜色、icon颜色-->
     <color name="easy_photos_fg_primary_dark">#999999</color>//前景偏暗色，如不可用状态的字体颜色
     <color name="easy_photos_fg_accent">#00bf93</color>//578fff 前景突出色，如发送按钮的背景色，选中状态的颜色
 
@@ -29,5 +40,5 @@
     <!--操作栏颜色-->
     <color name="easy_photos_bar_primary">#f2f2f2</color>//ffffff 操作栏主色，如相册页顶部和底部操作栏
     <color name="easy_photos_bar_primary_dark">#dddddd</color>//f9f9f9 操作栏偏暗色，操作栏间隔线颜色，如相册页返回按钮右边的竖线
-    <color name="easy_photos_bar_primary_translation">#eb212123</color>//b4ffffff
+    <color name="easy_photos_bar_primary_translation">#b4ffffff</color>//b4ffffff
 </resources>

@@ -1,0 +1,70 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "1f0e3d4c3da3f"
+    appSecret "33207e8ae6b8f1d9fbd7e099135260c9"
+
+    ShareSDK {
+        //平台配置信息
+        version "3.4.0"
+        devInfo {
+            Wechat {
+                SortId 1
+                appId "wxd394162c6dfffd44"
+                appSecret "d4624c36b6795d1d99dcf0547af5443d"
+            }
+            WechatMoments {
+                SortId 2
+                appId "wxd394162c6dfffd44"
+                appSecret "d4624c36b6795d1d99dcf0547af5443d"
+            }
+            QQ {
+                SortId 3
+                appId "1104821188"
+                appKey "b8jg87xzWbOqbrYK"
+            }
+            QZone{
+                SortId 4
+                appId "1104821188"
+                appKey "b8jg87xzWbOqbrYK"
+            }
+            SinaWeibo {
+                SortId 5
+                appKey "512916224"
+                appSecret "a503e09f93602bb23cca71c648b08969"
+            }
+        }
+    }
+
+}
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'//忽略遗漏的翻译
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

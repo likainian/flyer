@@ -7,10 +7,9 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
 
         classpath "com.mob.sdk:MobSDK:2018.0319.1724"
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -21,10 +20,12 @@ allprojects {
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
         google()
         jcenter()
-        //com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.3
+        //com.
+        // github.CymChad:BaseRecyclerViewAdapterHelper:2.9.3
         maven { url "https://jitpack.io" }
-        //蒲公英
-        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+
+        //http://doc.bmob.cn/data/android/
+        maven {url 'https://dl.bintray.com/chaozhouzhang/maven' }
     }
     ext {
         COMPILE_SDK_VERSION = 28

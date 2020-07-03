@@ -20,7 +20,6 @@ import com.flyer.chat.base.BaseActivity;
 import com.flyer.chat.util.CheckUtil;
 import com.flyer.chat.widget.PhotoView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,15 +81,8 @@ public class BigPictureActivity extends BaseActivity {
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             PhotoView view = new PhotoView(ChatApplication.getInstance().getApplicationContext());
-            if(imgPathList.get(position).startsWith("http")){
-                RequestOptions options = new RequestOptions().placeholder(R.drawable.default_image).error(R.drawable.default_image);
-                Glide.with(BigPictureActivity.this).applyDefaultRequestOptions(options)
-                        .load(imgPathList.get(position)).into(view);
-            }else {
-                RequestOptions options = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.default_image).error(R.drawable.default_image);
-                Glide.with(BigPictureActivity.this).applyDefaultRequestOptions(options)
-                        .load(new File(imgPathList.get(position))).into(view);
-            }
+            RequestOptions options = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.default_image).error(R.drawable.default_image);
+            Glide.with(BigPictureActivity.this).applyDefaultRequestOptions(options).load(imgPathList.get(position)).into(view);
             container.addView(view);
             return view;
         }

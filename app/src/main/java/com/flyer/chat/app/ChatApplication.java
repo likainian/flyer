@@ -6,7 +6,6 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.flyer.chat.util.CheckUtil;
-import com.pgyersdk.crash.PgyCrashManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +35,6 @@ public class ChatApplication extends Application {
         instance = this;
         Bmob.initialize(this,"0421c676074eef0cf5e75b563ac2c079");
 
-        PgyCrashManager.register();
     }
 
     public void addActivity(Activity activity) {

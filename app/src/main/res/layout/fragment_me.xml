@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:scrollbars="none"
+    android:fillViewport="true"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -39,6 +40,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -169,7 +171,7 @@
             android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_margin="30dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/shape_white_r2"
             android:focusable="true"
             android:text="退出登陆"

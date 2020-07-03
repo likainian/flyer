@@ -25,8 +25,9 @@ public class GridPhotoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         void OnClickAdd();
     }
 
-    public GridPhotoAdapter(Context context,int maxCount) {
-        super(R.layout.item_grid_photo_view,new ArrayList<String>(){{add(DEFAULT);}});
+    public GridPhotoAdapter(Context context,int maxCount,ArrayList<String> data) {
+        super(R.layout.item_grid_photo_view,data);
+        mData.add(DEFAULT);
         this.context = context;
         this.maxCount = maxCount;
     }
@@ -56,11 +57,12 @@ public class GridPhotoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     @Override
     public void setNewData(List<String> data) {
-        data.remove(DEFAULT);
-        if(data.size()<maxCount){
-            data.add(DEFAULT);
+        mData.clear();
+        mData.addAll(data);
+        if(mData.size()<maxCount){
+            mData.add(DEFAULT);
         }
-        super.setNewData(data);
+        notifyDataSetChanged();
     }
     @Override
     public List<String> getData() {

@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -28,7 +27,6 @@ import java.util.List;
 public class TitleSelectDialog extends AlertDialog {
     private Context context;
     private OnSelectListener onSelectListener;
-    private String title;
     private List<String> data;
     private String check;
 
@@ -45,8 +43,6 @@ public class TitleSelectDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_select_title_layout);
         RecyclerView mSelectList = findViewById(R.id.select_list);
-        TextView mTvTopText = findViewById(R.id.tv_top_text);
-        if(mTvTopText !=null) mTvTopText.setText(title);
         if (mSelectList != null) {
             mSelectList.setLayoutManager(new LinearLayoutManager(context));
             SelectAdapter adapter = new SelectAdapter();
@@ -63,18 +59,12 @@ public class TitleSelectDialog extends AlertDialog {
         Window window = getWindow();
         if (window != null) {
             WindowManager.LayoutParams layoutParams = window.getAttributes();
-            layoutParams.gravity = Gravity.BOTTOM;
-            layoutParams.windowAnimations = R.style.anim_y_bottom;
+            layoutParams.gravity = Gravity.TOP;
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             getWindow().getDecorView().setPadding(0, 0,0, 0);
             getWindow().setAttributes(layoutParams);
         }
-    }
-
-    public TitleSelectDialog setTitle(String title){
-        this.title = title;
-        return this;
     }
 
     public TitleSelectDialog setList(List<String> data){

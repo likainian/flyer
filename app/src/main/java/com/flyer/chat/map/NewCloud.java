@@ -20,8 +20,8 @@ public class NewCloud {
             public void onResponse(String response) {
                 List<MapUser> users = HttpParseUtil.parseArray(response, "datas", MapUser.class);
                 MapUser mapUser = users.get(0);
-                Long aLong = TimeUtil.parseToLong(mapUser.getUpdatetime(), TimeUtil.FORMAT_DATE_TIME_SECOND);
-                String string = TimeUtil.longToString(aLong, TimeUtil.FORMAT_DATE_TIME_SECOND);
+                Long aLong = TimeUtil.parseToLong(mapUser.getUpdatetime(), TimeUtil.FORMAT_YEAR_MONTH_DAY_TIME_SECOND);
+                String string = TimeUtil.longToString(aLong, TimeUtil.FORMAT_YEAR_MONTH_DAY_TIME_SECOND);
                 LogUtil.i("ttt","时间:"+string);
                 if(aLong<System.currentTimeMillis()+7200*1000){
                     LogUtil.i("ttt","时间:"+aLong);

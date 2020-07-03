@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.flyer.chat.R;
 import com.flyer.chat.activity.common.adapter.GridPhotoAdapter;
-import com.flyer.chat.activity.feedback.bean.Question;
+import com.flyer.chat.activity.feedback.bean.QuestionEntity;
 import com.flyer.chat.base.ToolbarActivity;
 import com.flyer.chat.listener.EditTextWatcher;
 import com.flyer.chat.util.BitmapUtil;
@@ -46,7 +46,10 @@ public class QuestionActivity extends ToolbarActivity{
     private EditText mEtContact;
     private TextView mTvCommit;
     private GridPhotoAdapter gridPhotoAdapter;
-
+    private ArrayList<String> data = new ArrayList<>();
+    public static void startActivity(Context context) {
+        context.startActivity(new Intent(context, QuestionActivity.class));
+    }
     public static void startActivity(Context context,String type) {
         context.startActivity(new Intent(context, QuestionActivity.class));
     }
@@ -67,8 +70,8 @@ public class QuestionActivity extends ToolbarActivity{
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mTvDelete.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        gridPhotoAdapter = new GridPhotoAdapter(this,9);
-        new ItemTouchHelper(new ItemTouchCallback(gridPhotoAdapter,gridPhotoAdapter.getData(), mTvDelete)).attachToRecyclerView(mRecyclerView);
+        gridPhotoAdapter = new GridPhotoAdapter(this,9,data);
+        new ItemTouchHelper(new ItemTouchCallback(gridPhotoAdapter,data, mTvDelete)).attachToRecyclerView(mRecyclerView);
         mRecyclerView.setAdapter(gridPhotoAdapter);
         gridPhotoAdapter.setOnClickAddListener(new GridPhotoAdapter.OnClickAddListener() {
             @Override
@@ -97,7 +100,7 @@ public class QuestionActivity extends ToolbarActivity{
                 .setFileProviderAuthority("cn.bmob.v3.util.BmobContentProvider")
                 .setCameraLocation(Setting.LIST_FIRST)
                 .setCount(9)
-                .setSelectedPhotoPaths((ArrayList<String>) gridPhotoAdapter.getData())
+                .setSelectedPhotoPaths(data)
                 .start(new SelectCallback() {
                     @Override
                     public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
@@ -107,17 +110,17 @@ public class QuestionActivity extends ToolbarActivity{
     }
 
     private void commit(){
-        Question question = new Question();
+        QuestionEntity questionEntity = new QuestionEntity();
         ArrayList<String> images = new ArrayList<>();
-        for (String file:gridPhotoAdapter.getData()) {
+        for (String file:data) {
             String image = BitmapUtil.bitmapToBase64(BitmapFactory.decodeFile(file));
             images.add(image);
         }
-        question.setMessage(mEtMessage.getText().toString().trim());
-        question.setContact(mEtContact.getText().toString().trim());
-        question.setImages(images);
+        questionEntity.setMessage(mEtMessage.getText().toString().trim());
+        questionEntity.setContact(mEtContact.getText().toString().trim());
+        questionEntity.setImages(images);
         showLoadingDialog();
-        question.save(new SaveListener<String>() {
+        questionEntity.save(new SaveListener<String>() {
             @Override
             public void done(String objectId,BmobException e) {
                 closeLoadingDialog();
