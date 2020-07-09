@@ -66,7 +66,13 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".test.TestScanActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestCaptureActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".test.TestNotifyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestPlayActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".test.TestLiveActivity"
             android:screenOrientation="portrait"/>
         <!--登陆-->
         <activity android:name=".activity.account.LoginActivity"

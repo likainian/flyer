@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -29,7 +30,13 @@ public class TestNotifyActivity extends ToolbarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_notify);
         View tv_1 = findViewById(R.id.tv_1);
+        View tv_2 = findViewById(R.id.tv_2);
+        View tv_3 = findViewById(R.id.tv_3);
+        View tv_4 = findViewById(R.id.tv_4);
         tv_1.setOnClickListener(this);
+        tv_2.setOnClickListener(this);
+        tv_3.setOnClickListener(this);
+        tv_4.setOnClickListener(this);
         createNotificationChannel();
     }
 
@@ -44,7 +51,7 @@ public class TestNotifyActivity extends ToolbarActivity implements View.OnClickL
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("标题")
-                        .setContentText("内容")
+                        .setContentText("内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容")
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -56,12 +63,23 @@ public class TestNotifyActivity extends ToolbarActivity implements View.OnClickL
                         .setContentTitle("标题")
                         .setContentText("内容")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("Much longer text that cannot fit one line..."))
+                                .bigText("内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"))
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 notificationManager.notify(1, builder2.build());
                 break;
             case R.id.tv_3:
+                NotificationCompat.Builder builder3 = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("标题")
+                        .setContentText("内容")
+                        .setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigPicture(BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher)))
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                notificationManager.notify(1, builder3.build());
+                break;
+            case R.id.tv_4:
                 String replyLabel = getResources().getString(R.string.app_name);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
                     RemoteInput remoteInput = new RemoteInput.Builder("KEY_TEXT_REPLY")
@@ -72,7 +90,7 @@ public class TestNotifyActivity extends ToolbarActivity implements View.OnClickL
                                     getString(R.string.app_name), pendingIntent)
                                     .addRemoteInput(remoteInput)
                                     .build();
-                    NotificationCompat.Builder builder3 = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    NotificationCompat.Builder builder4 = new NotificationCompat.Builder(this, CHANNEL_ID)
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentTitle("标题")
                             .setContentText("内容")
@@ -80,21 +98,8 @@ public class TestNotifyActivity extends ToolbarActivity implements View.OnClickL
                             .setContentIntent(pendingIntent)
                             .setAutoCancel(true)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    notificationManager.notify(3, builder3.build());
+                    notificationManager.notify(3, builder4.build());
                 }
-                break;
-            case R.id.tv_4:
-                Intent fullScreenIntent = new Intent(this, TestNotifyActivity.class);
-                PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-                        fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationCompat.Builder builder4 = new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setFullScreenIntent(fullScreenPendingIntent, true);
-                notificationManager.notify(3, builder4.build());
                 break;
         }
     }

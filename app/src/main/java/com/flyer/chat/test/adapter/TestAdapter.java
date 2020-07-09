@@ -13,8 +13,10 @@ import com.flyer.chat.test.TestBannerActivity;
 import com.flyer.chat.test.TestCalendarActivity;
 import com.flyer.chat.test.TestCanvasActivity;
 import com.flyer.chat.test.TestDialogActivity;
+import com.flyer.chat.test.TestLiveActivity;
 import com.flyer.chat.test.TestNotifyActivity;
 import com.flyer.chat.test.TestPictureActivity;
+import com.flyer.chat.test.TestPlayActivity;
 import com.flyer.chat.test.TestRefreshActivity;
 import com.flyer.chat.test.TestScanActivity;
 import com.flyer.chat.test.TestSwipeActivity;
@@ -69,11 +71,18 @@ public class TestAdapter extends BaseQuickAdapter<TestBean,BaseViewHolder> {
                     case "弹窗":
                         TestDialogActivity.startActivity(context);
                         break;
-                    case "扫码":
+                    case "直播":
+                        TestLiveActivity.startActivity(context);
+                        break;
+                    case "相机":
+//                        TestCaptureActivity.startActivity((FragmentActivity) context);
                         TestScanActivity.startActivity((FragmentActivity) context);
                         break;
                     case "通知和推送":
                         TestNotifyActivity.startActivity(context);
+                        break;
+                    case "视频播放":
+                        TestPlayActivity.startActivity(context);
                         break;
                 }
 

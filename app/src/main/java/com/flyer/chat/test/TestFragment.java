@@ -55,10 +55,10 @@ public class TestFragment extends BaseFragment {
         testBeans.add(new TestBean("自绘组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("上下拉刷新组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("弹窗",R.drawable.ic_launcher));
-        testBeans.add(new TestBean("扫码",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("相机",R.drawable.ic_launcher));
 
         testBeans.add(new TestBean("直播",R.drawable.ic_launcher));
-        testBeans.add(new TestBean("音乐和视频播放",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("视频播放",R.drawable.ic_launcher));
         testBeans.add(new TestBean("人脸识别",R.drawable.ic_launcher));
         testBeans.add(new TestBean("wifi和定位",R.drawable.ic_launcher));
         testBeans.add(new TestBean("通知和推送",R.drawable.ic_launcher));

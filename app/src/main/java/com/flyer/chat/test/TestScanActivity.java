@@ -2,15 +2,18 @@ package com.flyer.chat.test;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -18,22 +21,22 @@ import com.bumptech.glide.Glide;
 import com.flyer.chat.R;
 import com.flyer.chat.activity.common.BigPictureActivity;
 import com.flyer.chat.base.ToolbarActivity;
+import com.flyer.chat.util.CameraUtil;
+import com.flyer.chat.util.CodeUtil;
 import com.flyer.chat.util.FileUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.TimeUtil;
 import com.flyer.chat.util.ToastUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.yzq.zxinglibrary.android.CaptureActivity;
+import com.yzq.zxinglibrary.common.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mike.li on 2020/6/30.
@@ -41,7 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 public class TestScanActivity extends ToolbarActivity {
     private String TAG = "TestScanActivity";
     private Camera mCamera;
-    private CameraPreview mPreview;
+    private SurfaceView mPreview;
     private ImageView mIvImage;
     private Camera.Parameters mParameters;
     private MediaRecorder mediaRecorder;
@@ -72,16 +75,33 @@ public class TestScanActivity extends ToolbarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_scan);
+        setToolbarMiddleText("相机");
+        setToolbarRightText("应用");
+        setToolbarRightClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestScanActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, 0);
+//                TestCaptureActivity.startActivity(TestScanActivity.this);
+            }
+        });
         mIvImage = findViewById(R.id.iv_image);
-        mCamera = getCameraInstance();
-        // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        SurfaceView mPreview = (SurfaceView) findViewById(R.id.preview_view);
         final VideoView videoView = (VideoView) findViewById(R.id.video_view);
-        preview.addView(mPreview);
-        // Add a listener to the Capture button
-        button_picture = (Button) findViewById(R.id.button_picture);
+
         button_video = (Button) findViewById(R.id.button_video);
+
+        mCamera = CameraUtil.getCameraInstance();
+        CameraUtil.addCallback(mCamera,mPreview.getHolder());
+        CameraUtil.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+
+            }
+        });
+        CameraUtil.setParametersRotation(mCamera,90);
+
+        button_picture = (Button) findViewById(R.id.button_picture);
         button_picture.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -92,25 +112,7 @@ public class TestScanActivity extends ToolbarActivity {
                     }
                 }
         );
-        Disposable ss = Observable.interval(0, 1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong){
-                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                            @Override
-                            public void onAutoFocus(boolean success, Camera camera) {
 
-                            }
-                        });
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable){
-                        ToastUtil.showToast(throwable.getMessage());
-                    }
-                });
 
         button_video.setOnClickListener(
                 new View.OnClickListener() {
@@ -153,9 +155,7 @@ public class TestScanActivity extends ToolbarActivity {
                 videoView.start();
             }
         });
-        Camera.Parameters parameters = mCamera.getParameters();
-        parameters.setRotation(90);
-        mCamera.setParameters(parameters);
+
     }
 
     private void setCaptureButtonText(String stop) {
@@ -187,21 +187,10 @@ public class TestScanActivity extends ToolbarActivity {
             });
             Glide.with(TestScanActivity.this).load(data).into(mIvImage);
             FileUtil.saveByteFile(fullPath,data);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            CodeUtil.decode(bitmap);
         }
     };
-
-    /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-            ToastUtil.showToast(e.getMessage());
-        }
-        return c; // returns null if camera is unavailable
-    }
 
     private boolean prepareVideoRecorder(){
 
@@ -238,4 +227,16 @@ public class TestScanActivity extends ToolbarActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+// 扫描二维码/条码回传
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            if (data != null) {
+
+                String content = data.getStringExtra(Constant.CODED_CONTENT);
+                ToastUtil.showToast("扫描结果为：" + content);
+            }
+        }
+    }
 }

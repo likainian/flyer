@@ -77,14 +77,11 @@ public class BitmapUtil {
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         int options = 90;
         // 循环判断如果压缩后图片是否大于200kb,大于继续压缩
-        while (baos.toByteArray().length >w*h) {
+        while (baos.toByteArray().length >w*h&&options>0) {
             baos.reset();// 重置baos即清空baos
             // 这里压缩options%，把压缩后的数据存放到baos中
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
             options -= 10;// 每次都减少10
-            if (options < 0) {
-                break;
-            }
         }
         ByteArrayInputStream out = new ByteArrayInputStream(baos.toByteArray());
         return BitmapFactory.decodeStream(out);

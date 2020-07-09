@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.flyer.chat.util.CheckUtil;
+import com.tencent.rtmp.TXLiveBase;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +35,9 @@ public class ChatApplication extends Application {
         super.onCreate();
         instance = this;
         Bmob.initialize(this,"0421c676074eef0cf5e75b563ac2c079");
-
+        String licenceURL = ""; // 获取到的 licence url
+        String licenceKey = ""; // 获取到的 licence key
+        TXLiveBase.getInstance().setLicence(this, licenceURL, licenceKey);
     }
 
     public void addActivity(Activity activity) {
