@@ -11,8 +11,7 @@
         <SurfaceView
             android:id="@+id/preview_view"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_height="fill_parent" />
         <LinearLayout
             android:layout_above="@+id/ll_but"
             android:layout_width="wrap_content"

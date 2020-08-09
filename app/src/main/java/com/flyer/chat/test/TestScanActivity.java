@@ -2,15 +2,15 @@ package com.flyer.chat.test;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +22,6 @@ import com.flyer.chat.R;
 import com.flyer.chat.activity.common.BigPictureActivity;
 import com.flyer.chat.base.ToolbarActivity;
 import com.flyer.chat.util.CameraUtil;
-import com.flyer.chat.util.CodeUtil;
 import com.flyer.chat.util.FileUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.TimeUtil;
@@ -34,6 +33,7 @@ import com.yzq.zxinglibrary.common.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -41,7 +41,7 @@ import io.reactivex.functions.Consumer;
 /**
  * Created by mike.li on 2020/6/30.
  */
-public class TestScanActivity extends ToolbarActivity {
+public class TestScanActivity extends ToolbarActivity implements View.OnTouchListener {
     private String TAG = "TestScanActivity";
     private Camera mCamera;
     private SurfaceView mPreview;
@@ -86,7 +86,8 @@ public class TestScanActivity extends ToolbarActivity {
             }
         });
         mIvImage = findViewById(R.id.iv_image);
-        SurfaceView mPreview = (SurfaceView) findViewById(R.id.preview_view);
+        mPreview = (SurfaceView) findViewById(R.id.preview_view);
+        mPreview.setOnTouchListener(this);
         final VideoView videoView = (VideoView) findViewById(R.id.video_view);
 
         button_video = (Button) findViewById(R.id.button_video);
@@ -187,8 +188,7 @@ public class TestScanActivity extends ToolbarActivity {
             });
             Glide.with(TestScanActivity.this).load(data).into(mIvImage);
             FileUtil.saveByteFile(fullPath,data);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            CodeUtil.decode(bitmap);
+            mCamera.startPreview();
         }
     };
 
@@ -218,10 +218,8 @@ public class TestScanActivity extends ToolbarActivity {
         try {
             mediaRecorder.prepare();
         } catch (IllegalStateException e) {
-            Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());
             return false;
         } catch (IOException e) {
-            Log.d(TAG, "IOException preparing MediaRecorder: " + e.getMessage());
             return false;
         }
         return true;
@@ -238,5 +236,106 @@ public class TestScanActivity extends ToolbarActivity {
                 ToastUtil.showToast("扫描结果为：" + content);
             }
         }
+    }
+    private float oldDist = 1f;
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getPointerCount() == 1) {
+            handleFocusMetering(event, mCamera);
+        } else {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    oldDist = getFingerSpacing(event);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float newDist = getFingerSpacing(event);
+                    if (newDist > oldDist) {
+                        handleZoom(true, mCamera);
+                    } else if (newDist < oldDist) {
+                        handleZoom(false, mCamera);
+                    }
+                    oldDist = newDist;
+                    break;
+            }
+        }
+        return true;
+    }
+    private void handleZoom(boolean isZoomIn, Camera camera) {
+        Camera.Parameters params = camera.getParameters();
+        if (params.isZoomSupported()) {
+            int maxZoom = params.getMaxZoom();
+            int zoom = params.getZoom();
+            if (isZoomIn && zoom < maxZoom-2) {
+                zoom = zoom+2;
+            } else if (zoom > 2) {
+                zoom = zoom-2;
+            }
+            params.setZoom(zoom);
+            camera.setParameters(params);
+        } else {
+            LogUtil.i(TAG, "zoom not supported");
+        }
+    }
+    private static float getFingerSpacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float) Math.sqrt(x * x + y * y);
+    }
+    private void handleFocusMetering(MotionEvent event, Camera camera) {
+        int viewWidth = mPreview.getWidth();
+        int viewHeight = mPreview.getHeight();
+        Rect focusRect = calculateTapArea(event.getX(), event.getY(), 1f, viewWidth, viewHeight);
+        Rect meteringRect = calculateTapArea(event.getX(), event.getY(), 1.5f, viewWidth, viewHeight);
+
+        camera.cancelAutoFocus();
+        Camera.Parameters params = camera.getParameters();
+        if (params.getMaxNumFocusAreas() > 0) {
+            List<Camera.Area> focusAreas = new ArrayList<>();
+            focusAreas.add(new Camera.Area(focusRect, 800));
+            params.setFocusAreas(focusAreas);
+        } else {
+            LogUtil.i(TAG, "focus areas not supported");
+        }
+        if (params.getMaxNumMeteringAreas() > 0) {
+            List<Camera.Area> meteringAreas = new ArrayList<>();
+            meteringAreas.add(new Camera.Area(meteringRect, 800));
+            params.setMeteringAreas(meteringAreas);
+        } else {
+            LogUtil.i(TAG, "metering areas not supported");
+        }
+        final String currentFocusMode = params.getFocusMode();
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+        camera.setParameters(params);
+
+        camera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                Camera.Parameters params = camera.getParameters();
+                params.setFocusMode(currentFocusMode);
+                camera.setParameters(params);
+            }
+        });
+    }
+    private static Rect calculateTapArea(float x, float y, float coefficient, int width, int height) {
+        float focusAreaSize = 300;
+        int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
+        int centerX = (int) (x / width * 2000 - 1000);
+        int centerY = (int) (y / height * 2000 - 1000);
+
+        int halfAreaSize = areaSize / 2;
+        RectF rectF = new RectF(clamp(centerX - halfAreaSize, -1000, 1000)
+                , clamp(centerY - halfAreaSize, -1000, 1000)
+                , clamp(centerX + halfAreaSize, -1000, 1000)
+                , clamp(centerY + halfAreaSize, -1000, 1000));
+        return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
+    }
+    private static int clamp(int x, int min, int max) {
+        if (x > max) {
+            return max;
+        }
+        if (x < min) {
+            return min;
+        }
+        return x;
     }
 }
