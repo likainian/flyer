@@ -28,8 +28,8 @@ import com.flyer.chat.util.TimeUtil;
 import com.flyer.chat.util.ToastUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.yzq.zxinglibrary.android.CaptureActivity;
-import com.yzq.zxinglibrary.common.Constant;
+import com.flyer.chat.zxing.android.CaptureActivity;
+import com.flyer.chat.zxing.common.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;

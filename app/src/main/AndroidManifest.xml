@@ -48,6 +48,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".zxing.android.CaptureActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.WXScanActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".test.TestBannerActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".test.TestTimeActivity"

@@ -1,6 +1,7 @@
 package com.flyer.chat.test.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.flyer.chat.test.TestScanActivity;
 import com.flyer.chat.test.TestSwipeActivity;
 import com.flyer.chat.test.TestTimeActivity;
 import com.flyer.chat.test.bean.TestBean;
+import com.flyer.chat.zxing.android.CaptureActivity;
 
 import java.util.List;
 
@@ -77,6 +79,10 @@ public class TestAdapter extends BaseQuickAdapter<TestBean,BaseViewHolder> {
                     case "相机":
 //                        TestCaptureActivity.startActivity((FragmentActivity) context);
                         TestScanActivity.startActivity((FragmentActivity) context);
+                        break;
+                    case "扫一扫":
+                        Intent intent = new Intent(context, CaptureActivity.class);
+                        context.startActivity(intent);
                         break;
                     case "通知和推送":
                         TestNotifyActivity.startActivity(context);

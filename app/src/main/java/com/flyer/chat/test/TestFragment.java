@@ -56,6 +56,7 @@ public class TestFragment extends BaseFragment {
         testBeans.add(new TestBean("上下拉刷新组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("弹窗",R.drawable.ic_launcher));
         testBeans.add(new TestBean("相机",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("扫一扫",R.drawable.ic_launcher));
 
         testBeans.add(new TestBean("直播",R.drawable.ic_launcher));
         testBeans.add(new TestBean("视频播放",R.drawable.ic_launcher));
