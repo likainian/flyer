@@ -117,10 +117,6 @@
         <!--二维码-->
         <activity android:name=".activity.common.CodeActivity"
             android:screenOrientation="portrait"/>
-        <!--二维码-->
-        <activity android:name=".activity.common.ScanActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
         <!--查找朋友-->
         <activity android:name=".activity.setting.FindFriendActivity"
             android:hardwareAccelerated="true"

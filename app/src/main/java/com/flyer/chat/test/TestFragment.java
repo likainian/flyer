@@ -50,22 +50,27 @@ public class TestFragment extends BaseFragment {
         testBeans.add(new TestBean("banner组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("日期组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("日历组件",R.drawable.ic_launcher));
+
         testBeans.add(new TestBean("图片处理",R.drawable.ic_launcher));
         testBeans.add(new TestBean("侧滑组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("自绘组件",R.drawable.ic_launcher));
+
         testBeans.add(new TestBean("上下拉刷新组件",R.drawable.ic_launcher));
         testBeans.add(new TestBean("弹窗",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("通知和推送",R.drawable.ic_launcher));
+
         testBeans.add(new TestBean("相机",R.drawable.ic_launcher));
         testBeans.add(new TestBean("扫一扫",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("全屏扫一扫",R.drawable.ic_launcher));
 
         testBeans.add(new TestBean("直播",R.drawable.ic_launcher));
         testBeans.add(new TestBean("视频播放",R.drawable.ic_launcher));
         testBeans.add(new TestBean("人脸识别",R.drawable.ic_launcher));
-        testBeans.add(new TestBean("wifi和定位",R.drawable.ic_launcher));
-        testBeans.add(new TestBean("通知和推送",R.drawable.ic_launcher));
-        testBeans.add(new TestBean("朋友圈拖拽",R.drawable.ic_launcher));
 
+        testBeans.add(new TestBean("wifi和定位",R.drawable.ic_launcher));
+        testBeans.add(new TestBean("朋友圈拖拽",R.drawable.ic_launcher));
         testBeans.add(new TestBean("统计和报错分析",R.drawable.ic_launcher));
+
         testBeans.add(new TestBean("支付",R.drawable.ic_launcher));
         testBeans.add(new TestBean("分享",R.drawable.ic_launcher));
         TestAdapter testAdapter = new TestAdapter(getActivity(),testBeans);

@@ -22,31 +22,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyer.chat.R;
-import com.google.zxing.Result;
+import com.flyer.chat.util.ToastUtil;
 import com.flyer.chat.zxing.android.BeepManager;
 import com.flyer.chat.zxing.android.CaptureActivity;
 import com.flyer.chat.zxing.android.CaptureActivityHandler;
 import com.flyer.chat.zxing.android.FinishListener;
 import com.flyer.chat.zxing.android.InactivityTimer;
+import com.flyer.chat.zxing.android.ScanCallback;
 import com.flyer.chat.zxing.bean.ZxingConfig;
 import com.flyer.chat.zxing.camera.CameraManager;
 import com.flyer.chat.zxing.common.Constant;
 import com.flyer.chat.zxing.decode.DecodeImgCallback;
 import com.flyer.chat.zxing.decode.DecodeImgThread;
 import com.flyer.chat.zxing.decode.ImageUtil;
-import com.flyer.chat.zxing.view.ViewfinderView;
+import com.flyer.chat.zxing.view.ViewfinderResultPointCallback2;
+import com.flyer.chat.zxing.view.ViewfinderView2;
+import com.google.zxing.Result;
 
 import java.io.IOException;
 
 /**
  * Created by mike.li on 2020/8/10.
  */
-public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
+public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener, ScanCallback {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     public ZxingConfig config;
     private SurfaceView previewView;
-    private ViewfinderView viewfinderView;
+    private ViewfinderView2 viewfinderView;
     private AppCompatImageView flashLightIv;
     private TextView flashLightTv;
     private AppCompatImageView backIv;
@@ -61,7 +64,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
     private SurfaceHolder surfaceHolder;
 
 
-    public ViewfinderView getViewfinderView() {
+    public ViewfinderView2 getViewfinderView() {
         return viewfinderView;
     }
 
@@ -106,7 +109,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
         }
 
 
-        setContentView(R.layout.activity_capture);
+        setContentView(R.layout.activity_scan);
 
 
         initView();
@@ -186,7 +189,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
             flashLightTv.setText("关闭闪光灯");
         } else {
             flashLightIv.setImageResource(R.drawable.ic_close);
-            flashLightTv.setText("打开闪光灯");
+            flashLightTv.setText(R.string.open_flash);
         }
 
     }
@@ -199,7 +202,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
         inactivityTimer.onActivity();
 
         beepManager.playBeepSoundAndVibrate();
-
+        ToastUtil.showToast(rawResult.getText());
         Intent intent = getIntent();
         intent.putExtra(Constant.CODED_CONTENT, rawResult.getText());
         setResult(RESULT_OK, intent);
@@ -253,7 +256,8 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
             cameraManager.openDriver(surfaceHolder);
             // 创建一个handler来打开预览，并抛出一个运行时异常
             if (handler == null) {
-//                handler = new CaptureActivityHandler(this, cameraManager);
+                handler = new CaptureActivityHandler(this,new ViewfinderResultPointCallback2(
+                        getViewfinderView()), cameraManager);
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
@@ -295,6 +299,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        viewfinderView.stopAnimator();
         super.onDestroy();
     }
 
@@ -346,6 +351,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
         if (requestCode == Constant.REQUEST_IMAGE && resultCode == RESULT_OK) {
             String path = ImageUtil.getImageAbsolutePath(this, data.getData());
 
+
             new DecodeImgThread(path, new DecodeImgCallback() {
                 @Override
                 public void onImageDecodeSuccess(Result result) {
@@ -354,12 +360,13 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
 
                 @Override
                 public void onImageDecodeFailed() {
-                    Toast.makeText(WXScanActivity.this, "抱歉，解析失败,换个图片试试.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WXScanActivity.this, R.string.scan_failed_tip, Toast.LENGTH_SHORT).show();
                 }
             }).run();
 
 
         }
     }
+
 
 }

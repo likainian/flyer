@@ -8,7 +8,6 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -28,8 +27,6 @@ import com.flyer.chat.util.TimeUtil;
 import com.flyer.chat.util.ToastUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.flyer.chat.zxing.android.CaptureActivity;
-import com.flyer.chat.zxing.common.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,15 +73,6 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_scan);
         setToolbarMiddleText("相机");
-        setToolbarRightText("应用");
-        setToolbarRightClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TestScanActivity.this, CaptureActivity.class);
-                startActivityForResult(intent, 0);
-//                TestCaptureActivity.startActivity(TestScanActivity.this);
-            }
-        });
         mIvImage = findViewById(R.id.iv_image);
         mPreview = (SurfaceView) findViewById(R.id.preview_view);
         mPreview.setOnTouchListener(this);
@@ -225,18 +213,6 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-// 扫描二维码/条码回传
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-            if (data != null) {
-
-                String content = data.getStringExtra(Constant.CODED_CONTENT);
-                ToastUtil.showToast("扫描结果为：" + content);
-            }
-        }
-    }
     private float oldDist = 1f;
     @Override
     public boolean onTouch(View v, MotionEvent event) {

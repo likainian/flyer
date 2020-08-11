@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.flyer.chat.R;
+import com.flyer.chat.activity.WXScanActivity;
 import com.flyer.chat.activity.feedback.QuestionActivity;
 import com.flyer.chat.test.TestBannerActivity;
 import com.flyer.chat.test.TestCalendarActivity;
@@ -83,6 +84,10 @@ public class TestAdapter extends BaseQuickAdapter<TestBean,BaseViewHolder> {
                     case "扫一扫":
                         Intent intent = new Intent(context, CaptureActivity.class);
                         context.startActivity(intent);
+                        break;
+                    case "全屏扫一扫":
+                        Intent intent2 = new Intent(context, WXScanActivity.class);
+                        context.startActivity(intent2);
                         break;
                     case "通知和推送":
                         TestNotifyActivity.startActivity(context);
