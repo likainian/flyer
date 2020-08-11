@@ -16,16 +16,14 @@
 
 package com.flyer.chat.zxing.android;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
-import com.google.zxing.Result;
 import com.flyer.chat.zxing.camera.CameraManager;
 import com.flyer.chat.zxing.common.Constant;
 import com.flyer.chat.zxing.decode.DecodeThread;
-import com.flyer.chat.zxing.view.ViewfinderResultPointCallback;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPointCallback;
 
 /**
  * This class handles all the messaging which comprises the state machine for
@@ -38,7 +36,7 @@ public final class CaptureActivityHandler extends Handler {
     private static final String TAG = CaptureActivityHandler.class
             .getSimpleName();
 
-    private final CaptureActivity activity;
+    private final ScanCallback activity;
     private final DecodeThread decodeThread;
     private State state;
     private final CameraManager cameraManager;
@@ -47,10 +45,9 @@ public final class CaptureActivityHandler extends Handler {
         PREVIEW, SUCCESS, DONE
     }
 
-    public CaptureActivityHandler(CaptureActivity activity,CameraManager cameraManager) {
+    public CaptureActivityHandler(ScanCallback activity, ResultPointCallback resultPointCallback, CameraManager cameraManager) {
         this.activity = activity;
-        decodeThread = new DecodeThread(activity,  new ViewfinderResultPointCallback(
-                activity.getViewfinderView()));
+        decodeThread = new DecodeThread(activity,  resultPointCallback);
         decodeThread.start();
         state = State.SUCCESS;
 
@@ -83,11 +80,6 @@ public final class CaptureActivityHandler extends Handler {
                 state = State.PREVIEW;
                 cameraManager.requestPreviewFrame(decodeThread.getHandler(),
                         Constant.DECODE);
-                break;
-            case Constant.RETURN_SCAN_RESULT:
-
-                activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-                activity.finish();
                 break;
             case Constant.FLASH_OPEN:
                 activity.switchFlashImg(Constant.FLASH_OPEN);

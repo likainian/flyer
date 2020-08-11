@@ -22,12 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyer.chat.R;
+import com.flyer.chat.util.ToastUtil;
 import com.flyer.chat.zxing.bean.ZxingConfig;
 import com.flyer.chat.zxing.camera.CameraManager;
 import com.flyer.chat.zxing.common.Constant;
 import com.flyer.chat.zxing.decode.DecodeImgCallback;
 import com.flyer.chat.zxing.decode.DecodeImgThread;
 import com.flyer.chat.zxing.decode.ImageUtil;
+import com.flyer.chat.zxing.view.ViewfinderResultPointCallback;
 import com.flyer.chat.zxing.view.ViewfinderView;
 import com.google.zxing.Result;
 
@@ -40,7 +42,7 @@ import java.io.IOException;
  * @declare :扫一扫
  */
 
-public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
+public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener ,ScanCallback{
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     public ZxingConfig config;
@@ -198,7 +200,7 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         inactivityTimer.onActivity();
 
         beepManager.playBeepSoundAndVibrate();
-
+        ToastUtil.showToast(rawResult.getText());
         Intent intent = getIntent();
         intent.putExtra(Constant.CODED_CONTENT, rawResult.getText());
         setResult(RESULT_OK, intent);
@@ -252,7 +254,8 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
             cameraManager.openDriver(surfaceHolder);
             // 创建一个handler来打开预览，并抛出一个运行时异常
             if (handler == null) {
-                handler = new CaptureActivityHandler(this, cameraManager);
+                handler = new CaptureActivityHandler(this,new ViewfinderResultPointCallback(
+                        getViewfinderView()), cameraManager);
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);

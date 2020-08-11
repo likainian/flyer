@@ -17,26 +17,26 @@ public class ZxingConfig implements Serializable {
 
 
     /*是否播放声音*/
-    private boolean isPlayBeep = true;
+    public static boolean isPlayBeep = true;
     /*是否震动*/
-    private boolean isShake = true;
+    public static boolean isShake = true;
     /*是否显示下方的其他功能布局*/
-    private boolean isShowbottomLayout = true;
+    public static boolean isShowbottomLayout = true;
     /*是否显示闪光灯按钮*/
-    private boolean isShowFlashLight = true;
+    public static boolean isShowFlashLight = true;
     /*是否显示相册按钮*/
-    private boolean isShowAlbum = true;
+    public static boolean isShowAlbum = true;
     /*是否解析条形码*/
-    private boolean isDecodeBarCode = true;
+    public static boolean isDecodeBarCode = true;
     /*是否全屏扫描*/
-    private boolean isFullScreenScan = true;
+    public static boolean isFullScreenScan = true;
 
     /*四个角的颜色*/
     @ColorRes
-    private int reactColor = R.color.colorPrimary;
+    public static int reactColor = R.color.colorPrimary;
     /*扫描框颜色*/
     @ColorRes
-    private int frameLineColor = -1;
+    public static int frameLineColor = -1;
 
 
     /*扫描线颜色*/
