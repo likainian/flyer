@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyer.chat.R;
+import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.ToastUtil;
 import com.flyer.chat.zxing.android.BeepManager;
 import com.flyer.chat.zxing.android.CaptureActivity;
@@ -40,15 +45,17 @@ import com.flyer.chat.zxing.view.ViewfinderView2;
 import com.google.zxing.Result;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mike.li on 2020/8/10.
  */
-public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener, ScanCallback {
+public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener, ScanCallback, View.OnTouchListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     public ZxingConfig config;
-    private SurfaceView previewView;
+    private SurfaceView mPreview;
     private ViewfinderView2 viewfinderView;
     private AppCompatImageView flashLightIv;
     private TextView flashLightTv;
@@ -126,8 +133,9 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
 
 
     private void initView() {
-        previewView = findViewById(R.id.preview_view);
-        previewView.setOnClickListener(this);
+        mPreview = findViewById(R.id.preview_view);
+        mPreview.setOnClickListener(this);
+        mPreview.setOnTouchListener(this);
 
         viewfinderView = findViewById(R.id.viewfinder_view);
         viewfinderView.setZxingConfig(config);
@@ -230,7 +238,7 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
         viewfinderView.setCameraManager(cameraManager);
         handler = null;
 
-        surfaceHolder = previewView.getHolder();
+        surfaceHolder = mPreview.getHolder();
         if (hasSurface) {
 
             initCamera(surfaceHolder);
@@ -368,5 +376,105 @@ public class WXScanActivity extends AppCompatActivity implements SurfaceHolder.C
         }
     }
 
+    private float oldDist = 1f;
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getPointerCount() == 1) {
+            handleFocusMetering(event, cameraManager.camera);
+        } else {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    oldDist = getFingerSpacing(event);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float newDist = getFingerSpacing(event);
+                    if (newDist > oldDist) {
+                        handleZoom(true, cameraManager.camera);
+                    } else if (newDist < oldDist) {
+                        handleZoom(false, cameraManager.camera);
+                    }
+                    oldDist = newDist;
+                    break;
+            }
+        }
+        return true;
+    }
+    private void handleZoom(boolean isZoomIn, Camera camera) {
+        Camera.Parameters params = camera.getParameters();
+        if (params.isZoomSupported()) {
+            int maxZoom = params.getMaxZoom();
+            int zoom = params.getZoom();
+            if (isZoomIn && zoom < maxZoom-2) {
+                zoom = zoom+2;
+            } else if (zoom > 2) {
+                zoom = zoom-2;
+            }
+            params.setZoom(zoom);
+            camera.setParameters(params);
+        } else {
+            LogUtil.i(TAG, "zoom not supported");
+        }
+    }
+    private static float getFingerSpacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float) Math.sqrt(x * x + y * y);
+    }
+    private void handleFocusMetering(MotionEvent event, Camera camera) {
+        int viewWidth = mPreview.getWidth();
+        int viewHeight = mPreview.getHeight();
+        Rect focusRect = calculateTapArea(event.getX(), event.getY(), 1f, viewWidth, viewHeight);
+        Rect meteringRect = calculateTapArea(event.getX(), event.getY(), 1.5f, viewWidth, viewHeight);
 
+        camera.cancelAutoFocus();
+        Camera.Parameters params = camera.getParameters();
+        if (params.getMaxNumFocusAreas() > 0) {
+            List<Camera.Area> focusAreas = new ArrayList<>();
+            focusAreas.add(new Camera.Area(focusRect, 800));
+            params.setFocusAreas(focusAreas);
+        } else {
+            LogUtil.i(TAG, "focus areas not supported");
+        }
+        if (params.getMaxNumMeteringAreas() > 0) {
+            List<Camera.Area> meteringAreas = new ArrayList<>();
+            meteringAreas.add(new Camera.Area(meteringRect, 800));
+            params.setMeteringAreas(meteringAreas);
+        } else {
+            LogUtil.i(TAG, "metering areas not supported");
+        }
+        final String currentFocusMode = params.getFocusMode();
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+        camera.setParameters(params);
+
+        camera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                Camera.Parameters params = camera.getParameters();
+                params.setFocusMode(currentFocusMode);
+                camera.setParameters(params);
+            }
+        });
+    }
+    private static Rect calculateTapArea(float x, float y, float coefficient, int width, int height) {
+        float focusAreaSize = 300;
+        int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
+        int centerX = (int) (x / width * 2000 - 1000);
+        int centerY = (int) (y / height * 2000 - 1000);
+
+        int halfAreaSize = areaSize / 2;
+        RectF rectF = new RectF(clamp(centerX - halfAreaSize, -1000, 1000)
+                , clamp(centerY - halfAreaSize, -1000, 1000)
+                , clamp(centerX + halfAreaSize, -1000, 1000)
+                , clamp(centerY + halfAreaSize, -1000, 1000));
+        return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
+    }
+    private static int clamp(int x, int min, int max) {
+        if (x > max) {
+            return max;
+        }
+        if (x < min) {
+            return min;
+        }
+        return x;
+    }
 }

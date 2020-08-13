@@ -1,30 +1,35 @@
 package com.flyer.chat.test;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
+import android.view.SurfaceHolder;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import com.bumptech.glide.Glide;
 import com.flyer.chat.R;
-import com.flyer.chat.activity.common.BigPictureActivity;
-import com.flyer.chat.base.ToolbarActivity;
-import com.flyer.chat.util.CameraUtil;
+import com.flyer.chat.activity.common.PhotoPlayActivity;
+import com.flyer.chat.activity.common.VideoPlayActivity;
+import com.flyer.chat.base.BaseActivity;
+import com.flyer.chat.listener.CaptureListener;
+import com.flyer.chat.listener.SurfaceHolderCallback;
+import com.flyer.chat.util.CameraManager;
+import com.flyer.chat.util.DeviceUtil;
 import com.flyer.chat.util.FileUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.TimeUtil;
 import com.flyer.chat.util.ToastUtil;
+import com.flyer.chat.widget.CaptureButton;
+import com.flyer.chat.widget.FocusView;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -35,20 +40,29 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
+import static android.view.View.VISIBLE;
+
 /**
  * Created by mike.li on 2020/6/30.
  */
-public class TestScanActivity extends ToolbarActivity implements View.OnTouchListener {
+public class TestScanActivity extends BaseActivity implements View.OnTouchListener, View.OnClickListener {
     private String TAG = "TestScanActivity";
     private Camera mCamera;
-    private SurfaceView mPreview;
-    private ImageView mIvImage;
-    private Camera.Parameters mParameters;
+    private CaptureButton mCaptureView;
     private MediaRecorder mediaRecorder;
-    private boolean isRecording = false;
-    private Button button_picture;
-    private Button button_video;
     private String fullPath;
+    private FocusView mFocusView;
+    private VideoView mVideoView;
+    private boolean singleTouch = true;
+    private ImageView mIvBack;
+    private ImageView mIvFlash;
+    private ImageView mIvSwitch;
+
+    //闪关灯状态
+    private static final int TYPE_FLASH_AUTO = 0x021;
+    private static final int TYPE_FLASH_ON = 0x022;
+    private static final int TYPE_FLASH_OFF = 0x023;
+    private int type_flash = TYPE_FLASH_OFF;
 
     public static void startActivity(final FragmentActivity activity){
         Disposable subscribe = new RxPermissions(activity).requestEach(
@@ -72,83 +86,127 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_scan);
-        setToolbarMiddleText("相机");
-        mIvImage = findViewById(R.id.iv_image);
-        mPreview = (SurfaceView) findViewById(R.id.preview_view);
-        mPreview.setOnTouchListener(this);
-        final VideoView videoView = (VideoView) findViewById(R.id.video_view);
+        mCaptureView = (CaptureButton)findViewById(R.id.capture_view);
+        mVideoView = (VideoView) findViewById(R.id.video_view);
+        mFocusView = (FocusView) findViewById(R.id.focus_view);
+        mIvBack = (ImageView) findViewById(R.id.iv_back);
+        mIvFlash = (ImageView) findViewById(R.id.iv_flash);
+        mIvSwitch = (ImageView) findViewById(R.id.iv_switch);
+        mIvBack.setOnClickListener(this);
+        mIvSwitch.setOnClickListener(this);
+        mIvFlash.setOnClickListener(this);
+        mCaptureView.setCaptureLisenter(new CaptureListener() {
+            @Override
+            public void takePictures() {
+                mCamera.takePicture(null, null, new Camera.PictureCallback() {
 
-        button_video = (Button) findViewById(R.id.button_video);
+                    @Override
+                    public void onPictureTaken(byte[] data, Camera camera) {
+                        LogUtil.i("ttt","拿到数据"+ TimeUtil.longToYearMonthDayTimeSecond(System.currentTimeMillis()));
+                        final String fullPath = FileUtil.getSavePicturePath()+System.currentTimeMillis()+".jpg";
+                        FileUtil.saveByteFile(fullPath,data);
+                        mCaptureView.resetState();
+                        mCamera.startPreview();
+                        PhotoPlayActivity.startActivity(TestScanActivity.this,fullPath);
+                    }
+                });
+            }
 
-        mCamera = CameraUtil.getCameraInstance();
-        CameraUtil.addCallback(mCamera,mPreview.getHolder());
-        CameraUtil.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
+            @Override
+            public void recordShort(long time) {
+
+            }
+
+            @Override
+            public void recordStart() {
+                prepareVideoRecorder();
+            }
+
+            @Override
+            public void recordEnd(long time) {
+                // stop recording and release camera
+                mediaRecorder.stop();  // stop the recording
+                releaseMediaRecorder(); // release the MediaRecorder object
+                mCamera.lock();         // take camera access back from MediaRecorder
+                mCaptureView.resetState();
+                VideoPlayActivity.startActivity(TestScanActivity.this,fullPath);
+            }
+
+            @Override
+            public void recordZoom(float zoom) {
+
+            }
+
+            @Override
+            public void recordError() {
+
+            }
+        });
+        //camera
+        mCamera = CameraManager.getCameraInstance();
+        initCamera();
+    }
+    private void initCamera(){
+        CameraManager.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
-
+                mFocusView.setVisibility(View.INVISIBLE);
             }
         });
-        CameraUtil.setParametersRotation(mCamera,90);
-
-        button_picture = (Button) findViewById(R.id.button_picture);
-        button_picture.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // get an image from the camera
-                        LogUtil.i("ttt","照片"+ TimeUtil.longToYearMonthDayTimeSecond(System.currentTimeMillis()));
-                        mCamera.takePicture(null, null, mPicture);
-                    }
-                }
-        );
-
-
-        button_video.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isRecording) {
-                            // stop recording and release camera
-                            mediaRecorder.stop();  // stop the recording
-                            releaseMediaRecorder(); // release the MediaRecorder object
-                            mCamera.lock();         // take camera access back from MediaRecorder
-
-                            // inform the user that recording has stopped
-                            setCaptureButtonText("开始");
-                            isRecording = false;
-                            videoView.setVideoPath(fullPath);
-//                            videoView.setRotation(90);
-                            videoView.start();
-                        }else {
-                            // initialize video camera
-                            if (prepareVideoRecorder()) {
-                                // Camera is available and unlocked, MediaRecorder is prepared,
-                                // now you can start recording
-                                mediaRecorder.start();
-
-                                // inform the user that recording has started
-                                setCaptureButtonText("停止");
-                                isRecording = true;
-                            } else {
-                                // prepare didn't work, release the camera
-                                releaseMediaRecorder();
-                                // inform user
-                            }
-                        }
-                    }
-                }
-        );
-        videoView.setOnClickListener(new View.OnClickListener() {
+        CameraManager.setParametersRotation(mCamera,90);
+        mVideoView.getHolder().addCallback(new SurfaceHolderCallback() {
             @Override
-            public void onClick(View v) {
-                videoView.start();
+            public void surfaceCreated(SurfaceHolder holder) {
+                try {
+                    mCamera.setPreviewDisplay(holder);
+                    mCamera.setDisplayOrientation(90);
+                    mCamera.startPreview();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
+        mVideoView.setOnTouchListener(this);
     }
-
-    private void setCaptureButtonText(String stop) {
-        button_video.setText(stop);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.iv_flash:
+                type_flash++;
+                if (type_flash > 0x023)
+                    type_flash = TYPE_FLASH_AUTO;
+                setFlashRes();
+                break;
+            case R.id.iv_switch:
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+                mCamera = CameraManager.switchCamera();
+                initCamera();
+                break;
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseCamera();
+    }
+    //释放资源
+    private void releaseCamera() {
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            try {
+                mCamera.setPreviewDisplay(null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mCamera.release();
+            mCamera = null;
+        }
     }
 
     private void releaseMediaRecorder(){
@@ -160,27 +218,8 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
         }
     }
 
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            LogUtil.i("ttt","拿到数据"+ TimeUtil.longToYearMonthDayTimeSecond(System.currentTimeMillis()));
-            final String fullPath = FileUtil.getSavePicturePath()+System.currentTimeMillis()+".jpg";
-            mIvImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ArrayList<String> strings = new ArrayList<>();
-                    strings.add(fullPath);
-                    BigPictureActivity.startActivity(TestScanActivity.this,strings,0);
-                }
-            });
-            Glide.with(TestScanActivity.this).load(data).into(mIvImage);
-            FileUtil.saveByteFile(fullPath,data);
-            mCamera.startPreview();
-        }
-    };
-
-    private boolean prepareVideoRecorder(){
+    private void prepareVideoRecorder(){
 
         mediaRecorder = new MediaRecorder();
 
@@ -200,30 +239,32 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
         mediaRecorder.setOutputFile(fullPath);
 
         // Step 5: Set the preview output
-        mediaRecorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+        mediaRecorder.setPreviewDisplay(mVideoView.getHolder().getSurface());
         mediaRecorder.setOrientationHint(90);//视频旋转90度
         // Step 6: Prepare configured MediaRecorder
         try {
             mediaRecorder.prepare();
+            mediaRecorder.start();
         } catch (IllegalStateException e) {
-            return false;
         } catch (IOException e) {
-            return false;
         }
-        return true;
     }
 
     private float oldDist = 1f;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getPointerCount() == 1) {
-            handleFocusMetering(event, mCamera);
-        } else {
-            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                case MotionEvent.ACTION_POINTER_DOWN:
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                mFocusView.setVisibility(View.INVISIBLE);
+                if (event.getPointerCount() == 2) {
+                    singleTouch = false;
                     oldDist = getFingerSpacing(event);
-                    break;
-                case MotionEvent.ACTION_MOVE:
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (event.getPointerCount() == 2) {
+                    singleTouch = false;
                     float newDist = getFingerSpacing(event);
                     if (newDist > oldDist) {
                         handleZoom(true, mCamera);
@@ -231,9 +272,45 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
                         handleZoom(false, mCamera);
                     }
                     oldDist = newDist;
-                    break;
-            }
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (event.getPointerCount() == 1 && singleTouch) {
+                    handleFocusMetering(event);
+                    handlerFocusView(event.getX(),event.getY());
+                }
+                singleTouch = true;
+                break;
         }
+        return true;
+    }
+
+    public boolean handlerFocusView(float x, float y) {
+        int cxy = mFocusView.getWidth() >> 1;
+        int width = DeviceUtil.getDisplayWidth(this);
+        int height = DeviceUtil.getDisplayHeight(this);
+        if (x < cxy) {
+            x = cxy;
+        }
+        if (x > width - cxy) {
+            x = width - cxy;
+        }
+        if (y < cxy) {
+            y = cxy;
+        }
+        if (y > height - cxy) {
+            y = height - cxy;
+        }
+        mFocusView.setX(x - cxy);
+        mFocusView.setY(y - cxy);
+        mFocusView.setVisibility(VISIBLE);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(mFocusView, "scaleX", 1, 0.6f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(mFocusView, "scaleY", 1, 0.6f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(mFocusView, "alpha", 1f, 0.4f, 1f, 0.4f, 1f, 0.4f, 1f);
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.play(scaleX).with(scaleY).before(alpha);
+        animSet.setDuration(400);
+        animSet.start();
         return true;
     }
     private void handleZoom(boolean isZoomIn, Camera camera) {
@@ -257,61 +334,71 @@ public class TestScanActivity extends ToolbarActivity implements View.OnTouchLis
         float y = event.getY(0) - event.getY(1);
         return (float) Math.sqrt(x * x + y * y);
     }
-    private void handleFocusMetering(MotionEvent event, Camera camera) {
-        int viewWidth = mPreview.getWidth();
-        int viewHeight = mPreview.getHeight();
+    private void handleFocusMetering(MotionEvent event) {
+        int viewWidth = mVideoView.getWidth();
+        int viewHeight = mVideoView.getHeight();
         Rect focusRect = calculateTapArea(event.getX(), event.getY(), 1f, viewWidth, viewHeight);
         Rect meteringRect = calculateTapArea(event.getX(), event.getY(), 1.5f, viewWidth, viewHeight);
-
-        camera.cancelAutoFocus();
-        Camera.Parameters params = camera.getParameters();
+        mCamera.cancelAutoFocus();
+        Camera.Parameters params = mCamera.getParameters();
         if (params.getMaxNumFocusAreas() > 0) {
             List<Camera.Area> focusAreas = new ArrayList<>();
-            focusAreas.add(new Camera.Area(focusRect, 800));
+            focusAreas.add(new Camera.Area(focusRect, 600));
             params.setFocusAreas(focusAreas);
         } else {
             LogUtil.i(TAG, "focus areas not supported");
         }
         if (params.getMaxNumMeteringAreas() > 0) {
             List<Camera.Area> meteringAreas = new ArrayList<>();
-            meteringAreas.add(new Camera.Area(meteringRect, 800));
+            meteringAreas.add(new Camera.Area(meteringRect, 600));
             params.setMeteringAreas(meteringAreas);
         } else {
             LogUtil.i(TAG, "metering areas not supported");
         }
-        final String currentFocusMode = params.getFocusMode();
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-        camera.setParameters(params);
-
-        camera.autoFocus(new Camera.AutoFocusCallback() {
+        mCamera.setParameters(params);
+        CameraManager.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
-                Camera.Parameters params = camera.getParameters();
-                params.setFocusMode(currentFocusMode);
-                camera.setParameters(params);
+                mFocusView.setVisibility(View.INVISIBLE);
             }
         });
     }
-    private static Rect calculateTapArea(float x, float y, float coefficient, int width, int height) {
-        float focusAreaSize = 300;
+    private Rect calculateTapArea(float x, float y, float coefficient, int width, int height) {
+        float focusAreaSize = mFocusView.getWidth() ;
         int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
         int centerX = (int) (x / width * 2000 - 1000);
         int centerY = (int) (y / height * 2000 - 1000);
 
         int halfAreaSize = areaSize / 2;
-        RectF rectF = new RectF(clamp(centerX - halfAreaSize, -1000, 1000)
-                , clamp(centerY - halfAreaSize, -1000, 1000)
-                , clamp(centerX + halfAreaSize, -1000, 1000)
-                , clamp(centerY + halfAreaSize, -1000, 1000));
-        return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
+        return new Rect(clamp(centerX-halfAreaSize), clamp(centerY-halfAreaSize)
+                , clamp(centerX+halfAreaSize), clamp(centerY+halfAreaSize));
     }
-    private static int clamp(int x, int min, int max) {
-        if (x > max) {
-            return max;
+    private static int clamp(int x) {
+        if (x > 1000) {
+            return 1000;
         }
-        if (x < min) {
-            return min;
+        if (x < -1000) {
+            return -1000;
         }
         return x;
+    }
+
+
+    private void setFlashRes() {
+        switch (type_flash) {
+            case TYPE_FLASH_AUTO:
+                mIvFlash.setImageResource(R.drawable.flash_auto);
+                CameraManager.setParametersFlash(mCamera,Camera.Parameters.FLASH_MODE_AUTO);
+                break;
+            case TYPE_FLASH_ON:
+                mIvFlash.setImageResource(R.drawable.flash_on);
+                CameraManager.setParametersFlash(mCamera,Camera.Parameters.FLASH_MODE_ON);
+                break;
+            case TYPE_FLASH_OFF:
+                mIvFlash.setImageResource(R.drawable.flash_off);
+                CameraManager.setParametersFlash(mCamera,Camera.Parameters.FLASH_MODE_OFF);
+                break;
+        }
     }
 }

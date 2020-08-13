@@ -49,7 +49,7 @@ public final class CameraManager {
     private final Context context;
     private final CameraConfigurationManager configManager;
     private ZxingConfig config;
-    private Camera camera;
+    public Camera camera;
     private AutoFocusManager autoFocusManager;
     private Rect framingRect;
     private Rect framingRectInPreview;

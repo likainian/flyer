@@ -10,7 +10,7 @@ import android.view.SurfaceView;
 
 import com.flyer.chat.R;
 import com.flyer.chat.base.ToolbarActivity;
-import com.flyer.chat.util.CameraUtil;
+import com.flyer.chat.util.CameraManager;
 import com.flyer.chat.util.CodeUtil;
 import com.flyer.chat.util.LogUtil;
 import com.flyer.chat.util.ToastUtil;
@@ -62,15 +62,15 @@ public class TestCaptureActivity extends ToolbarActivity implements Camera.Previ
         setContentView(R.layout.activity_test_capture);
         mPreview = findViewById(R.id.preview_view);
 
-        mCamera = CameraUtil.getCameraInstance();
-        CameraUtil.addCallback(mCamera,mPreview.getHolder());
-        CameraUtil.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
+        mCamera = CameraManager.getCameraInstance();
+        CameraManager.addCallback(mCamera,mPreview.getHolder());
+        CameraManager.setAutoFocus(mCamera, new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
                 mCamera.setOneShotPreviewCallback(TestCaptureActivity.this);
             }
         });
-        CameraUtil.setParametersRotation(mCamera,90);
+        CameraManager.setParametersRotation(mCamera,90);
 
         Bitmap any = CodeUtil.encode("随便一句话");
         if (any != null) {

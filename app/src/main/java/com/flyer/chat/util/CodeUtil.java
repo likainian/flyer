@@ -10,6 +10,7 @@ import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -146,5 +147,21 @@ public class CodeUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Result decode(byte[] data, int width, int height) {
+        PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data,width,height,0,0,width,height,false);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        QRCodeReader reader = new QRCodeReader();
+        Result result = null;
+        try {
+            result = reader.decode(bitmap);
+        } catch (ReaderException re) {
+            reader.reset();
+            //Log.i("解码异常",re.toString());
+        } finally {
+            reader.reset();
+        }
+        return result;
     }
 }

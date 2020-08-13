@@ -69,6 +69,13 @@
         <activity android:name=".test.TestDialogActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".test.TestScanActivity"
+            android:theme="@style/FullTransTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.common.VideoPlayActivity"
+            android:theme="@style/FullTransTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.common.PhotoPlayActivity"
+            android:theme="@style/FullTransTheme"
             android:screenOrientation="portrait"/>
         <activity android:name=".test.TestCaptureActivity"
             android:screenOrientation="portrait"/>
